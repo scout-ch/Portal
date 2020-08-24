@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="#{general.app.name}">application name</title>
-    <th:block th:replace="fragments/header :: header"/>
+    <th:block th:replace="fragments/head :: head"/>
 </head>
 <body>
 
@@ -59,6 +59,7 @@
         </div>
     </div>
 </header>
+
 <main role="main">
     <div class="container">
         <div class="row">
