@@ -1,0 +1,127 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="20200821-01" author="mkobel">
+        <createSequence sequenceName="hibernate_sequence"/>
+        <createTable tableName="user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="account_expired" type="boolean"/>
+            <column name="account_locked" type="boolean"/>
+            <column name="password_expired" type="boolean"/>
+            <column name="enabled" type="boolean"/>
+            <column name="first_name" type="text"/>
+            <column name="last_name" type="text"/>
+            <column name="nick_name" type="text"/>
+            <column name="midata_user_id" type="bigint"/>
+            <column name="mail" type="text"/>
+            <column name="password" type="text"/>
+            <column name="username" type="text"/>
+        </createTable>
+        <createTable tableName="role">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="name" type="text"/>
+        </createTable>
+        <createTable tableName="user_role">
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user" referencedTableName="user" referencedColumnNames="id"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints foreignKeyName="fk_role" referencedTableName="role" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <createTable tableName="category">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="name" type="text"/>
+        </createTable>
+        <createTable tableName="file_meta">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="name" type="text"/>
+            <column name="content_type" type="text"/>
+            <column name="content_size" type="text"/>
+            <column name="data" type="oid"/>
+        </createTable>
+        <sql splitStatements="false"
+             stripComments="true">
+            -- remember limitations! https://www.postgresql.org/docs/9.3/lo.html
+            CREATE EXTENSION IF NOT EXISTS lo;
+            CREATE TRIGGER t_file_meta_lo_manage BEFORE UPDATE OR DELETE ON file_meta
+            FOR EACH ROW EXECUTE PROCEDURE lo_manage(data);
+        </sql>
+        <sql splitStatements="false"
+             stripComments="true">
+            CREATE EXTENSION IF NOT EXISTS hstore;
+        </sql>
+        <createTable tableName="master_tile">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="title" type="hstore"/>
+            <column name="title_color" type="text"/>
+            <column name="content" type="hstore"/>
+            <column name="content_color" type="text"/>
+            <column name="background_color" type="text"/>
+            <column name="url" type="hstore"/>
+            <column name="image_id" type="bigint">
+                <constraints foreignKeyName="fk_image" references="file_meta(id)"/>
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints foreignKeyName="fk_category" references="category(id)"/>
+            </column>
+            <column name="position" type="int"/>
+            <column name="api_key" type="text"/>
+        </createTable>
+        <createTable tableName="user_tile">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="master_tile_id" type="bigint">
+                <constraints foreignKeyName="fk_master_tile" references="master_tile(id)"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user" referencedTableName="user" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <createTable tableName="message">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="user_tile_id" type="bigint">
+                <constraints foreignKeyName="fk_user_tile" references="user_tile(id)"/>
+            </column>
+            <column name="title" type="text"/>
+            <column name="content" type="text"/>
+            <column name="read" type="boolean"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

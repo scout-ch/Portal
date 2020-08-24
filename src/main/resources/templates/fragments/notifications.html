@@ -1,0 +1,10 @@
+<th:block th:fragment="notifications" xmlns:th="http://www.thymeleaf.org">
+    <div class="portal-flash d-none"
+         th:if="${#vars['flash.success']!=null||#vars['flash.info']!=null||#vars['flash.error']!=null}">
+        <div class="alert alert-success mt-3" th:if="${#vars['flash.success']!=null}"
+             th:text="${#vars['flash.success']}"></div>
+        <div class="alert alert-info mt-3" th:if="${#vars['flash.info']!=null}" th:text="${#vars['flash.info']}"></div>
+        <div class="alert alert-danger mt-3" th:if="${#vars['flash.error']!=null}"
+             th:text="${#vars['flash.error']}"></div>
+    </div>
+</th:block>

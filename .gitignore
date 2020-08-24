@@ -1,0 +1,25 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+.asscache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+## Generated
+src/assets/generated
+src/main/generated
+src/main/resources/templates/fragments/version.html
+
+### Secret
+src/main/resources/application-local.properties
+

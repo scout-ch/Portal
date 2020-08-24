@@ -1,0 +1,284 @@
+import java.text.SimpleDateFormat
+
+String activeProfile = System.properties['spring.profiles.active'] ?: 'development,local'
+println("Active profiles = ${activeProfile}")
+
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+		maven {
+			url "https://repo1.maven.org/maven2/"
+		}
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
+		classpath "com.github.ben-manes:gradle-versions-plugin:0.29.0"
+		classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.4.5"
+		classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
+		classpath "com.avast.gradle:gradle-docker-compose-plugin:0.13.0"
+		classpath 'com.browserstack:browserstack-local-java:1.0.3'
+		classpath "io.bit3:jsass:${jsassVersion}"
+	}
+}
+
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.github.ben-manes.versions"
+apply plugin: "com.bertramlabs.asset-pipeline"
+apply plugin: 'war'
+apply plugin: 'pmd'
+apply plugin: "com.github.spotbugs"
+apply plugin: 'org.kordamp.gradle.stats'
+apply plugin: 'docker-compose'
+apply plugin: 'jacoco'
+
+group = 'ch.itds.pbs'
+version = project.version
+sourceCompatibility = '14'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	runtime.exclude group: "log4j", module: "log4j"
+	assets.exclude group: "log4j", module: "log4j"
+}
+
+repositories {
+	mavenCentral()
+	jcenter()
+	maven {
+		url "https://repo1.maven.org/maven2/"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.liquibase:liquibase-core'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	compile 'com.vladmihalcea:hibernate-types-52:2.9.12'
+	implementation 'org.postgresql:postgresql:42.2.14'
+
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+	compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1'
+	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+	compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
+	compile 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.0.0'
+
+	runtime "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
+	assets "com.bertramlabs.plugins:sass-asset-pipeline:${assetPipelineVersion}"
+	testCompile "com.bertramlabs.plugins:sass-asset-pipeline:${assetPipelineVersion}" //does not work for tests otherwise
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	testCompile("org.assertj:assertj-core:3.16.1")
+
+	compile 'log4j:log4j:1.2.17'
+	compile 'org.slf4j:log4j-over-slf4j:1.7.30' // required for asset pipeline
+
+	// Logging to Logstash
+	compile "net.logstash.logback:logstash-logback-encoder:6.4"
+	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.1' // required for logback (does not start otherwise)
+
+	// for spotBugs @SuppressFBWarnings annotation
+	compileOnly 'net.jcip:jcip-annotations:1.0'
+	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.6'
+
+	// required to run with intellij as plain spring boot application. running with gradle works without
+	compile group: 'io.bit3', name: 'jsass', version: jsassVersion
+
+	// web frontend libraries
+	compile 'org.webjars:bootstrap:4.5.0'
+	compile 'org.webjars:font-awesome:5.13.0'
+	compile 'org.webjars:jquery:3.4.1'
+	compile 'org.webjars:datatables:1.10.21'
+
+	compile 'org.webjars.npm:sortablejs:1.8.4'
+	compile 'org.webjars.npm:popper.js:1.16.1'
+	compile 'org.webjars.npm:pnotify:4.0.0'
+
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDir "src/assets"
+		}
+	}
+}
+
+bootRun {
+	systemProperty "spring.profiles.active", activeProfile
+}
+
+bootJar {
+	enabled = true
+	archiveName = "${baseName.toLowerCase().replace(' ', '-')}-${activeProfile}.jar"
+	launchScript()
+}
+
+springBoot {
+	buildInfo()
+}
+
+assemble.dependsOn bootJar
+
+assets {
+	minifyJs = true
+	minifyCss = true
+	enableSourceMaps = true
+	maxThreads = 4 //useful for concurrent asset processing during build
+	configOptions = [commonJs: false] //useful for custom config on extension libraries
+
+	minifyOptions = [
+			optimizationLevel: 'SIMPLE',
+			targetLanguage   : 'ES5',
+	]
+
+	includes = [
+			'extensions/*',
+			'webjars/font-awesome/5.13.0/webfonts/**',
+			'webjars/datatables/1.10.21/images/**'
+	]
+	excludes = ['**/*.less', '**/*.scss', 'webjars/**', '**/*.es6', 'inc/**'] //Example Exclude GLOB pattern
+
+	//developmentRuntime can be turned off
+	developmentRuntime = true
+
+	//if you want to customize the jar task this task runs on you can specify a jarTaskName
+	jarTaskName = "bootJar"
+}
+
+task generateItdsFooter {
+	doLast {
+		println '** Generate ITDS Footer **'
+
+		Date now = new Date()
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy")
+
+		Map<String, String> m = [
+				"appName"       : project.name,
+				"version"       : project.version,
+				"buildTimestamp": sdf.format(now),
+				"buildYear"     : sdfYear.format(now),
+				"branch"        : System.getenv("CI_BUILD_REF_NAME") ?: "unknown",
+				"commit"        : System.getenv("CI_BUILD_REF") ?: "unknown",
+				"buildNumber"   : System.getenv("CI_BUILD_ID") ?: "unknown",
+				"buildHostId"   : System.getenv("CI_RUNNER_ID") ?: "unknown",
+				"buildHostName" : System.getenv("CI_RUNNER_DESCRIPTION") ?: "unknown",
+				"pipelineNumber": System.getenv("CI_PIPELINE_ID") ?: "unknown"
+		]
+		String versionInfo = "<span class=\"versioninfo\" title=\"&copy; ${m.buildYear} IT &amp; Design Solutions GmbH - ${m.appName} ${m.version} - Build: ${m.pipelineNumber}/${m.buildNumber} (${m.branch}) ${m.buildTimestamp}\">${m.appName} ${m.version}</span>"
+
+
+		File footer = project.file("src/main/resources/templates/fragments/version.html")
+		if (!footer.exists())
+			footer.createNewFile()
+		footer.text = versionInfo
+
+	}
+}
+
+processResources.dependsOn generateItdsFooter
+
+dependencyUpdates {
+	resolutionStrategy {
+		componentSelection { rules ->
+			rules.all { ComponentSelection selection ->
+				boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea', 'pr'].any { qualifier ->
+					selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-+]*/
+				}
+
+				//geb rc versions
+				if (selection.candidate.version ==~ /\d+.\d+-RC(\d+)-groovy-\d+.\d+/ ) rejected = true
+
+				if (rejected) {
+					selection.reject('Release candidate')
+				}
+			}
+		}
+	}
+	checkForGradleUpdate = false
+	outputFormatter = "text,xml"
+}
+
+spotbugs {
+	//ignoreFailures=true
+	spotbugsTest.enabled = false
+	excludeFilter = file("config/spotbugs/exclude.xml")
+}
+
+spotbugsMain {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+
+pmd {
+	toolVersion = '6.14.0'
+	//ignoreFailures = true
+	pmdTest.enabled = false
+	ruleSetFiles = files("config/pmd/ruleset.xml")
+	ruleSets = []
+}
+
+tasks.withType(Pmd) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+
+dockerCompose {
+	stopContainers = false // reconnect instead of recreate
+}
+
+dockerCompose.isRequiredBy(bootRun)
+
+if (!System.getenv("CI_SERVER")) {
+	dockerCompose.isRequiredBy(test)
+}
+
+test {
+	useJUnitPlatform()
+
+	forkEvery = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
+	//testLogging.showStandardStreams = true
+
+	systemProperty 'spring.profiles.active', activeProfile+',test'
+	testLogging {
+		exceptionFormat = 'full'
+	}
+}

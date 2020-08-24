@@ -1,0 +1,20 @@
+version: "3"
+services:
+  development:
+    container_name: pbsportal_postgresql_development
+    image: postgres:9.6
+    ports:
+      - 5555:5432
+    environment:
+      - POSTGRES_DB=pbsportal
+      - POSTGRES_USER=pbsportal
+      - POSTGRES_PASSWORD=pbsportal
+  test:
+    container_name: pbsportal_postgresql_test
+    image: postgres:9.6
+    ports:
+      - 5556:5432
+    environment:
+      - POSTGRES_DB=pbsportal
+      - POSTGRES_USER=pbsportal
+      - POSTGRES_PASSWORD=pbsportal

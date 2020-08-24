@@ -1,0 +1,71 @@
+@import "/webjars/font-awesome/5.13.0/scss/variables";
+
+$fa-font-path: "/assets/webjars/font-awesome/5.13.0/webfonts";
+
+@import "/webjars/font-awesome/5.13.0/scss/mixins";
+@import "/webjars/font-awesome/5.13.0/scss/core";
+@import "/webjars/font-awesome/5.13.0/scss/larger";
+@import "/webjars/font-awesome/5.13.0/scss/fixed-width";
+@import "/webjars/font-awesome/5.13.0/scss/list";
+@import "/webjars/font-awesome/5.13.0/scss/bordered-pulled";
+@import "/webjars/font-awesome/5.13.0/scss/animated";
+@import "/webjars/font-awesome/5.13.0/scss/rotated-flipped";
+@import "/webjars/font-awesome/5.13.0/scss/stacked";
+@import "/webjars/font-awesome/5.13.0/scss/icons";
+@import "/webjars/font-awesome/5.13.0/scss/screen-reader";
+
+.fa-blank {
+  visibility: hidden !important;
+}
+
+/*@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  src: url('#{$fa-font-path}/fa-regular-400.eot');
+  src: url('#{$fa-font-path}/fa-regular-400.eot?#iefix') format('embedded-opentype'),
+  url('#{$fa-font-path}/fa-regular-400.woff2') format('woff2'),
+  url('#{$fa-font-path}/fa-regular-400.woff') format('woff'),
+  url('#{$fa-font-path}/fa-regular-400.ttf') format('truetype'),
+  url('#{$fa-font-path}/fa-regular-400.svg#fontawesome') format('svg');
+}
+
+.far {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 400;
+}*/
+
+@font-face {
+  font-family: 'Font Awesome 5 Brands';
+  font-style: normal;
+  font-weight: normal;
+  src: url('#{$fa-font-path}/fa-brands-400.eot');
+  src: url('#{$fa-font-path}/fa-brands-400.eot?#iefix') format('embedded-opentype'),
+  url('#{$fa-font-path}/fa-brands-400.woff2') format('woff2'),
+  url('#{$fa-font-path}/fa-brands-400.woff') format('woff'),
+  url('#{$fa-font-path}/fa-brands-400.ttf') format('truetype'),
+  url('#{$fa-font-path}/fa-brands-400.svg#fontawesome') format('svg');
+}
+
+.fab {
+  font-family: 'Font Awesome 5 Brands';
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
+  src: url('#{$fa-font-path}/fa-solid-900.eot');
+  src: url('#{$fa-font-path}/fa-solid-900.eot?#iefix') format('embedded-opentype'),
+  url('#{$fa-font-path}/fa-solid-900.woff2') format('woff2'),
+  url('#{$fa-font-path}/fa-solid-900.woff') format('woff'),
+  url('#{$fa-font-path}/fa-solid-900.ttf') format('truetype'),
+  url('#{$fa-font-path}/fa-solid-900.svg#fontawesome') format('svg');
+}
+
+.fa,
+.fas {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+

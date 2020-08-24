@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        layout:decorate="~{layouts/portal}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="|${error} ${status}|">Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="|${error} ${status}|"></h1>
+    <div th:text="${message}"></div>
+    <dl>
+        <th:block th:if="${requestId!=null}">
+            <dt th:text="#{error.label.requestId}"></dt>
+            <dd th:text="${requestId}"></dd>
+        </th:block>
+        <th:block
+                th:if="${@environment.acceptsProfiles(T(org.springframework.core.env.Profiles).of('development', 'integration'))}">
+            <dt th:text="#{error.label.class}" th:if="${exceptionClass}"></dt>
+            <dd th:text="${exceptionClass}" th:if="${exceptionClass}"></dd>
+            <dt th:text="#{error.label.message}" th:if="${exceptionMessage}"></dt>
+            <dd th:text="${exceptionMessage}" th:if="${exceptionMessage}"></dd>
+        </th:block>
+    </dl>
+    <button class="btn btn-outline-secondary" onclick="window.history.back();" th:text="#{general.back}"></button>
+
+
+</div>
+
+<th:block layout:fragment="scripts">
+</th:block>
+
+</body>
+</html>

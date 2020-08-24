@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html
+        th:with="lang=${#locale.language}" th:lang="${lang}"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="#{general.app.name}">application name</title>
+    <th:block th:replace="fragments/header :: header"/>
+</head>
+<body>
+
+
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">About</h4>
+                    <p class="text-muted">
+
+                    </p>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Tools</h4>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a class="text-white" th:href="@{/admin}" th:text="#{general.menu.admin}"></a>
+                        </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <a class="text-white"
+                               href="javascript:document.logoutForm.submit()"
+                               th:text="#{general.menu.logout}">Logout
+                            </a>
+                            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                                <input hidden type="submit" value="Sign Out"/>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center">&nbsp;
+                <strong th:text="#{general.app.name}">application name</strong>
+            </a>
+            <div class="d-flex btn-group" role="group">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                        aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+<main role="main">
+    <div class="container">
+        <div class="row">
+            <th:block th:replace="fragments/notifications :: notifications"/>
+            <div class="col-md-12" layout:fragment="content">
+                Page content goes here
+            </div>
+        </div>
+    </div> <!-- /container -->
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p th:replace="fragments/version">&copy; IT &amp; Design Solutions GmbH</p>
+    </div>
+</footer>
+
+<th:block th:replace="fragments/footer :: footer"/>
+<th:block layout:fragment="scripts"/>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+$basepath: '/webjars/bootstrap/4.5.0/scss/';
+
+@import "/webjars/bootstrap/4.5.0/scss/functions";
+@import "/webjars/bootstrap/4.5.0/scss/variables";
+// @import "lkb3/custom-bootstrap-variables";
+@import "/webjars/bootstrap/4.5.0/scss/mixins";
+@import "/webjars/bootstrap/4.5.0/scss/root";
+@import "/webjars/bootstrap/4.5.0/scss/reboot";
+@import "/webjars/bootstrap/4.5.0/scss/type";
+@import "/webjars/bootstrap/4.5.0/scss/images";
+@import "/webjars/bootstrap/4.5.0/scss/code";
+@import "/webjars/bootstrap/4.5.0/scss/grid";
+@import "/webjars/bootstrap/4.5.0/scss/tables";
+@import "/webjars/bootstrap/4.5.0/scss/forms";
+@import "/webjars/bootstrap/4.5.0/scss/buttons";
+@import "/webjars/bootstrap/4.5.0/scss/transitions";
+@import "/webjars/bootstrap/4.5.0/scss/dropdown";
+@import "/webjars/bootstrap/4.5.0/scss/button-group";
+@import "/webjars/bootstrap/4.5.0/scss/input-group";
+@import "/webjars/bootstrap/4.5.0/scss/custom-forms";
+@import "/webjars/bootstrap/4.5.0/scss/nav";
+@import "/webjars/bootstrap/4.5.0/scss/navbar";
+@import "/webjars/bootstrap/4.5.0/scss/card";
+@import "/webjars/bootstrap/4.5.0/scss/breadcrumb";
+@import "/webjars/bootstrap/4.5.0/scss/pagination";
+@import "/webjars/bootstrap/4.5.0/scss/badge";
+@import "/webjars/bootstrap/4.5.0/scss/jumbotron";
+@import "/webjars/bootstrap/4.5.0/scss/alert";
+@import "/webjars/bootstrap/4.5.0/scss/progress";
+@import "/webjars/bootstrap/4.5.0/scss/media";
+@import "/webjars/bootstrap/4.5.0/scss/list-group";
+@import "/webjars/bootstrap/4.5.0/scss/close";
+@import "/webjars/bootstrap/4.5.0/scss/modal";
+@import "/webjars/bootstrap/4.5.0/scss/tooltip";
+@import "/webjars/bootstrap/4.5.0/scss/popover";
+@import "/webjars/bootstrap/4.5.0/scss/carousel";
+@import "/webjars/bootstrap/4.5.0/scss/utilities";
+@import "/webjars/bootstrap/4.5.0/scss/print";
+
+@import "../bs-dependent-includes/example";
+
+// bugfix: is in the documentation but missing in these includes
+.custom-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}

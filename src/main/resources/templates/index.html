@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title>Portal</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1>Portal</h1>
+
+    <div class="card-columns">
+
+        <div class="card" th:each="tile : ${tiles}">
+            <h5 class="card-header">
+                <th:block th:text="${tile.title}"/>
+            </h5>
+            <div class="card-body">
+                <p class="card-text" th:text="${tile.content}"></p>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>
