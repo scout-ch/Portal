@@ -124,4 +124,42 @@
             <column name="read" type="boolean"/>
         </createTable>
     </changeSet>
+    <changeSet id="20200824-01" author="mkobel">
+        <addColumn tableName="master_tile">
+            <column name="title_de" type="text"/>
+            <column name="title_fr" type="text"/>
+            <column name="title_it" type="text"/>
+            <column name="title_en" type="text"/>
+            <column name="content_de" type="text"/>
+            <column name="content_fr" type="text"/>
+            <column name="content_it" type="text"/>
+            <column name="content_en" type="text"/>
+            <column name="url_de" type="text"/>
+            <column name="url_fr" type="text"/>
+            <column name="url_it" type="text"/>
+            <column name="url_en" type="text"/>
+        </addColumn>
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE master_tile SET
+            title_de = title->'DE',
+            title_fr = title->'FR',
+            title_it = title->'IT',
+            title_en = title->'EN',
+            content_de = content->'DE',
+            content_fr = content->'FR',
+            content_it = content->'IT',
+            content_en = content->'EN',
+            url_de = url->'DE',
+            url_fr = url->'FR',
+            url_it = url->'IT',
+            url_en = url->'EN'
+            WHERE true
+        </sql>
+        <dropColumn tableName="master_tile">
+            <column name="title" type="hstore"/>
+            <column name="content" type="hstore"/>
+            <column name="url" type="hstore"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

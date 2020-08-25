@@ -24,7 +24,7 @@ public class UserTile extends BaseEntity {
     @NotNull
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "userTile")
     private Set<Message> messages;
 
 }

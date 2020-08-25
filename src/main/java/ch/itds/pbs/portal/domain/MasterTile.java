@@ -1,33 +1,39 @@
 package ch.itds.pbs.portal.domain;
 
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
-@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class MasterTile extends BaseEntity {
 
-    @Type(type = "hstore")
-    private Map<Language, String> title = new HashMap<>();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "de", column = @Column(name = "title_de")),
+            @AttributeOverride(name = "fr", column = @Column(name = "title_fr")),
+            @AttributeOverride(name = "it", column = @Column(name = "title_it")),
+            @AttributeOverride(name = "en", column = @Column(name = "title_en"))
+    })
+    private LocalizedString title = new LocalizedString();
 
     @Enumerated(EnumType.STRING)
     @NotNull
     private Color titleColor = Color.DEFAULT;
 
-    @Type(type = "hstore")
-    private Map<Language, String> content = new HashMap<>();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "de", column = @Column(name = "content_de")),
+            @AttributeOverride(name = "fr", column = @Column(name = "content_fr")),
+            @AttributeOverride(name = "it", column = @Column(name = "content_it")),
+            @AttributeOverride(name = "en", column = @Column(name = "content_en"))
+    })
+    private LocalizedString content = new LocalizedString();
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -37,8 +43,14 @@ public class MasterTile extends BaseEntity {
     @NotNull
     private Color backgroundColor = Color.DEFAULT;
 
-    @Type(type = "hstore")
-    private Map<Language, String> url = new HashMap<>();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "de", column = @Column(name = "url_de")),
+            @AttributeOverride(name = "fr", column = @Column(name = "url_fr")),
+            @AttributeOverride(name = "it", column = @Column(name = "url_it")),
+            @AttributeOverride(name = "en", column = @Column(name = "url_en"))
+    })
+    private LocalizedString url = new LocalizedString();
 
     @ManyToOne
     @JoinColumn
