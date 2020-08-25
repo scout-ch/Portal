@@ -1,0 +1,56 @@
+.page-header {
+  background-color: $color-primary;
+  color: $color-bright;
+  height: $header-height;
+  left: 0;
+  padding: 15px 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+
+  .container {
+    height: 100%;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .col-block { height: 100%; }
+
+  .col {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .logo {
+    display: block;
+    height: 100px;
+    text-decoration: none;
+
+    img {
+      height: 100%;
+      max-width: none;
+      width: auto;
+    }
+  }
+
+  nav {
+    ul {
+      @include link-list;
+    }
+
+    a {
+      color: $color-bright;
+    }
+  }
+
+  .icons { margin-left: 25px; }
+
+  body.scrolled & {
+    height: $header-height-small;
+
+    .logo { height: $header-height-small - 30px; }
+  }
+}

@@ -1,6 +1,4 @@
 /*
-*= require inc/bootstrap-loader
-*= require inc/fontawesome-loader
-*= require inc/misc
-*= require_self
+ *= require utility/start
+ *= require inc/misc
  */

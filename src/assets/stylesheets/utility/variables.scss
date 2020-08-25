@@ -1,0 +1,47 @@
+// ===== COLORS =====
+$color-primary:                 #521d3a;
+$color-primary-escaped:         '%23521d3a';
+$color-dark:                    #000000;
+$color-bright:                  #ffffff;
+$color-bright-escaped:          '%23ffffff';
+$color-gray:                    #5f6368;
+$color-gray-light:              #cccccc;
+$color-error:                   #ba0000;
+$color-success:                 #009900;
+
+
+
+// ===== SIZES =====
+$container-width:               1400px;
+$container-horizontal-padding:  20px;
+$header-height:                 130px;
+$header-height-small:           80px;
+$column-spacing:                15px;
+
+
+
+// ===== FONTS =====
+$base-font-size:                10px;
+$font-weight-light:             300;
+$font-weight-semi-bold:         600;
+$font-weight-bold:              700;
+
+$base-body-font-family:         'Source Sans Pro', Arial, Helvetica, sans-serif;
+$base-body-font-weight:         $font-weight-light;
+$base-body-font-size:           2rem;
+$base-body-line-height:         1.5;
+
+
+
+// ===== ANIMATIONS =====
+$animation-time:                0.3s;
+
+
+
+// ===== BREAKPOINTS =====
+$break-xxl:                     1999px;
+$break-xl:                      1600px;
+$break-lg:                      1199px;
+$break-md:                      991px;
+$break-sm:                      767px;
+$break-xs:                      479px;

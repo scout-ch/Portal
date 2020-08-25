@@ -1,3 +1,26 @@
-<th:block th:fragment="footer" xmlns:asset="https://www.itds.ch/taglib/asset" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="footer"
+        xmlns:asset="https://www.itds.ch/taglib/asset"
+        xmlns:th="http://www.thymeleaf.org"
+>
+    <footer class="page-footer">
+        <div class="container">
+            <div class="col-block col-2">
+                <div class="col">
+                    <strong>(c) 2020 Pfadibewegung Schweiz</strong>
+                    <th:block th:replace="fragments/version"/>
+                </div>
+
+                <div class="col text-right">
+                    <nav class="links">
+                        <ul>
+                            <li><a href="">Datenschutz</a></li>
+                            <li><a href="">Impressum</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script asset:src="@{/assets/application.js}"></script>
 </th:block>

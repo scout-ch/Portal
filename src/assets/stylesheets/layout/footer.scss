@@ -1,0 +1,16 @@
+.page-footer {
+  background-color: $color-primary;
+  color: $color-bright;
+  margin-top: 150px;
+  padding: 15px 0;
+
+  .col { margin-bottom: 0; }
+
+  ul {
+    @include link-list;
+  }
+
+  a {
+    color: $color-bright;
+  }
+}
