@@ -1,10 +1,10 @@
 .btn-icon {
   @include btn;
   background-color: transparent;
-  height: 50px;
+  height: 5rem;
   line-height: 2rem;
-  padding: 15px;
-  width: 50px;
+  padding: 1.5rem;
+  width: 5rem;
 
   svg {
     max-height: 100%;

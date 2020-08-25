@@ -3,7 +3,7 @@
   color: $color-bright;
   height: $header-height;
   left: 0;
-  padding: 15px 0;
+  padding: $header-padding 0;
   position: fixed;
   right: 0;
   top: 0;
@@ -26,7 +26,7 @@
 
   .logo {
     display: block;
-    height: 100px;
+    height: $header-height - ($header-padding * 2);
     text-decoration: none;
 
     img {
@@ -46,11 +46,11 @@
     }
   }
 
-  .icons { margin-left: 25px; }
+  .icons { margin-left: 2.5rem; }
 
   body.scrolled & {
     height: $header-height-small;
 
-    .logo { height: $header-height-small - 30px; }
+    .logo { height: $header-height-small - ($header-padding * 2); }
   }
 }

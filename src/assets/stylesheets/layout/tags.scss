@@ -36,7 +36,7 @@ main, section, header, footer {
 }
 
 main {
-  padding-top: $header-height + 80px;
+  padding-top: $header-height + 8rem;
 }
 
 address {
@@ -64,5 +64,5 @@ h1 {
   font-size: 4.5rem;
   font-weight: $font-weight-bold;
   line-height: 6rem;
-  margin: 0 0 75px;
+  margin: 0 0 7.5rem;
 }
