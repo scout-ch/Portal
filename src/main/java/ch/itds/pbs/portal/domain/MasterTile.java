@@ -64,4 +64,6 @@ public class MasterTile extends BaseEntity {
 
     private String apiKey;
 
+    private boolean enabled = true;
+
 }

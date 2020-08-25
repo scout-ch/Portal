@@ -162,4 +162,13 @@
             <column name="url" type="hstore"/>
         </dropColumn>
     </changeSet>
+    <changeSet id="20200825-01" author="mkobel">
+        <addColumn tableName="master_tile">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE master_tile SET enabled = TRUE where enabled IS NULL;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

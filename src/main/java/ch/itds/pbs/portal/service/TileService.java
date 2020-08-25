@@ -33,7 +33,7 @@ public class TileService {
 
     @Transactional(readOnly = true)
     public List<LocalizedTile> listTiles(UserPrincipal userPrincipal, Language language) {
-        return userTileRepository.findAllWithFetchForUserId(userPrincipal.getId())
+        return userTileRepository.findAllEnabledWithFetchForUserId(userPrincipal.getId())
                 .map(ut -> convertToLocalized(ut, language))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -109,6 +109,7 @@ public class TileService {
         midata.getContent().put(Language.EN, midataContent);
         midata.setPosition(0);
         midata.setCategory(main);
+        midata.setEnabled(true);
         midata = masterTileRepository.save(midata);
 
     }
