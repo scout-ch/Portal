@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
+import java.util.Locale;
 
 @Getter
 @Setter
@@ -31,6 +32,26 @@ public class LocalizedString {
             }
             default -> {
                 return defaultValue;
+            }
+        }
+    }
+
+    public String getLocalized(Locale locale) {
+        switch (locale.getLanguage()) {
+            case "de" -> {
+                return de;
+            }
+            case "fr" -> {
+                return fr;
+            }
+            case "it" -> {
+                return it;
+            }
+            case "en" -> {
+                return en;
+            }
+            default -> {
+                return de;
             }
         }
     }

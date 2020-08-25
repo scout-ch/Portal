@@ -33,10 +33,6 @@ public class IndexController {
     @RequestMapping("")
     public String index(@CurrentUser UserPrincipal userPrincipal, Model model, Locale locale) {
 
-        log.debug("user: {}", userPrincipal.getUsername());
-
-        tileService.init();
-
         Language language = languageService.convertToLanguage(locale);
 
         List<LocalizedTile> tiles = tileService.listTiles(userPrincipal, language);

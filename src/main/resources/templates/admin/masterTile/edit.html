@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title>Portal</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <form th:action="@{/admin/masterTile/edit/{id}(id=${entity.id})}" method="post" th:object="${entity}">
+
+        <select th:classappend="${not #lists.isEmpty(#fields.errors('category'))} ? 'is-invalid'"
+                th:field="*{category}"
+                id="category-input"
+        >
+            <option th:each="category: ${categoryList}"
+                    th:selected="${entity.category != null && category.id == entity.category.id}"
+                    th:text="${category.name}"
+                    th:value="${category.id}">
+        </select>
+        <label th:for="category-input" th:text="#{masterTile.category.label}"></label>
+        <div class="invalid-feedback">
+            <p th:each="error: ${#fields.errors('category')}" th:text="${error}">Invalid data</p>
+        </div>
+
+        <input th:classappend="${not #lists.isEmpty(#fields.errors('title.de'))} ? 'is-invalid'"
+               th:placeholder="#{masterTile.title.label}"
+               th:field="*{title.de}"
+               id="title_de-input"
+               type="text"
+        >
+        <label th:for="title_de-input" th:text="#{masterTile.title.label}"></label>
+        <div class="invalid-feedback">
+            <p th:each="error: ${#fields.errors('title.de')}" th:text="${error}">Invalid data</p>
+        </div>
+
+        <input type="submit">
+    </form>
+
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>

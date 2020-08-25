@@ -61,7 +61,8 @@ public class WebConfig implements WebMvcConfigurer {
     public MessageSource messageSource(@Qualifier("messageSourceCacheDuration") Integer messageSourceCacheDuration) {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames(
-                "classpath:/i18n/messages"
+                "classpath:/i18n/messages",
+                "classpath:/i18n/masterTile"
         );
         messageSource.setDefaultEncoding("UTF-8");
         //messageSource.setUseCodeAsDefaultMessage(true); // must be default=false to /beefOrder/create : options fallback

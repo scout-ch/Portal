@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title>Edit</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <ul>
+        <li th:each="entity : ${entityList}">
+            <span th:text="${entity.title.getLocalized(#locale)}"></span>
+            <a th:href="@{/admin/masterTile/edit/{id}(id=${entity.id})}">E</a>
+        </li>
+    </ul>
+
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>
