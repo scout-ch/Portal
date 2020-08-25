@@ -1,8 +1,9 @@
 package ch.itds.pbs.portal.service;
 
-import ch.itds.pbs.portal.domain.*;
+import ch.itds.pbs.portal.domain.Language;
+import ch.itds.pbs.portal.domain.User;
+import ch.itds.pbs.portal.domain.UserTile;
 import ch.itds.pbs.portal.dto.LocalizedTile;
-import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.repo.UserRepository;
 import ch.itds.pbs.portal.repo.UserTileRepository;
@@ -19,13 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class TileService {
 
-    private final transient CategoryRepository categoryRepository;
     private final transient UserRepository userRepository;
     private final transient UserTileRepository userTileRepository;
     private final transient MasterTileRepository masterTileRepository;
 
-    public TileService(CategoryRepository categoryRepository, UserRepository userRepository, UserTileRepository userTileRepository, MasterTileRepository masterTileRepository) {
-        this.categoryRepository = categoryRepository;
+    public TileService(UserRepository userRepository, UserTileRepository userTileRepository, MasterTileRepository masterTileRepository) {
         this.userRepository = userRepository;
         this.userTileRepository = userTileRepository;
         this.masterTileRepository = masterTileRepository;
@@ -87,31 +86,6 @@ public class TileService {
                     return ut;
                 }).collect(Collectors.toList());
         userTileRepository.saveAll(newTiles);
-    }
-
-    public void init() {
-
-        String mainName = "Hauptkategorie";
-        Category main = categoryRepository.findByName(mainName).orElseGet(() -> new Category());
-        main.setName(mainName);
-        main = categoryRepository.save(main);
-
-        String midataName = "MiData";
-        String midataContent = "MiData Content";
-        MasterTile midata = masterTileRepository.findByNameDe(midataName).orElseGet(() -> new MasterTile());
-        midata.getTitle().put(Language.DE, midataName);
-        midata.getTitle().put(Language.FR, midataName);
-        midata.getTitle().put(Language.IT, midataName);
-        midata.getTitle().put(Language.EN, midataName);
-        midata.getContent().put(Language.DE, midataContent);
-        midata.getContent().put(Language.FR, midataContent);
-        midata.getContent().put(Language.IT, midataContent);
-        midata.getContent().put(Language.EN, midataContent);
-        midata.setPosition(0);
-        midata.setCategory(main);
-        midata.setEnabled(true);
-        midata = masterTileRepository.save(midata);
-
     }
 
 }

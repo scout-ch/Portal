@@ -1,0 +1,39 @@
+bootstrap:
+  data:
+    categories: # categories are referenced by name
+      - name: Hauptkategorie
+      - name: Lager & Kurse
+    masterTiles: # tiles are referenced by title.de
+      - title:
+          de: MiData DE
+          fr: MiData FR
+          it: MiData IT
+          en: MiData EN
+        content:
+          de: MiData Content DE
+          fr: MiData Content FR
+          it: MiData Content IT
+          en: MiData Content EN
+        category.name: Hauptkategorie
+        position: 1
+        enabled: true
+        titleColor: DEFAULT
+      - title:
+          de: Lagerkochbuch DE
+          fr: Lagerkochbuch FR
+          it: Lagerkochbuch IT
+          en: Lagerkochbuch EN
+        content:
+          de: Lagerkochbuch Content DE
+          fr: Lagerkochbuch Content FR
+          it: Lagerkochbuch Content IT
+          en: Lagerkochbuch Content EN
+        url:
+          de: https://www.lagerkochbuch.ch
+          fr: https://www.lagerkochbuch.ch
+          it: https://www.lagerkochbuch.ch
+          en: https://www.lagerkochbuch.ch
+        category.name: Lager & Kurse
+        position: 2
+        enabled: true
+        titleColor: DEFAULT

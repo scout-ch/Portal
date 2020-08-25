@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface MasterTileRepository extends BaseEntityRepository<MasterTile> {
 
-    @Query(value = "SELECT mt.* FROM master_tile mt WHERE mt.title_de = :name", nativeQuery = true)
-    Optional<MasterTile> findByNameDe(@Param("name") String name);
+    @Query(value = "SELECT mt.* FROM master_tile mt WHERE mt.title_de = :title LIMIT 1", nativeQuery = true)
+    Optional<MasterTile> findFirstByTitleDe(@Param("title") String title);
 
     @Query("SELECT mt FROM MasterTile mt LEFT JOIN FETCH mt.category ORDER BY mt.position ASC")
     List<MasterTile> findAllWithCategory();
