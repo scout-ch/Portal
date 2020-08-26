@@ -1,5 +1,7 @@
 package ch.itds.pbs.portal.conf;
 
+import ch.itds.pbs.portal.service.UserService;
+import ch.itds.pbs.portal.util.UserUpdatingSessionLocaleResolver;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
@@ -24,6 +25,12 @@ public class WebConfig implements WebMvcConfigurer {
     public static final String DEFAULT_AMOUNT_PATTERN = "0.000";
     public static final String DEFAULT_PRICE_PATTERN = "0.00";
     private final static long MAX_AGE_SECS = 3600;
+
+    private final transient UserService userService;
+
+    public WebConfig(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -40,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
+        UserUpdatingSessionLocaleResolver slr = new UserUpdatingSessionLocaleResolver(userService);
         slr.setDefaultLocale(Locale.forLanguageTag("de-CH"));
         return slr;
     }
@@ -61,6 +68,7 @@ public class WebConfig implements WebMvcConfigurer {
     public MessageSource messageSource(@Qualifier("messageSourceCacheDuration") Integer messageSourceCacheDuration) {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames(
+                "classpath:/i18n/message",
                 "classpath:/i18n/messages",
                 "classpath:/i18n/masterTile"
         );

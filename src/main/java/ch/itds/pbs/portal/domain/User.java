@@ -42,6 +42,9 @@ public class User extends BaseEntity {
 
     private String nickName;
 
+    @Enumerated(EnumType.STRING)
+    private Language language = Language.DE;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

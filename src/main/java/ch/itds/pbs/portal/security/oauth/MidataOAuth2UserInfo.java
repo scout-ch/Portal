@@ -30,4 +30,8 @@ public class MidataOAuth2UserInfo {
         return (String) attributes.get("last_name");
     }
 
+    public String getCorrespondenceLanguage() {
+        return (String) attributes.get("correspondence_language");
+    }
+
 }

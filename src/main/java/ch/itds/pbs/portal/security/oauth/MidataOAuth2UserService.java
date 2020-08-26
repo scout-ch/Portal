@@ -1,6 +1,7 @@
 package ch.itds.pbs.portal.security.oauth;
 
 
+import ch.itds.pbs.portal.domain.Language;
 import ch.itds.pbs.portal.domain.User;
 import ch.itds.pbs.portal.exception.OAuth2AuthenticationProcessingException;
 import ch.itds.pbs.portal.repo.RoleRepository;
@@ -74,6 +75,8 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         user.setMail(oAuth2UserInfo.getEmail());
         user.setFirstName(oAuth2UserInfo.getFirstName());
         user.setLastName(oAuth2UserInfo.getLastName());
+        user.setNickName(oAuth2UserInfo.getName());
+        user.setLanguage(Language.valueOfOrDefault(oAuth2UserInfo.getCorrespondenceLanguage().toUpperCase()));
         user.setEnabled(true);
         user.setAccountExpired(false);
         user.setAccountLocked(false);
@@ -88,6 +91,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         existingUser.setMail(oAuth2UserInfo.getEmail());
         existingUser.setFirstName(oAuth2UserInfo.getFirstName());
         existingUser.setLastName(oAuth2UserInfo.getLastName());
+        existingUser.setNickName(oAuth2UserInfo.getName());
         return userRepository.save(existingUser);
     }
 }

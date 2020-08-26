@@ -28,6 +28,8 @@ public class Message extends BaseEntity {
     @NotEmpty
     private String content;
 
+    private String url;
+
     private boolean read = false;
 
 }

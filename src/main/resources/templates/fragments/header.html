@@ -15,8 +15,9 @@
                 <nav class="links">
                     <ul>
                         <li>
-                            <a href="">Nachrichten</a>
-                            <span class="badge message-count-total">3</span>
+                            <a th:href="@{/message}" th:text="#{message.title}">Nachrichten</a>
+                            <span class="badge message-count-total"
+                                  th:text="${@messageService.countUnreadMessages(#authentication.principal)}">3</span>
                         </li>
                         <li><a href="" target="_blank" rel="noopener">Hilfe</a></li>
                     </ul>
@@ -26,10 +27,10 @@
             <div class="col justify-flex-end">
                 <nav class="language-switch">
                     <ul>
-                        <li><a href="">DE</a></li>
-                        <li><a href="">FR</a></li>
-                        <li><a href="">IT</a></li>
-                        <li><a href="">EN</a></li>
+                        <li><a href="?lang=de">DE</a></li>
+                        <li><a href="?lang=fr">FR</a></li>
+                        <li><a href="?lang=it">IT</a></li>
+                        <li><a href="?lang=en">EN</a></li>
                     </ul>
                 </nav>
 

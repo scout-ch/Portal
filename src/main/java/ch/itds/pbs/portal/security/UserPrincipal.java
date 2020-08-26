@@ -6,10 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails, OAuth2User {
@@ -28,8 +25,10 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private final boolean expired;
     private final boolean credentialsExpired;
 
+    private final Locale locale;
+
     public UserPrincipal(Long id, String email, String nickName, String password, Collection<? extends GrantedAuthority> authorities,
-                         boolean enabled, boolean locked, boolean expired, boolean credentialsExpired) {
+                         boolean enabled, boolean locked, boolean expired, boolean credentialsExpired, Locale locale) {
         this.id = id;
         this.email = email;
         this.nickName = nickName;
@@ -39,6 +38,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         this.locked = locked;
         this.expired = expired;
         this.credentialsExpired = credentialsExpired;
+        this.locale = locale;
     }
 
     public static UserPrincipal create(User user) {
@@ -59,7 +59,8 @@ public class UserPrincipal implements UserDetails, OAuth2User {
                 user.isEnabled(),
                 user.isAccountLocked(),
                 user.isAccountExpired(),
-                user.isPasswordExpired()
+                user.isPasswordExpired(),
+                Locale.forLanguageTag(user.getLanguage().name().toLowerCase() + "-CH")
         );
     }
 
@@ -114,5 +115,9 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     public Long getId() {
         return id;
+    }
+
+    public Locale getLocale() {
+        return locale;
     }
 }

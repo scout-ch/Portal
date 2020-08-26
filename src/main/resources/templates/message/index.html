@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title th:text="#{message.title}">Nachrichten</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{message.title}">Nachrichten</h1>
+
+    <div class="alert alert-info" th:text="#{message.list.none}" th:if="${entityList.isEmpty()}"></div>
+    <ul th:unless="${entityList.isEmpty()}">
+        <li th:each="entity : ${entityList}">
+            <span th:text="${entity.title}"></span>
+            <span th:text="${entity.userTile.masterTile.title.getLocalized(#locale)}"></span>
+            <span th:text="${entity.content}"></span>
+            <span th:text="${entity.url}"></span>
+            <span th:text="${#temporals.format(entity.dateCreated, 'dd.MM.yyyy HH:mm')}"></span>
+        </li>
+    </ul>
+
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>

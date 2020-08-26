@@ -171,4 +171,16 @@
             UPDATE master_tile SET enabled = TRUE where enabled IS NULL;
         </sql>
     </changeSet>
+    <changeSet id="20200826-01" author="mkobel">
+        <addColumn tableName="message">
+            <column name="url" type="text"/>
+        </addColumn>
+        <addColumn tableName="user">
+            <column name="language" type="varchar(2)"/>
+        </addColumn>
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE "user" SET language = 'DE' where language IS NULL;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

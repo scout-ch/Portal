@@ -1,6 +1,7 @@
 package ch.itds.pbs.portal.conf;
 
 
+import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -29,12 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final transient UserDetailsService userDetailsService;
     private final transient MidataOAuth2UserService midataOAuth2UserService;
+    private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
 
-    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService) {
+    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler) {
         super();
         this.userDetailsService = userDetailsService;
 
         this.midataOAuth2UserService = midataOAuth2UserService;
+        this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
     }
 
     @Override
@@ -73,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
+                .successHandler(localeSettingAuthenticationSuccessHandler)
                 .permitAll()
                 .and()
                 .httpBasic()
@@ -89,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).access("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")
                 .and()
                 .oauth2Login()
+                .successHandler(localeSettingAuthenticationSuccessHandler)
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
                 .and()
