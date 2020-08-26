@@ -1,3 +1,15 @@
+.btn {
+  @include btn;
+  background-color: $color-primary;
+  border-radius: 0.4rem;
+  color: $color-bright;
+  padding: 0.6rem 2.3rem;
+
+  &:hover {
+    background-color: $color-secondary;
+  }
+}
+
 .btn-icon {
   @include btn;
   background-color: transparent;
@@ -10,6 +22,10 @@
     max-height: 100%;
     max-width: 100%;
     vertical-align: top;
+  }
+
+  &:hover {
+    color: $color-secondary;
   }
 }
 
@@ -51,8 +67,54 @@
   }
 
   @for $i from 1 through 5 {
-    &.col-#{$i} .col { width: calc((100% / #{$i}) - #{$column-spacing * 2}); }
+    &.col-#{$i} .col {
+      width: calc((100% / #{$i}) - #{$column-spacing * 2});
+
+      @if $i > 1 {
+        &.double {
+          width: calc((100% / #{$i} * 2) - #{$column-spacing * 2});
+        }
+      }
+    }
   }
+}
+
+
+.tab-controls {
+  .btn-tab {
+    @include btn;
+    background-color: $color-secondary;
+    color: $color-bright;
+    border-radius: 0.4rem 0.4rem 0 0;
+    font-weight: $font-weight-light;
+    margin-left: 2rem;
+    min-width: 13rem;
+    padding: 1rem;
+    transition: all $animation-time;
+
+    &.active {
+      background-color: $color-bright;
+      color: $color-primary;
+      font-weight: $font-weight-bold;
+    }
+
+    &:hover {
+      background-color: $color-primary;
+      color: $color-bright;
+    }
+  }
+}
+.tab-elements {
+  .tab-content {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}
+.tab-btn-offset {
+  margin-top: ($base-body-font-size * $base-body-line-height) + 2rem;
 }
 
 .text-right { text-align: right; }

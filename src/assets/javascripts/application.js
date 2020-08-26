@@ -1,6 +1,8 @@
 //= require webjars.js
 //= require portal.js
 //= require inc/notification
+//= require inc/copy-to-clipboard.js
+//= require inc/tabs.js
 //= require_self
 
 var portal = new Portal();

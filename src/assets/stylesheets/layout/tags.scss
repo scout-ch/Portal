@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-  background-color: $color-bright;
+  background-color: $color-gray-light;
   color: $color-primary;
   font-family: $base-body-font-family;
   font-size: $base-body-font-size;
@@ -62,7 +62,7 @@ strong, b {
 
 h1 {
   font-size: 4.5rem;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semi-bold;
   line-height: 6rem;
   margin: 0 0 7.5rem;
 }

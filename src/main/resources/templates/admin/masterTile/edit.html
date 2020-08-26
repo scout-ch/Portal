@@ -8,35 +8,138 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <h1 th:text="#{masterTile.newEntry.titel}"></h1>
 
     <form th:action="@{/admin/masterTile/edit/{id}(id=${entity.id})}" method="post" th:object="${entity}">
+        <div class="col-block col-3">
+            <div class="col double tabs">
+                <div class="tab-controls">
+                    <button type="button" class="btn-tab"
+                            th:each="language : ${T(ch.itds.pbs.portal.domain.Language).values()}"
+                            th:text="${language}"
+                            th:classappend="${language == T(ch.itds.pbs.portal.domain.Language).DE ? 'active' : ''}"
+                            th:attr="data-tabid=${language}"
+                    ></button>
+                </div>
+                <div class="tab-elements">
+                    <div class="form-panel tab-content"
+                         th:each="language : ${T(ch.itds.pbs.portal.domain.Language).values()}"
+                         th:classappend="${language == T(ch.itds.pbs.portal.domain.Language).DE ? 'active' : ''}"
+                         th:attr="data-tabid=${language}"
+                         th:with="langLow=${#strings.toLowerCase(language)}"
+                    >
+                        <div class="form-wrap">
+                            <input th:classappend="${not #lists.isEmpty(#fields.errors('title.' + langLow))} ? 'is-invalid'"
+                                   th:placeholder="#{masterTile.title.label}"
+                                   th:field="*{title.__${langLow}__}"
+                                   th:id="${'title_' + langLow + '-input'}"
+                                   type="text"
+                            >
+                            <label th:for="${'title_' + langLow + '-input'}" th:text="#{masterTile.title.label}"></label>
+                            <div class="invalid-feedback">
+                                <p th:each="error: ${#fields.errors('title.' + langLow)}" th:text="${error}">Invalid data</p>
+                            </div>
+                        </div>
+                        <div class="form-wrap wordcount">
+                            <textarea th:classappend="${not #lists.isEmpty(#fields.errors('content.' + langLow))} ? 'is-invalid'"
+                                   th:placeholder="#{masterTile.content.label}"
+                                   th:field="*{content.__${langLow}__}"
+                                   th:id="${'content_' + langLow + '-input'}"
+                            ></textarea>
+                            <label th:for="${'content_' + langLow + '-input'}" th:text="#{masterTile.content.label}"></label>
+                            <div class="invalid-feedback">
+                                <p th:each="error: ${#fields.errors('content.' + langLow)}" th:text="${error}">Invalid data</p>
+                            </div>
+                        </div>
+                        <div class="form-wrap">
+                            <input th:classappend="${not #lists.isEmpty(#fields.errors('url.' + langLow))} ? 'is-invalid'"
+                                   th:placeholder="#{masterTile.url.label}"
+                                   th:field="*{url.__${langLow}__}"
+                                   th:id="${'url_' + langLow + '-input'}"
+                                   type="text"
+                            >
+                            <label th:for="${'url_' + langLow + '-input'}" th:text="#{masterTile.url.label}"></label>
+                            <div class="invalid-feedback">
+                                <p th:each="error: ${#fields.errors('url.' + langLow)}" th:text="${error}">Invalid data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <select th:classappend="${not #lists.isEmpty(#fields.errors('category'))} ? 'is-invalid'"
-                th:field="*{category}"
-                id="category-input"
-        >
-            <option th:each="category: ${categoryList}"
-                    th:selected="${entity.category != null && category.id == entity.category.id}"
-                    th:text="${category.name}"
-                    th:value="${category.id}">
-        </select>
-        <label th:for="category-input" th:text="#{masterTile.category.label}"></label>
-        <div class="invalid-feedback">
-            <p th:each="error: ${#fields.errors('category')}" th:text="${error}">Invalid data</p>
+            <div class="col">
+                <div class="form-panel tab-btn-offset">
+                    <div class="form-wrap">
+                        <select th:classappend="${not #lists.isEmpty(#fields.errors('category'))} ? 'is-invalid'"
+                                th:field="*{category}"
+                                id="category-input"
+                        >
+                            <option th:each="category: ${categoryList}"
+                                    th:selected="${entity.category != null && category.id == entity.category.id}"
+                                    th:text="${category.name}"
+                                    th:value="${category.id}">
+                        </select>
+                        <label th:for="category-input" th:text="#{masterTile.category.label}"></label>
+                        <div class="invalid-feedback">
+                            <p th:each="error: ${#fields.errors('category')}" th:text="${error}">Invalid data</p>
+                        </div>
+                    </div>
+
+                    <div class="form-wrap">
+                        <input th:classappend="${not #lists.isEmpty(#fields.errors('image'))} ? 'is-invalid'"
+                               th:field="*{image}"
+                               id="image-input"
+                               type="file"
+                        >
+                        <label th:for="image-input" th:text="#{masterTile.image.label}"></label>
+                        <div class="invalid-feedback">
+                            <p th:each="error: ${#fields.errors('image')}" th:text="${error}">Invalid data</p>
+                        </div>
+                    </div>
+
+                    <div class="form-wrap">
+                        <select th:classappend="${not #lists.isEmpty(#fields.errors('contentColor'))} ? 'is-invalid'"
+                                th:field="*{contentColor}"
+                                id="theme-select"
+                        >
+<!--                            TODO: Get themes from backend -->
+                            <option th:each="category: ${categoryList}"
+                                    th:selected="${entity.category != null && category.id == entity.category.id}"
+                                    th:text="${category.name}"
+                                    th:value="${category.id}">
+                        </select>
+                        <label th:for="theme-select" th:text="#{masterTile.theme.label}"></label>
+                        <div class="invalid-feedback">
+                            <p th:each="error: ${#fields.errors('category')}" th:text="${error}">Invalid data</p>
+                        </div>
+                    </div>
+
+                    <div class="form-wrap">
+                        <input th:field="*{apiKey}"
+                               id="apiKey-input"
+                               type="text"
+                               class="copy-to-clipboard"
+                               readonly
+                        >
+                        <label th:for="apiKey-input" th:text="#{masterTile.apiKey.label}"></label>
+                    </div>
+
+                    <div class="form-wrap">
+                        <input th:field="*{enabled}"
+                               id="enabled-input"
+                               type="checkbox"
+                        >
+                        <label th:for="enabled-input" th:text="#{masterTile.enabled.label}"></label>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <input th:classappend="${not #lists.isEmpty(#fields.errors('title.de'))} ? 'is-invalid'"
-               th:placeholder="#{masterTile.title.label}"
-               th:field="*{title.de}"
-               id="title_de-input"
-               type="text"
-        >
-        <label th:for="title_de-input" th:text="#{masterTile.title.label}"></label>
-        <div class="invalid-feedback">
-            <p th:each="error: ${#fields.errors('title.de')}" th:text="${error}">Invalid data</p>
-        </div>
 
-        <input type="submit">
+        <div class="controls">
+            <button type="submit" class="btn">Speichern</button>
+            <a type="button" class="btn" th:href="@{/admin}">Abbrechen</a>
+        </div>
     </form>
 
 </div>

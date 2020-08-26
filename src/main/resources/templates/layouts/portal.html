@@ -17,16 +17,12 @@
 <th:block th:replace="fragments/header :: header"/>
 
 <main role="main">
-    <div class="container">
-        <div class="row">
-            <th:block th:replace="fragments/notifications :: notifications"/>
-            <div class="col-md-12" layout:fragment="content">
-                Page content goes here
-            </div>
-        </div>
+    <div class="container" layout:fragment="content">
+        Page content goes here
     </div> <!-- /container -->
 </main>
 
+<th:block th:replace="fragments/notifications :: notifications"/>
 <th:block th:replace="fragments/footer :: footer"/>
 <th:block layout:fragment="scripts"/>
 

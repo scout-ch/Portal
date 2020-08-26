@@ -1,0 +1,195 @@
+.form-panel {
+  background-color: $color-bright;
+  padding: 7.5rem 3rem;
+}
+
+.form-wrap {
+  position: relative;
+  margin-bottom: 3rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="email"],
+  input[type="file"],
+  select,
+  textarea {
+    -webkit-appearance: none;
+    background-color: $color-gray-light;
+    border: none;
+    border-right: 0.2rem solid $color-gray-light;
+    border-radius: 0;
+    box-shadow: none;
+    color: $color-primary;
+    font-family: $base-body-font-family;
+    font-size: $base-body-font-size;
+    font-weight: $base-body-font-weight;
+    line-height: $base-body-line-height;
+    outline: none;
+    padding: 1rem;
+    width: 100%;
+
+    &:focus,
+    &:hover {
+      border-right: 0.2rem solid $color-primary;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &.is-invalid {
+      border-right: 0.2rem solid $color-error;
+
+      + label {
+        color: $color-error;
+      }
+    }
+
+    + label {
+      font-size: 1.6rem;
+      left: 1rem;
+      line-height: 2rem;
+      position: absolute;
+      top: -1rem;
+    }
+
+    &.copy-to-clipboard {
+      padding-right: 5rem;
+    }
+  }
+
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="email"],
+  select {
+    height: ($base-body-font-size * $base-body-line-height) + 2rem;
+  }
+
+  input[type="file"],
+  select {
+    cursor: pointer;
+  }
+
+  input[type="file"] {
+    padding-right: 5rem;
+  }
+
+  select {
+    @include bg-icon-sort-down($color-primary-escaped);
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 2rem 2rem;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 16rem;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+    left: 0.5rem;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    + label,
+    + input + label {
+      cursor: pointer;
+      display: block;
+      padding: 1rem 0 1rem 3.5rem;
+      position: relative;
+
+      &:before {
+        background-color: $color-gray;
+        border: 0.2rem solid $color-gray;
+        border-radius: 0.8rem;
+        content: '';
+        cursor: pointer;
+        height: 1.6rem;
+        left: 0;
+        outline: none;
+        position: absolute;
+        width: 3rem;
+        top: 1.7rem;
+        z-index: 1;
+      }
+
+      &:after {
+        background-color: $color-bright;
+        border-radius: 50%;
+        content: '';
+        height: 1.2rem;
+        left: 0.2rem;
+        position: absolute;
+        top: 1.9rem;
+        transition: color $animation-time, left $animation-time;
+        width: 1.2rem;
+        z-index: 2;
+      }
+
+      &:hover:after,
+      &:focus:after {
+        background-color: $color-secondary;
+      }
+    }
+
+    &:checked + label,
+    &:checked + input + label {
+      &:before {
+        background-color: $color-primary;
+        border-color: $color-primary;
+      }
+      &:after {
+        left: 1.6rem;
+      }
+      &:hover:after,
+      &:focus:after {
+        background-color: $color-secondary;
+      }
+    }
+
+    &:focus + label:after,
+    &:focus + input + label:after {
+      background-color: $color-secondary;
+    }
+  }
+
+  &.wordcount {
+    position: relative;
+
+    &:after {
+      background-color: $color-gray-light;
+      content: '0/200';
+      display: block;
+      font-size: 1.4rem;
+      padding: 0 0.5rem;
+      position: absolute;
+      right: 1.5rem;
+      top: 0;
+    }
+  }
+
+  .invalid-feedback {
+    color: $color-error;
+    font-size: 1.6rem;
+    padding: 0 1rem;
+  }
+
+  .btn-input-after {
+    color: $color-primary;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}

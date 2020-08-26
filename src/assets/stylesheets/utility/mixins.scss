@@ -37,11 +37,18 @@
   cursor: pointer;
   display: inline-block;
   font-family: $base-body-font-family;
-  font-weight: $font-weight-light;
+  font-weight: $font-weight-semi-bold;
   font-size: $base-body-font-size;
   line-height: $base-body-line-height;
   outline: none;
   text-align: center;
   text-decoration: none;
   transition: all $animation-time;
+
+  &:disabled,
+  &[disabled] { cursor: pointer; }
+}
+
+@mixin bg-icon-sort-down($color) {
+  background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' focusable='false' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='#{$color}' d='M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41z'%3E%3C/path%3E%3C/svg%3E");
 }
