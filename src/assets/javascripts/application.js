@@ -3,6 +3,8 @@
 //= require inc/notification
 //= require inc/copy-to-clipboard.js
 //= require inc/tabs.js
+//= require vendor/isotope.min.js
+//= require inc/tiles.js
 //= require_self
 
 var portal = new Portal();
