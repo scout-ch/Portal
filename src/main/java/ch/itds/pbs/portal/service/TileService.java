@@ -56,6 +56,7 @@ public class TileService {
         localizedTile.setCategory(userTile.getMasterTile().getCategory().getName());
 
         localizedTile.setMasterTileId(userTile.getMasterTile().getId());
+        localizedTile.setMasterTileVersion(userTile.getMasterTile().getVersion());
         localizedTile.setUserTileId(userTile.getId());
         localizedTile.setCategoryId(userTile.getMasterTile().getCategory().getId());
 
@@ -74,7 +75,7 @@ public class TileService {
 
     @Transactional
     public void provisioning(UserPrincipal userPrincipal) {
-        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new EntityNotFoundException());
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).collect(Collectors.toList());
         List<UserTile> newTiles = masterTileRepository.findAll().stream()
@@ -87,5 +88,4 @@ public class TileService {
                 }).collect(Collectors.toList());
         userTileRepository.saveAll(newTiles);
     }
-
 }

@@ -19,7 +19,9 @@
             </h5>
             <div class="card-body">
                 <p class="card-text" th:text="${tile.content}"></p>
-
+                <img th:if="${tile.image!=null}"
+                     th:src="@{/tile/masterFile/{tileId}/{tileVersion}/{name}(tileId=${tile.masterTileId},tileVersion=${tile.masterTileVersion},name=${tile.image.name})}"
+                     style="max-width: 100px">
             </div>
         </div>
 

@@ -17,6 +17,7 @@ public class LocalizedTile {
     private Color backgroundColor;
 
     private Long masterTileId;
+    private int masterTileVersion;
     private Long userTileId;
     private Long categoryId;
 

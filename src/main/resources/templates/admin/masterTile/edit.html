@@ -10,7 +10,8 @@
 <div layout:fragment="content">
     <h1 th:text="#{masterTile.newEntry.titel}"></h1>
 
-    <form th:action="@{/admin/masterTile/edit/{id}(id=${entity.id})}" method="post" th:object="${entity}">
+    <form th:action="@{/admin/masterTile/edit/{id}(id=${entity.id})}" method="post" th:object="${entity}"
+          enctype="multipart/form-data">
         <div class="col-block col-3">
             <div class="col double tabs">
                 <div class="tab-controls">
@@ -86,8 +87,12 @@
                     </div>
 
                     <div class="form-wrap">
+                        <span th:if="${entity.image!=null}" th:text="${entity.image.name}"></span>
+                        <img th:if="${entity.image!=null}"
+                             th:src="@{/tile/masterFile/{tileId}/{tileVersion}/{name}(tileId=${entity.id},tileVersion=${entity.version},name=${entity.image.name})}"
+                             style="max-width: 30px">
                         <input th:classappend="${not #lists.isEmpty(#fields.errors('image'))} ? 'is-invalid'"
-                               th:field="*{image}"
+                               name="imageUpload"
                                id="image-input"
                                type="file"
                         >
@@ -98,15 +103,14 @@
                     </div>
 
                     <div class="form-wrap">
-                        <select th:classappend="${not #lists.isEmpty(#fields.errors('contentColor'))} ? 'is-invalid'"
-                                th:field="*{contentColor}"
+                        <select th:classappend="${not #lists.isEmpty(#fields.errors('backgroundColor'))} ? 'is-invalid'"
+                                th:field="*{backgroundColor}"
                                 id="theme-select"
                         >
-<!--                            TODO: Get themes from backend -->
-                            <option th:each="category: ${categoryList}"
-                                    th:selected="${entity.category != null && category.id == entity.category.id}"
-                                    th:text="${category.name}"
-                                    th:value="${category.id}">
+                            <option th:each="theme: ${colorList}"
+                                    th:selected="${entity.backgroundColor != null && theme == entity.backgroundColor}"
+                                    th:text="${theme}"
+                                    th:value="${theme}">
                         </select>
                         <label th:for="theme-select" th:text="#{masterTile.theme.label}"></label>
                         <div class="invalid-feedback">
