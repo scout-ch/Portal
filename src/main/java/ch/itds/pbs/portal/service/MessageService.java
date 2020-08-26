@@ -64,4 +64,12 @@ public class MessageService {
 
         return messages.size();
     }
+
+    public boolean setMessageRead(UserPrincipal userPrincipal, long id) {
+        return messageRepository.setRead(userPrincipal.getId(), id) == 1;
+    }
+
+    public boolean delete(UserPrincipal userPrincipal, long id) {
+        return messageRepository.delete(userPrincipal.getId(), id) == 1;
+    }
 }
