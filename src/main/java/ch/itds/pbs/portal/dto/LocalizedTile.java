@@ -24,7 +24,7 @@ public class LocalizedTile {
     private FileMeta image;
 
     private int position = -1;
-    private int messageCount = 0;
+    private long unreadMessageCount = 0;
 
 
 }

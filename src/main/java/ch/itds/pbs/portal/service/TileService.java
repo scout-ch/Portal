@@ -67,7 +67,7 @@ public class TileService {
         localizedTile.setBackgroundColor(userTile.getMasterTile().getBackgroundColor());
 
         localizedTile.setPosition(userTile.getMasterTile().getPosition());
-        localizedTile.setMessageCount(userTile.getMessages().size());
+        localizedTile.setUnreadMessageCount(userTile.getMessages().stream().filter(msg -> !msg.isRead()).count());
 
         return localizedTile;
 
