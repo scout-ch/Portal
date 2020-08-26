@@ -117,5 +117,61 @@
   margin-top: ($base-body-font-size * $base-body-line-height) + 2rem;
 }
 
+.tiles {
+  .tile {
+    background-color: $color-bright;
+    border: 0.3rem solid $color-bright;
+    padding: $tile-padding $tile-padding 8rem;
+    position: relative;
+    transition: border-color $animation-time;
+
+    .title {
+      font-size: 2.4rem;
+      font-weight: $font-weight-semi-bold;
+      margin-bottom: 4rem;
+      padding-right: 5rem;
+    }
+
+    .image {
+      line-height: 0;
+    }
+
+    .label {
+      bottom: $tile-padding;
+      left: $tile-padding;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .btn-link {
+      opacity: 0;
+      position: absolute;
+      right: 1.3rem;
+      top: 1.3rem;
+      transition: opacity $animation-time;
+      z-index: 1;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+
+      .btn-link {
+        opacity: 1;
+      }
+    }
+  }
+
+  .grid-sizer { display: none; width: calc(100% / 3 - #{$column-spacing * 2}); }
+  .gutter-sizer { display: none; width: $column-spacing * 2; }
+}
+
+.label {
+  background-color: $color-primary;
+  color: $color-bright;
+  font-size: 1.6rem;
+  padding: 0.3rem 1.2rem;
+}
+
 .text-right { text-align: right; }
-.justify-flex-end { justify-content: flex-end; }
+.flex-justify-end { justify-content: flex-end; }
+.flex-align-start { align-items: flex-start; }
