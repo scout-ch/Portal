@@ -18,6 +18,9 @@
         <div class="tile col" th:each="tile : ${tiles}">
             <div class="title" th:text="${tile.title}"></div>
             <div class="content" th:text="${tile.content}"></div>
+            <div class="image" th:if="${tile.image}">
+                <img th:src="${tile.image}" th:alt="${tile.title}">
+            </div>
             <div class="category label" th:text="${tile.category}"></div>
 
             <a class="btn-icon btn-link" target="_blank" rel="noopener"
