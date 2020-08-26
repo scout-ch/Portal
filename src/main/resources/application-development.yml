@@ -18,6 +18,7 @@ bootstrap:
         position: 1
         enabled: true
         titleColor: DEFAULT
+        apiKey: DEMO-KEY
       - title:
           de: Lagerkochbuch DE
           fr: Lagerkochbuch FR

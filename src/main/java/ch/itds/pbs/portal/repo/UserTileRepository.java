@@ -15,4 +15,9 @@ public interface UserTileRepository extends BaseEntityRepository<UserTile> {
     @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.masterTile mt LEFT JOIN FETCH ut.messages LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE ut.user.id = :userId AND mt.enabled = TRUE ORDER BY mt.position")
     Stream<UserTile> findAllEnabledWithFetchForUserId(@Param("userId") Long id);
 
+    @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.user u WHERE ut.masterTile.id = :masterTileId")
+    List<UserTile> findAllByMasterTileIdWithUser(@Param("masterTileId") Long masterTileId);
+
+    @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.user u WHERE ut.masterTile.id = :masterTileId AND u.midataUserId IN :limitToUserIds")
+    List<UserTile> findAllByMasterTileIdAndUserMidataIdWithUser(@Param("masterTileId") Long masterTileId, @Param("limitToUserIds") List<Long> limitToUserIds);
 }

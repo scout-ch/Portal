@@ -19,7 +19,7 @@ import java.util.Locale;
 @Slf4j
 @Controller
 @RequestMapping("/")
-@PreAuthorize("isAuthenticated()")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class IndexController {
 
     private final transient TileService tileService;

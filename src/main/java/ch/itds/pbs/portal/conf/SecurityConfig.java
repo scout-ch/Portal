@@ -1,8 +1,10 @@
 package ch.itds.pbs.portal.conf;
 
 
+import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final transient UserDetailsService userDetailsService;
     private final transient MidataOAuth2UserService midataOAuth2UserService;
     private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
+    private final transient TileAuthenticationProvider tileAuthenticationProvider;
 
-    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler) {
+    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
         super();
         this.userDetailsService = userDetailsService;
 
         this.midataOAuth2UserService = midataOAuth2UserService;
         this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
+        this.tileAuthenticationProvider = tileAuthenticationProvider;
     }
 
     @Override
@@ -61,7 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     protected void configure(HttpSecurity http) throws Exception {
-        http.headers()
+        http.authenticationProvider(tileAuthenticationProvider)
+                .headers()
                 .frameOptions().sameOrigin()
                 .and()
                 .cors()
@@ -91,7 +97,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).access("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")
+                .antMatchers("/api/v1/**").hasRole("TILE")
                 .and()
+                .addFilterBefore(
+                        new TileTokenAuthenticationFilter(), BasicAuthenticationFilter.class
+                )
                 .oauth2Login()
                 .successHandler(localeSettingAuthenticationSuccessHandler)
                 .authorizationEndpoint()

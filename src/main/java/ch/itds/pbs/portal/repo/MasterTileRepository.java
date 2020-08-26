@@ -15,4 +15,6 @@ public interface MasterTileRepository extends BaseEntityRepository<MasterTile> {
     @Query("SELECT mt FROM MasterTile mt LEFT JOIN FETCH mt.category ORDER BY mt.position ASC")
     List<MasterTile> findAllWithCategory();
 
+    @Query("SELECT mt FROM MasterTile mt WHERE mt.enabled = TRUE AND mt.apiKey = :apiKey")
+    MasterTile findEnabledByApiKey(@Param("apiKey") String apiKey);
 }

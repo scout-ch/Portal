@@ -49,6 +49,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
                 .stream()
                 .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
                 .collect(Collectors.toList());
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new UserPrincipal(
                 user.getId(),
