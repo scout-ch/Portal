@@ -126,6 +126,7 @@ dependencies {
 	compile 'org.webjars.npm:sortablejs:1.8.4'
 	compile 'org.webjars.npm:popper.js:1.16.1'
 	compile 'org.webjars.npm:pnotify:4.0.0'
+	compile 'org.webjars.npm:tablesort:5.2.0'
 
 	// rest api doc
 	compile 'org.springdoc:springdoc-openapi-ui:1.3.4'

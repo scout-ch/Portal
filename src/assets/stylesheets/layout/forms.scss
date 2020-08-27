@@ -81,7 +81,7 @@
   }
 
   select {
-    @include bg-icon-sort-down($color-primary-escaped);
+    @include bg-icon-caret-down($color-primary-escaped);
     background-position: right 1rem center;
     background-repeat: no-repeat;
     background-size: 2rem 2rem;

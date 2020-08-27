@@ -13,6 +13,7 @@
 .btn-icon {
   @include btn;
   background-color: transparent;
+  color: $color-primary;
   height: 5rem;
   line-height: 2rem;
   padding: 1.5rem;
@@ -168,8 +169,21 @@
 .label {
   background-color: $color-primary;
   color: $color-bright;
+  display: inline-block;
   font-size: 1.6rem;
   padding: 0.3rem 1.2rem;
+}
+
+.icon {
+  display: inline-block;
+  height: 3rem;
+  padding: 0.5rem;
+  width: 3rem;
+
+  svg {
+    max-height: 100%;
+    max-width: 100%;
+  }
 }
 
 .text-right { text-align: right; }
