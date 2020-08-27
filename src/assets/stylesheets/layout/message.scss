@@ -80,5 +80,9 @@
     .url {
       margin-top: 3rem;
     }
+
+    &.hidden {
+      display: none;
+    }
   }
 }

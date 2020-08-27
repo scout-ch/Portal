@@ -1,3 +1,21 @@
+input[type="text"],
+input[type="search"],
+input[type="date"],
+input[type="email"],
+input[type="file"],
+select,
+textarea {
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  font-family: $base-body-font-family;
+  font-size: $base-body-font-size;
+  font-weight: $base-body-font-weight;
+  line-height: $base-body-line-height;
+  outline: none;
+  padding: 1rem;
+}
+
 .form-panel {
   background-color: $color-bright;
   padding: 7.5rem 3rem;
@@ -18,19 +36,11 @@
   input[type="file"],
   select,
   textarea {
-    -webkit-appearance: none;
     background-color: $color-gray-light;
     border: none;
     border-right: 0.2rem solid $color-gray-light;
     border-radius: 0;
-    box-shadow: none;
     color: $color-primary;
-    font-family: $base-body-font-family;
-    font-size: $base-body-font-size;
-    font-weight: $base-body-font-weight;
-    line-height: $base-body-line-height;
-    outline: none;
-    padding: 1rem;
     width: 100%;
 
     &:focus,
@@ -192,4 +202,17 @@
     top: 0;
     z-index: 1;
   }
+}
+
+select.filter {
+  @include bg-icon-filter($color-bright-escaped);
+  background-color: $color-primary;
+  background-position: left 1rem center, right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 2rem 2rem;
+  color: $color-bright;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  font-weight: $font-weight-semi-bold;
+  padding: 1rem 4rem;
 }

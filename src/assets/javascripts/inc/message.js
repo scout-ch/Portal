@@ -1,6 +1,12 @@
 (function() {
+  var filter = null;
+  var messages = [];
+
+
+
   function init() {
-    var messages = document.querySelectorAll('.messages .message');
+    messages = document.querySelectorAll('.messages .message');
+    filter = document.getElementById('message-filter-sender');
     var mLength = messages.length;
 
     for (var i = 0; i < mLength; i+=1) {
@@ -9,8 +15,37 @@
         messages[i].addEventListener('accordion-opened', onFirstOpen);
       }
     }
+
+    if (filter) {
+      initFilter();
+      filterMessages();
+    }
   }
 
+
+
+  function filterMessages() {
+    var mLength = messages.length;
+
+    for (var i = 0;  i < mLength; i+=1) {
+      var tileId = messages[i].getAttribute('data-tileid');
+
+      if (filter.value === 'all' || tileId === filter.value) {
+        messages[i].classList.remove('hidden');
+      } else {
+        messages[i].classList.add('hidden');
+      }
+    }
+  }
+
+
+  function initFilter() {
+    var filter = document.getElementById('message-filter-sender');
+
+    if (filter) {
+      filter.addEventListener('change', filterMessages);
+    }
+  }
 
 
   function onFirstOpen() {
