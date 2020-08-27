@@ -4,13 +4,14 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/portal}">
 <head>
-    <title>Portal</title>
+    <title th:text="${entity.id} ? #{masterTile.edit.title} : #{masterTile.create.title}">Portal</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="#{masterTile.newEntry.titel}"></h1>
+    <h1 th:text="${entity.id} ? #{masterTile.edit.title} : #{masterTile.create.title}"></h1>
 
-    <form th:action="@{/admin/masterTile/edit/{id}(id=${entity.id})}" method="post" th:object="${entity}"
+    <form th:action="${entity.id} ? @{/admin/masterTile/edit/{id}(id=${entity.id})} : @{/admin/masterTile/create}"
+          method="post" th:object="${entity}"
           enctype="multipart/form-data">
         <div class="col-block col-3">
             <div class="col double tabs">

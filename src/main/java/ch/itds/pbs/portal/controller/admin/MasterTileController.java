@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @PreAuthorize("hasRole('ADMIN')")
@@ -51,6 +53,49 @@ public class MasterTileController {
         model.addAttribute("entityList", masterTileRepository.findAllWithCategory());
 
         return "admin/masterTile/index";
+    }
+
+    @GetMapping("/create")
+    public String createForm(Model model) {
+
+        MasterTile entity = new MasterTile();
+        entity.setApiKey(UUID.randomUUID().toString());
+
+        model.addAttribute("entity", entity);
+        model.addAttribute("categoryList", categoryRepository.findAll());
+        model.addAttribute("colorList", Color.values());
+
+        return "admin/masterTile/edit";
+    }
+
+    @PostMapping("/create")
+    public String createSave(@Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
+                             @RequestParam("imageUpload") MultipartFile imageUpload,
+                             Model model, RedirectAttributes redirectAttributes, Locale locale) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("colorList", Color.values());
+            return "admin/masterTile/edit";
+        }
+
+        if (imageUpload != null && !imageUpload.isEmpty()) {
+            FileMeta image = fileService.upload(imageUpload);
+            entity.setImage(image);
+        }
+        try {
+            entity = masterTileRepository.save(entity);
+        } catch (Exception e) {
+            log.error("unable to save entity {}: {}", entity.getClass().getSimpleName(), e.getMessage(), e);
+            model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.create.error", new String[]{e.getMessage()}, locale));
+            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("colorList", Color.values());
+            return "admin/masterTile/edit";
+        }
+
+        redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.create.success", null, locale));
+
+        return "redirect:/admin/masterTile";
     }
 
     @GetMapping("/edit/{id}")
@@ -110,6 +155,20 @@ public class MasterTileController {
 
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.edit.success", null, locale));
 
+        return "redirect:/admin/masterTile";
+    }
+
+    @PostMapping("/delete/{id}")
+    @Transactional
+    public String delete(@PathVariable long id, RedirectAttributes redirectAttributes, Locale locale) {
+
+        MasterTile masterTile = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        try {
+            masterTileRepository.delete(masterTile);
+            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.success", null, locale));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.error", new String[]{e.getMessage()}, locale));
+        }
         return "redirect:/admin/masterTile";
     }
 

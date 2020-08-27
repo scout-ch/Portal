@@ -24,7 +24,7 @@ public class UserTile extends BaseEntity {
     @NotNull
     private User user;
 
-    @OneToMany(mappedBy = "userTile")
+    @OneToMany(mappedBy = "userTile", cascade = CascadeType.REMOVE)
     private Set<Message> messages;
 
 }

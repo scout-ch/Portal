@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 @EntityListeners({AuditingEntityListener.class})
@@ -59,6 +60,9 @@ public class MasterTile extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn
     private Category category;
+
+    @OneToMany(mappedBy = "masterTile", cascade = CascadeType.REMOVE)
+    Set<UserTile> userTiles;
 
     private int position = -1;
 

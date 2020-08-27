@@ -51,14 +51,22 @@
                     </div>
                 </td>
                 <td data-sort-method="none" class="no-padding text-right">
-                    <button class="btn-icon" type="button" th:title="#{general.delete}" th:attr="aria-label=#{general.delete}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366" viewBox="0 0 18.669 20.366">
-                            <path d="M12.637,4a1.634,1.634,0,0,0-1.7,1.7v.849H5v1.7h.928L7.546,23.6l.08.769H21.043l.08-.769L22.741,8.243h.928v-1.7h-5.94V5.7a1.727,1.727,0,0,0-.477-1.22A1.727,1.727,0,0,0,16.031,4Zm0,1.7h3.394v.849H12.637ZM7.652,8.243H21.017L19.505,22.669H9.163Zm3.288,2.546v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Z" transform="translate(-5 -4)" fill="currentColor"/>
-                        </svg>
-                    </button>
-                    <a class="btn-icon" th:href="@{/admin/masterTile/edit/{id}(id=${entity.id})}" th:title="#{general.edit}" th:attr="aria-label=#{general.edit}">
-                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
+                    <form th:action="@{/admin/masterTile/delete/{id}(id=${entity.id})}" method="post">
+                        <button class="btn-icon" type="submit" th:title="#{general.delete}"
+                                th:attr="aria-label=#{general.delete}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366"
+                                 viewBox="0 0 18.669 20.366">
+                                <path d="M12.637,4a1.634,1.634,0,0,0-1.7,1.7v.849H5v1.7h.928L7.546,23.6l.08.769H21.043l.08-.769L22.741,8.243h.928v-1.7h-5.94V5.7a1.727,1.727,0,0,0-.477-1.22A1.727,1.727,0,0,0,16.031,4Zm0,1.7h3.394v.849H12.637ZM7.652,8.243H21.017L19.505,22.669H9.163Zm3.288,2.546v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Z"
+                                      transform="translate(-5 -4)" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <a class="btn-icon" th:href="@{/admin/masterTile/edit/{id}(id=${entity.id})}"
+                       th:title="#{general.edit}" th:attr="aria-label=#{general.edit}">
+                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 512 512">
+                            <path fill="currentColor"
+                                  d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
                         </svg>
                     </a>
                 </td>
