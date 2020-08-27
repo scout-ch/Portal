@@ -15,7 +15,9 @@
         <div class="grid-sizer"></div>
         <div class="gutter-sizer"></div>
 
-        <div class="tile col" th:each="tile : ${tiles}">
+        <div class="tile col" th:each="tile : ${tiles}"
+             th:classappend="${tile.backgroundColor != T(ch.itds.pbs.portal.domain.Color).DEFAULT ? 'theme-' + tile.backgroundColor: ''}"
+        >
             <div class="title" th:text="${tile.title}"></div>
             <div class="content" th:text="${tile.content}"></div>
             <div class="image" th:if="${tile.image}">
