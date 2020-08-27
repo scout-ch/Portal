@@ -18,7 +18,7 @@ public class TileTokenAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String apiKey = request.getHeader("X-Authorization");
+        String apiKey = request.getHeader("X-Tile-Authorization");
 
         if (apiKey != null) {
 

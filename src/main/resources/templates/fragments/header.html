@@ -16,7 +16,8 @@
                     <ul>
                         <li>
                             <a th:href="@{/message}" th:text="#{general.menu.messages}">Messages</a>
-                            <span class="badge message-count-total"
+                            <span sec:authorize="isAuthenticated()"
+                                  class="badge message-count-total"
                                   th:text="${@messageService.countUnreadMessages(#authentication.principal)}">3</span>
                         </li>
                         <li>

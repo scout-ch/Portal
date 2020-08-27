@@ -1,5 +1,6 @@
 package ch.itds.pbs.portal.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,19 @@ import java.util.Locale;
 @Getter
 @Setter
 @Embeddable
+@Schema(description = "localized string")
 public class LocalizedString {
 
+    @Schema(description = "Deutsch")
     private String de = null;
+
+    @Schema(description = "Francais")
     private String fr = null;
+
+    @Schema(description = "Italiano")
     private String it = null;
+
+    @Schema(description = "English")
     private String en = null;
 
     public String getOrDefault(Language language, String defaultValue) {

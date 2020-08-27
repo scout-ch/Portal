@@ -1,6 +1,7 @@
 package ch.itds.pbs.portal.security.tile;
 
 import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.exception.InvalidTileApiKeyException;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -25,8 +26,9 @@ public class TileAuthenticationProvider implements AuthenticationProvider {
         if (masterTile != null) {
             tileAuthentication.setAuthenticated(true);
             tileAuthentication.setTileId(masterTile.getId());
+            return tileAuthentication;
         }
-        return tileAuthentication;
+        throw new InvalidTileApiKeyException("invalid api key");
     }
 
     @Override

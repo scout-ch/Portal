@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @SuppressWarnings("PMD.AvoidDuplicateLiterals")
     protected void configure(HttpSecurity http) throws Exception {
-        http.authenticationProvider(tileAuthenticationProvider)
+        http
                 .headers()
                 .frameOptions().sameOrigin()
                 .and()
@@ -87,21 +87,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .disable()
-                .exceptionHandling()
-                //.authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
                 .authorizeRequests()
                 .mvcMatchers("/admin", "/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/error",
                         "/assets/**"
                 ).permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
+                .antMatchers("/v3/api-docs", "/v3/api-docs/swagger-config", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).access("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")
                 .antMatchers("/api/v1/**").hasRole("TILE")
                 .and()
-                .addFilterBefore(
-                        new TileTokenAuthenticationFilter(), BasicAuthenticationFilter.class
-                )
+                .authenticationProvider(tileAuthenticationProvider)
+                .addFilterBefore(new TileTokenAuthenticationFilter(), BasicAuthenticationFilter.class)
                 .oauth2Login()
                 .successHandler(localeSettingAuthenticationSuccessHandler)
                 .authorizationEndpoint()
@@ -111,7 +108,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .baseUri("/oauth2/callback/*")
                 .and()
                 .userInfoEndpoint()
-                .userService(midataOAuth2UserService);
+                .userService(midataOAuth2UserService)
+                .and()
+                .and();
 
     }
 }
