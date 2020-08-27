@@ -10,6 +10,21 @@
   }
 }
 
+.btn-text {
+  @include btn;
+  text-align: left;
+
+  svg {
+    height: 2rem;
+    vertical-align: middle;
+    width: 2rem;
+  }
+
+  &:hover {
+    color: $color-secondary;
+  }
+}
+
 .btn-icon {
   @include btn;
   background-color: transparent;
@@ -194,6 +209,12 @@
     max-height: 100%;
     max-width: 100%;
   }
+}
+
+.top-buttons {
+  position: absolute;
+  right: $container-horizontal-padding;
+  top: 1.5rem;
 }
 
 .text-right { text-align: right; }
