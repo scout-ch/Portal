@@ -144,6 +144,16 @@
       z-index: 1;
     }
 
+    .message-count {
+      background-color: $color-primary;
+      bottom: $tile-padding;
+      color: $color-bright;
+      position: absolute;
+      right: $tile-padding;
+      text-decoration: none;
+      top: auto;
+    }
+
     .btn-link {
       opacity: 0;
       position: absolute;

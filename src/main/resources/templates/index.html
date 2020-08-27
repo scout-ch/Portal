@@ -22,9 +22,11 @@
                 <img th:src="@{/tile/masterFile/{tileId}/{tileVersion}/{name}(tileId=${tile.masterTileId},tileVersion=${tile.masterTileVersion},name=${tile.image.name})}">
             </div>
             <div class="category label" th:text="${tile.category}"></div>
-
-            <span th:if="${tile.unreadMessageCount>0}"
-                  th:text="${tile.unreadMessageCount}">3</span>
+            <a th:href="@{/message(tileId=${tile.masterTileId})}" class="message-count badge"
+               th:if="${tile.unreadMessageCount>0}"
+               th:text="${tile.unreadMessageCount}"
+               th:title="#{message.unread.link.title(${tile.title})}"
+            ></a>
 
             <a class="btn-icon btn-link" target="_blank" rel="noopener"
                th:if="${tile.url}"
