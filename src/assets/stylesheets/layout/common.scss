@@ -217,6 +217,27 @@
   top: 1.5rem;
 }
 
+.list-striped {
+  @include unstyled-list;
+
+  .header {
+    font-weight: $font-weight-semi-bold;
+  }
+
+  li {
+    padding: 1rem;
+
+    &:nth-of-type(even) {
+      background-color: $color-bright;
+    }
+
+    form {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+}
+
 .text-right { text-align: right; }
 .flex-justify-end { justify-content: flex-end; }
 .flex-align-start { align-items: flex-start; }
