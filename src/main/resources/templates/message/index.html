@@ -20,7 +20,9 @@
             <span th:text="${entity.url}"></span>
             <span th:text="${#temporals.format(entity.dateCreated, 'dd.MM.yyyy HH:mm')}"></span>
             <a th:unless="${entity.read}" th:href="@{/message/setRead/{id}(id=${entity.id})}" target="_blank">R</a>
-            <a th:href="@{/message/delete/{id}(id=${entity.id})}">D</a>
+            <form th:action="@{/message/delete/{id}(id=${entity.id})}" method="post">
+                <button type="submit">D</button>
+            </form>
         </li>
     </ul>
 

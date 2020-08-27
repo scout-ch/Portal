@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,7 +38,7 @@ public class MessageController {
         return "message/index";
     }
 
-    @RequestMapping(path = "/setRead/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/setRead/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<ActionMessage> setRead(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal, Locale locale) {
 
@@ -54,7 +55,7 @@ public class MessageController {
         }
     }
 
-    @RequestMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     @Transactional
     public String delete(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal, RedirectAttributes redirectAttributes, Locale locale) {
 
