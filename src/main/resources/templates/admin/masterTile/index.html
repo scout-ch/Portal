@@ -9,13 +9,62 @@
 <body>
 <div layout:fragment="content">
 
-    <ul>
-        <li th:each="entity : ${entityList}">
-            <span th:text="${entity.title.getLocalized(#locale)}"></span>
-            <a th:href="@{/admin/masterTile/edit/{id}(id=${entity.id})}">E</a>
-        </li>
-    </ul>
+    <h1 th:text="#{masterTile.index.titel}">Admin Portal</h1>
 
+    <table class="table table-sortable table-draggable">
+        <thead>
+            <tr>
+                <th data-sort-default class="order" th:text="#{masterTile.table.heading.order}">Order</th>
+                <th th:text="#{masterTile.table.heading.name}">Name</th>
+                <th th:text="#{masterTile.table.heading.category}">Category</th>
+                <th data-sort-method="none" th:text="#{masterTile.table.heading.languages}">Languages</th>
+                <th th:text="#{masterTile.table.heading.published}">Published</th>
+                <th data-sort-method="none"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entity : ${entityList}">
+                <td th:attr="data-sort=${entity.position}">
+                    <div class="icon grip-handle">
+                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M496 288H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm0-128H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16z"></path>
+                        </svg>
+                    </div>
+                </td>
+                <td th:text="${entity.title.getLocalized(#locale)}"></td>
+                <td>
+                    <div class="label" th:text="${entity.category.name}"></div>
+                </td>
+                <td data-sort-method="none">
+<!--                TODO: Implement language list once available -->
+                </td>
+                <td>
+                    <div th:if="${entity.enabled}" class="icon">
+                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
+                        </svg>
+                    </div>
+                    <div th:unless="${entity.enabled}" class="icon">
+                        <svg aria-hidden="true" focusable="false"  role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512">
+                            <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
+                        </svg>
+                    </div>
+                </td>
+                <td data-sort-method="none" class="no-padding text-right">
+                    <button class="btn-icon" type="button" th:title="#{general.delete}" th:attr="aria-label=#{general.delete}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366" viewBox="0 0 18.669 20.366">
+                            <path d="M12.637,4a1.634,1.634,0,0,0-1.7,1.7v.849H5v1.7h.928L7.546,23.6l.08.769H21.043l.08-.769L22.741,8.243h.928v-1.7h-5.94V5.7a1.727,1.727,0,0,0-.477-1.22A1.727,1.727,0,0,0,16.031,4Zm0,1.7h3.394v.849H12.637ZM7.652,8.243H21.017L19.505,22.669H9.163Zm3.288,2.546v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Z" transform="translate(-5 -4)" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <a class="btn-icon" th:href="@{/admin/masterTile/edit/{id}(id=${entity.id})}" th:title="#{general.edit}" th:attr="aria-label=#{general.edit}">
+                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <th:block layout:fragment="scripts">

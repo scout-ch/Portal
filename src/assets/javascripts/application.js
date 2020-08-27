@@ -3,6 +3,7 @@
 //= require inc/notification
 //= require inc/copy-to-clipboard.js
 //= require inc/tabs.js
+//= require inc/table-sort.js
 //= require vendor/isotope.min.js
 //= require inc/tiles.js
 //= require_self
