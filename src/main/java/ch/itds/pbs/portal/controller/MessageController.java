@@ -1,10 +1,12 @@
 package ch.itds.pbs.portal.controller;
 
+import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.security.CurrentUser;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.MessageService;
 import ch.itds.pbs.portal.util.Flash;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -35,14 +37,20 @@ public class MessageController {
         return "message/index";
     }
 
-    @RequestMapping("/setRead/{id}")
+    @RequestMapping(path = "/setRead/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
-    public ResponseEntity<?> setRead(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<ActionMessage> setRead(@PathVariable long id, @CurrentUser UserPrincipal userPrincipal, Locale locale) {
 
         if (messageService.setMessageRead(userPrincipal, id)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(ActionMessage
+                    .builder()
+                    .message(messageSource.getMessage("message.setRead.success", null, locale))
+                    .build());
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(ActionMessage
+                    .builder()
+                    .message(messageSource.getMessage("message.setRead.error", null, locale))
+                    .build());
         }
     }
 

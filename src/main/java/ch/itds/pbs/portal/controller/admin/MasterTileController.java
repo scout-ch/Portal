@@ -3,6 +3,7 @@ package ch.itds.pbs.portal.controller.admin;
 import ch.itds.pbs.portal.domain.Color;
 import ch.itds.pbs.portal.domain.FileMeta;
 import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.service.FileService;
@@ -10,6 +11,8 @@ import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @PreAuthorize("hasRole('ADMIN')")
@@ -106,6 +111,23 @@ public class MasterTileController {
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.edit.success", null, locale));
 
         return "redirect:/admin/masterTile";
+    }
+
+    @PostMapping(path = "/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ActionMessage> updateSort(@RequestBody Map<Long, Integer> data, Locale locale) {
+
+        List<MasterTile> items = masterTileRepository.findAll();
+        for (MasterTile i : items) {
+            i.setPosition(data.get(i.getId()));
+        }
+        masterTileRepository.saveAll(items);
+
+        return ResponseEntity
+                .ok(ActionMessage
+                        .builder()
+                        .message(messageSource.getMessage("masterTile.updateSort.success", null, locale))
+                        .build()
+                );
     }
 
 }
