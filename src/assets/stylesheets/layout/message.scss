@@ -1,0 +1,84 @@
+.messages {
+  .header,
+  .accordion-header {
+    display: flex;
+
+    .sender {
+      overflow: hidden;
+      width: 30rem;
+    }
+    .title {
+      flex: 2 1 auto;
+      overflow: hidden;
+      width: 30rem;
+    }
+    .read {
+      flex: 0 0 auto;
+      width: 10rem;
+    }
+    .date {
+      overflow: hidden;
+      width: 15rem;
+    }
+    .controls {
+      flex: 0 0 auto;
+      margin: -1rem 0 -1rem 0;
+      text-align: right;
+      width: 10rem;
+    }
+  }
+
+  .message {
+    border: 0.3rem solid $color-bright;
+    padding: 0.7rem;
+
+    &:hover {
+      .indicator-open,
+      .indicator-close {
+        color: $color-secondary;
+      }
+    }
+
+    &:nth-of-type(odd) {
+      border-color: $color-gray-light;
+    }
+
+    &.open {
+      border-color: $color-primary;
+
+      .indicator-close {
+        display: inline-block;
+      }
+
+      .indicator-open {
+        display: none;
+      }
+
+      .accordion-body {
+        padding-top: 4rem;
+      }
+    }
+
+    .accordion-header {
+      height: 3rem;
+    }
+
+    .accordion-body {
+      padding-top: 0;
+      transition: padding-top $animation-time;
+    }
+
+    .indicator-close {
+      display: none;
+    }
+
+    .indicator-close,
+    .indicator-open {
+      margin-top: 1rem;
+    }
+
+    .url {
+      margin-top: 3rem;
+    }
+  }
+}

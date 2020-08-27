@@ -1,9 +1,11 @@
 //= require webjars.js
 //= require portal.js
-//= require inc/notification
+//= require inc/notification.js
 //= require inc/copy-to-clipboard.js
 //= require inc/tabs.js
 //= require inc/table-sort.js
+//= require inc/accordion.js
+//= require inc/message.js
 //= require vendor/isotope.min.js
 //= require inc/tiles.js
 //= require_self

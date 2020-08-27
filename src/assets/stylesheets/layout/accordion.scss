@@ -1,0 +1,18 @@
+.accordion {
+  .open {
+    .accordion-body {
+      max-height: 2000px;
+      transition: max-height ($animation-time * 20);
+    }
+  }
+
+  .accordion-header {
+    cursor: pointer;
+  }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height $animation-time;
+  }
+}
