@@ -22,10 +22,11 @@
 
   a {
     display: inline-block;
+    font-weight: $font-weight-semi-bold;
     text-decoration: none;
 
     &:hover {
-      text-decoration: underline;
+      color: $color-secondary;
     }
   }
 }
