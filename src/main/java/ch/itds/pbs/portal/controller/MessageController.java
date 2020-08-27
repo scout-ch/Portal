@@ -1,5 +1,7 @@
 package ch.itds.pbs.portal.controller;
 
+import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.domain.Message;
 import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.security.CurrentUser;
 import ch.itds.pbs.portal.security.UserPrincipal;
@@ -15,9 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/message")
@@ -33,8 +38,12 @@ public class MessageController {
     }
 
     @RequestMapping("")
-    public String index(@CurrentUser UserPrincipal userPrincipal, Model model) {
-        model.addAttribute("entityList", messageService.listMessages(userPrincipal));
+    public String index(@RequestParam(required = false) Long tileId, @CurrentUser UserPrincipal userPrincipal, Model model) {
+        List<Message> messageList = messageService.listMessages(userPrincipal);
+        List<MasterTile> masterTileList = messageList.stream().map(m -> m.getUserTile().getMasterTile()).distinct().collect(Collectors.toList());
+        model.addAttribute("entityList", messageList);
+        model.addAttribute("masterTileList", masterTileList);
+        model.addAttribute("tileId", tileId);
         return "message/index";
     }
 
