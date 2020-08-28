@@ -76,7 +76,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         user.setFirstName(oAuth2UserInfo.getFirstName());
         user.setLastName(oAuth2UserInfo.getLastName());
         user.setNickName(oAuth2UserInfo.getName());
-        user.setLanguage(Language.valueOfOrDefault(oAuth2UserInfo.getCorrespondenceLanguage().toUpperCase()));
+        user.setLanguage(Language.valueOfOrDefault(oAuth2UserInfo.getCorrespondenceLanguage()));
         user.setEnabled(true);
         user.setAccountExpired(false);
         user.setAccountLocked(false);
