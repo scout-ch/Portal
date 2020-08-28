@@ -2,6 +2,7 @@ package ch.itds.pbs.portal.service;
 
 import ch.itds.pbs.portal.domain.FileMeta;
 import ch.itds.pbs.portal.repo.FileMetaRepository;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.postgresql.largeobject.LargeObject;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
 public class FileService {
 
     private final transient JdbcTemplate jdbcTemplate;

@@ -84,7 +84,7 @@ public class MasterTileController {
             entity.setImage(image);
         }
         try {
-            entity = masterTileRepository.save(entity);
+            masterTileRepository.save(entity);
         } catch (Exception e) {
             log.error("unable to save entity {}: {}", entity.getClass().getSimpleName(), e.getMessage(), e);
             model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.create.error", new String[]{e.getMessage()}, locale));

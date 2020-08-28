@@ -10,6 +10,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.Locale;
 
 public class UserUpdatingSessionLocaleResolver extends SessionLocaleResolver {
 
@@ -26,7 +27,10 @@ public class UserUpdatingSessionLocaleResolver extends SessionLocaleResolver {
         if (principal instanceof OAuth2AuthenticationToken) {
             OAuth2User oAuth2User = ((OAuth2AuthenticationToken) principal).getPrincipal();
             if (oAuth2User instanceof UserPrincipal) {
-                userService.setLanguage((UserPrincipal) oAuth2User, localeContext.getLocale());
+                Locale locale = localeContext.getLocale();
+                if (locale != null) {
+                    userService.setLanguage((UserPrincipal) oAuth2User, locale);
+                }
             }
         }
     }
