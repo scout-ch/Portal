@@ -15,6 +15,6 @@ services:
     ports:
       - 5556:5432
     environment:
-      - POSTGRES_DB=pbsportal
-      - POSTGRES_USER=pbsportal
-      - POSTGRES_PASSWORD=pbsportal
+      - POSTGRES_DB=pbsportal-test
+      - POSTGRES_USER=pbsportal-test
+      - POSTGRES_PASSWORD=pbsportal-test
