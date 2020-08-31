@@ -59,7 +59,9 @@
                     </div>
                 </td>
                 <td data-sort-method="none" class="no-padding text-right">
-                    <form th:action="@{/admin/masterTile/delete/{id}(id=${entity.id})}" method="post">
+                    <form th:action="@{/admin/masterTile/delete/{id}(id=${entity.id})}" method="post"
+                          onsubmit="return confirm('Wirklich löschen?');"
+                    >
                         <button class="btn-icon" type="submit" th:title="#{general.delete}"
                                 th:attr="aria-label=#{general.delete}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366"
