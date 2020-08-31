@@ -32,7 +32,9 @@
             <div class="controls"></div>
         </li>
         <li class="message accordion-element" th:each="entity : ${entityList}"
-            th:attr="data-read=${entity.read}, data-messageid=${entity.id},data-tileid=${entity.userTile.masterTile.id}">
+            th:attr="data-read=${entity.read}, data-messageid=${entity.id},data-tileid=${entity.userTile.masterTile.id}"
+            th:classappend="${(tileId == null || tileId == entity.userTile.id) ? '' : 'hidden'}"
+        >
             <div class="accordion-header">
                 <div class="sender" th:text="${entity.userTile.masterTile.title.getLocalized(#locale)}"></div>
                 <div class="title" th:text="${entity.title}"></div>

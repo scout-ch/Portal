@@ -1,12 +1,14 @@
 (function() {
   var filter = null;
   var messages = [];
+  var totalCount = null;
 
 
 
   function init() {
     messages = document.querySelectorAll('.messages .message');
     filter = document.getElementById('message-filter-sender');
+    totalCount = document.querySelector('.message-count-total');
     var mLength = messages.length;
 
     for (var i = 0; i < mLength; i+=1) {
@@ -69,6 +71,7 @@
         }
         message.setAttribute('data-read', true);
         message.removeEventListener('accordion-opened', onFirstOpen);
+        reduceTotalCount();
 
         var data = JSON.parse(this.responseText);
         portal.notification('success', data.message);
@@ -83,6 +86,18 @@
       }
     };
     xhr.send();
+  }
+
+
+  function reduceTotalCount() {
+    if (!totalCount) {
+      return;
+    }
+
+    var current = parseInt(totalCount.textContent);
+    if (!isNaN(current) && current > 0) {
+      totalCount.textContent = current - 1;
+    }
   }
 
 
