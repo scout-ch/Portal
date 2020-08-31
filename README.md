@@ -19,7 +19,7 @@
 * Build using Gradle:
   * Set `Build and Run using` to Gradle in `Build, Execution, Deployment > Build Tools > Gradle`
 * Enable `Enable annotation processing` in `Build, Execution, Deployment > Compiler > Annotation Processors`
-* Configure Run/Debug Configuration for ChatPoCApplication
+* Configure Run/Debug Configuration for PortalApplication (available in `.run` folder)
     * Enable launch optimizations
     * Set `On 'Update' action` to `Hot swap classes and update trigger file if failed`
     * Set `On frame deactivation` to `Update classes and resources`
