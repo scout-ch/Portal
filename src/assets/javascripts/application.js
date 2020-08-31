@@ -8,6 +8,8 @@
 //= require inc/message.js
 //= require vendor/isotope.min.js
 //= require inc/tiles.js
+//= require vendor/Sortable.min.js
+//= require inc/table-drag.js
 //= require_self
 
 var portal = new Portal();
