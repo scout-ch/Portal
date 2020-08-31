@@ -118,14 +118,8 @@ dependencies {
 	compile group: 'io.bit3', name: 'jsass', version: jsassVersion
 
 	// web frontend libraries
-	compile 'org.webjars:bootstrap:4.5.0'
 	compile 'org.webjars:font-awesome:5.13.0'
-	compile 'org.webjars:jquery:3.4.1'
-	compile 'org.webjars:datatables:1.10.21'
 
-	compile 'org.webjars.npm:sortablejs:1.8.4'
-	compile 'org.webjars.npm:popper.js:1.16.1'
-	compile 'org.webjars.npm:pnotify:4.0.0'
 	compile 'org.webjars.npm:tablesort:5.2.0'
 
 	// rest api doc
@@ -173,7 +167,6 @@ assets {
 	includes = [
 			'extensions/*',
 			'webjars/font-awesome/5.13.0/webfonts/**',
-			'webjars/datatables/1.10.21/images/**'
 	]
 	excludes = ['**/*.less', '**/*.scss', 'webjars/**', '**/*.es6', 'inc/**'] //Example Exclude GLOB pattern
 
