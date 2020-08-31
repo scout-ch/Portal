@@ -202,6 +202,22 @@ textarea {
     top: 0;
     z-index: 1;
   }
+
+  .image-preview {
+    background-color: $color-gray-light;
+    padding: 1rem 5rem;
+    position: relative;
+
+    img {
+      max-height: 3rem;
+      max-width: 3rem;
+      left: 1rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      vertical-align: middle;
+    }
+  }
 }
 
 select.filter {
