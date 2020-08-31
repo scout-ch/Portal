@@ -5,6 +5,7 @@ input[type="email"],
 input[type="file"],
 select,
 textarea {
+  -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
   box-shadow: none;
@@ -95,6 +96,10 @@ textarea {
     background-position: right 1rem center;
     background-repeat: no-repeat;
     background-size: 2rem 2rem;
+
+    &::-ms-expand {
+      display: none;
+    }
   }
 
   textarea {
@@ -220,13 +225,29 @@ textarea {
 
 select.filter {
   @include bg-icon-filter($color-bright-escaped);
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
   background-color: $color-primary;
   background-position: left 1rem center, right 1rem center;
   background-repeat: no-repeat;
   background-size: 2rem 2rem;
   color: $color-bright;
   cursor: pointer;
+  border: none;
   border-radius: 0.4rem;
   font-weight: $font-weight-semi-bold;
   padding: 1rem 4rem;
+
+  &:hover {
+    background-color: $color-secondary;
+  }
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  option {
+    background-color: $color-primary;
+  }
 }
