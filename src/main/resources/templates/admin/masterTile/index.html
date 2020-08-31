@@ -44,8 +44,7 @@
                 <td>
                     <div class="label" th:text="${entity.category.name}"></div>
                 </td>
-                <td data-sort-method="none">
-<!--                TODO: Implement language list once available -->
+                <td data-sort-method="none" th:text="${#strings.listJoin(entity.availableLanguages, ', ')}">
                 </td>
                 <td>
                     <div th:if="${entity.enabled}" class="icon">

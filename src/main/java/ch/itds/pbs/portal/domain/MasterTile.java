@@ -2,10 +2,13 @@ package ch.itds.pbs.portal.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -69,5 +72,16 @@ public class MasterTile extends BaseEntity {
     private String apiKey;
 
     private boolean enabled = true;
+
+    public List<Language> getAvailableLanguages() {
+        List<Language> languages = new ArrayList<>();
+        for (Language l : Language.values()) {
+            if (!Strings.isEmpty(title.getOrDefault(l, null))
+                    && !Strings.isEmpty(content.getOrDefault(l, null))) {
+                languages.add(l);
+            }
+        }
+        return languages;
+    }
 
 }
