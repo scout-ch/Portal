@@ -112,7 +112,8 @@ public class MasterTileController {
 
     @PostMapping("/edit/{id}")
     public String editSave(@PathVariable long id, @Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
-                           @RequestParam("imageUpload") MultipartFile imageUpload, @RequestParam(required = false) boolean imageDelete,
+                           @RequestParam("imageUpload") MultipartFile imageUpload,
+                           @RequestParam(required = false, name = "imageUpload-delete") boolean imageDelete,
                            Model model, RedirectAttributes redirectAttributes, Locale locale) {
 
         MasterTile savedEntity = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
