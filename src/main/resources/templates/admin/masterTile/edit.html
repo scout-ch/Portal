@@ -51,7 +51,7 @@
                                 <p th:each="error: ${#fields.errors('title.' + langLow)}" th:text="${error}">Invalid data</p>
                             </div>
                         </div>
-                        <div class="form-wrap wordcount">
+                        <div class="form-wrap char-count">
                             <textarea th:classappend="${not #lists.isEmpty(#fields.errors('content.' + langLow))} ? 'is-invalid'"
                                    th:placeholder="#{masterTile.content.label}"
                                    th:field="*{content.__${langLow}__}"

@@ -7,6 +7,7 @@
 //= require inc/accordion.js
 //= require inc/message.js
 //= require inc/file-input.js
+//= require inc/char-count.js
 //= require vendor/isotope.min.js
 //= require inc/tiles.js
 //= require vendor/Sortable.min.js
