@@ -1,36 +1,44 @@
-PNotify.defaults.styling = 'bootstrap4'; // Bootstrap version 4
-PNotify.defaults.icons = 'fontawesome5'; // Font Awesome 5
+(function () {
+  var wrapper = null;
+  var defaultTimeout = 2000;
+  var errorTimeout = 4000;
 
-Portal.prototype.notification = function (level, msg) {
-    var _this = this;
-    _this.notificationWithTitle(level, undefined, msg)
-};
+  function init() {
+    wrapper = document.getElementById('notifications');
+    var notifications = wrapper.querySelectorAll('.alert');
+    var nLength = notifications.length;
 
-Portal.prototype.notificationWithTitle = function (level, title, msg) {
-
-    var _this = this;
-
-    var delay = 2000;
-
-    if (level === 'error') {
-        delay = 4000;
+    for (var i = 0; i < nLength; i+=1) {
+      setTimeout((function(notification) {
+        return function() {
+          wrapper.removeChild(notification);
+        };
+      }(notifications[i])), notifications[i].classList.contains('error') ? errorTimeout : defaultTimeout);
     }
 
-    var data = {
-        text: msg,
-        type: level,
-        delay: delay,
-        modules: {
-            Buttons: {
-                closer: true
-            }
-        }
-    };
+    Portal.prototype.notification = function (level, msg) {
+      createNotification(level, msg);
+    }
+  }
 
-    if (title) {
-        data.title = title;
+
+  function createNotification(level, msg) {
+    if (!wrapper) {
+      return;
     }
 
-    PNotify.alert(data);
+    var notification = document.createElement('div');
+    notification.classList.add('alert');
+    notification.classList.add(level);
+    notification.textContent = msg;
+    wrapper.appendChild(notification);
 
-}
+    setTimeout(function() {
+      wrapper.removeChild(notification);
+    }, level === 'error' ? errorTimeout : defaultTimeout);
+  }
+
+
+
+  window.addEventListener('DOMContentLoaded', init);
+}());

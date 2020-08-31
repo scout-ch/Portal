@@ -1,0 +1,29 @@
+#notifications {
+  max-width: calc(100% - #{$container-horizontal-padding * 2});
+  position: fixed;
+  right: $container-horizontal-padding;
+  top: $container-horizontal-padding;
+  z-index: 1000;
+
+  .alert {
+    background-color: $color-bright;
+    box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.4);
+    color: $color-primary;
+    font-weight: $font-weight-semi-bold;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    padding: 2rem;
+    width: 40rem;
+
+
+    &.error {
+      background-color: $color-error;
+      color: $color-bright;
+    }
+
+    &.success {
+      background-color: $color-success;
+      color: $color-bright;
+    }
+  }
+}
