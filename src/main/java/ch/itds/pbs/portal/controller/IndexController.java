@@ -6,7 +6,6 @@ import ch.itds.pbs.portal.security.CurrentUser;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.LanguageService;
 import ch.itds.pbs.portal.service.TileService;
-import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,6 @@ public class IndexController {
         }
 
         model.addAttribute("tiles", tiles);
-        model.addAttribute(Flash.INFO, "Info!");
 
         return "index";
     }
