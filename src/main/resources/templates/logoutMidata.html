@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Logout redirect</title>
+</head>
+<body>
+<span th:text="#{general.logout.redirect}"></span>
+<form method="post" th:action="${localizedLogoutUrl}" name="logoutRedirect">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Finish Logout" th:value="#{general.logout.finish}">
+</form>
+<script type="application/javascript">
+    document.logoutRedirect.submit();
+</script>
+</body>
+</html>
