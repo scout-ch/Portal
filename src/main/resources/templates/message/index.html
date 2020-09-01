@@ -72,7 +72,8 @@
                 </div>
             </div>
             <div class="accordion-body">
-                <div th:text="${entity.content}"></div>
+                <div class="title" th:text="${entity.title}"></div>
+                <div class="content" th:text="${entity.content}"></div>
                 <div class="url" th:text="${entity.url}" th:if="${entity.url}"></div>
             </div>
         </li>

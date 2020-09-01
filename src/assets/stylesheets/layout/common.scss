@@ -82,7 +82,7 @@
     margin: 0 $column-spacing ($column-spacing * 2);
   }
 
-  @for $i from 1 through 5 {
+  @for $i from 1 through 3 {
     &.col-#{$i} .col {
       width: calc((100% / #{$i}) - #{$column-spacing * 2});
 
@@ -183,3 +183,29 @@
 .text-right { text-align: right; }
 .flex-justify-end { justify-content: flex-end; }
 .flex-align-start { align-items: flex-start; }
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-lg) {
+  .col-block {
+    &.col-3 .col { width: calc(50% - #{$column-spacing * 2}); }
+  }
+}
+
+
+@media (max-width: $break-md) {
+  .top-buttons {
+    margin-bottom: 2rem;
+    position: static;
+    text-align: right;
+  }
+}
+
+
+@media (max-width: $break-sm) {
+  .col-block {
+    &.col-2 .col,
+    &.col-3 .col { width: calc(100% - #{$column-spacing * 2}); }
+  }
+}

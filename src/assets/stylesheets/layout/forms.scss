@@ -251,3 +251,12 @@ select.filter {
     background-color: $color-primary;
   }
 }
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-xs) {
+  select.filter {
+    width: 100%;
+  }
+}

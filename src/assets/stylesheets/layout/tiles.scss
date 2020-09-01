@@ -97,3 +97,49 @@
   .grid-sizer { display: none; width: calc(100% / 3 - #{$column-spacing * 2}); }
   .gutter-sizer { display: none; width: $column-spacing * 2; }
 }
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-md) {
+  .tiles {
+    .tile {
+      .title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .btn-link {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+
+@media (max-width: $break-xs) {
+  .tiles {
+    .tile {
+      padding: $tile-padding-small $tile-padding-small 6rem;
+
+      .title {
+        padding-right: 4rem;
+      }
+
+      .label {
+        bottom: $tile-padding-small;
+        left: $tile-padding-small;
+      }
+
+      .btn-link {
+        right: 0.1rem;
+        top: 0.1rem;
+      }
+
+      .message-count {
+        bottom: $tile-padding-small;
+        right: $tile-padding-small;
+      }
+    }
+  }
+}

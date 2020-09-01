@@ -1,6 +1,7 @@
 //= require webjars.js
 //= require portal.js
 //= require inc/notification.js
+//= require inc/menu.js
 //= require inc/copy-to-clipboard.js
 //= require inc/tabs.js
 //= require inc/table-sort.js
