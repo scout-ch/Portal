@@ -265,6 +265,17 @@ select.filter {
   textarea {
     font-size: $medium-body-font-size;
   }
+
+  .form-panel {
+    padding: 3rem 1.5rem;
+  }
+
+  .form-wrap.char-count .counter {
+    background-color: transparent;
+    padding: 0;
+    right: 1rem;
+    top: -1rem;
+  }
 }
 
 
