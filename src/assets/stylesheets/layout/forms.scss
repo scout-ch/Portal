@@ -255,7 +255,30 @@ select.filter {
 
 
 // ===== MEDIA QUERIES =====
+@media (max-width: $break-md) {
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="email"],
+  input[type="file"],
+  select,
+  textarea {
+    font-size: $medium-body-font-size;
+  }
+}
+
+
 @media (max-width: $break-xs) {
+  input[type="text"],
+  input[type="search"],
+  input[type="date"],
+  input[type="email"],
+  input[type="file"],
+  select,
+  textarea {
+    font-size: $small-body-font-size;
+  }
+
   select.filter {
     width: 100%;
   }

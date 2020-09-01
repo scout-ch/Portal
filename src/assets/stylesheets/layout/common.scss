@@ -189,7 +189,12 @@
 // ===== MEDIA QUERIES =====
 @media (max-width: $break-lg) {
   .col-block {
-    &.col-3 .col { width: calc(50% - #{$column-spacing * 2}); }
+    &.col-3 .col {
+      width: calc(50% - #{$column-spacing * 2});
+
+      &.double-lg,
+      &.double { width: calc(100% - #{$column-spacing * 2}); }
+    }
   }
 }
 
@@ -200,6 +205,16 @@
     position: static;
     text-align: right;
   }
+
+  .tab-controls {
+    .btn-tab {
+      margin-left: 0.5rem;
+      min-width: 5rem;
+    }
+  }
+  .tab-btn-offset {
+    margin-top: 0;
+  }
 }
 
 
@@ -207,5 +222,17 @@
   .col-block {
     &.col-2 .col,
     &.col-3 .col { width: calc(100% - #{$column-spacing * 2}); }
+  }
+}
+
+
+@media (max-width: $break-xs) {
+  .btn {
+    display: block;
+    width: 100%;
+
+    +.btn {
+      margin-top: 1rem;
+    }
   }
 }
