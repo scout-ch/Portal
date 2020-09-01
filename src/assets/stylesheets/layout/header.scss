@@ -90,6 +90,19 @@
   }
 }
 
+#btn-message-mobile {
+  display: none;
+  padding: 1.3rem;
+  position: absolute;
+  right: $container-horizontal-padding + 5rem;
+  top: 1rem;
+  z-index: 1;
+
+  .badge {
+    position: static;
+  }
+}
+
 
 
 // ===== MEDIA QUERIES =====
@@ -142,7 +155,8 @@
     }
   }
 
-  #btn-menu {
+  #btn-menu,
+  #btn-message-mobile {
     display: block;
   }
 }
