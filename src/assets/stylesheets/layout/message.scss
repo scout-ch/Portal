@@ -109,7 +109,7 @@
     .accordion-header {
       display: block;
       height: auto;
-      padding-right: 9rem;
+      padding-right: 4rem;
       position: relative;
 
       .sender,
@@ -131,6 +131,13 @@
         right: 0;
         top: 0;
         z-index: 1;
+
+        .btn-delete {
+          position: absolute;
+          right: -1rem;
+          top: 4rem;
+          z-index: 1;
+        }
       }
     }
 

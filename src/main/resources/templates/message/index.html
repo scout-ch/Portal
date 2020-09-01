@@ -49,7 +49,7 @@
                     <form th:action="@{/message/delete/{id}(id=${entity.id})}" method="post"
                           onsubmit="return confirm('Wirklich löschen?');"
                     >
-                        <button class="btn-icon" type="submit" th:title="#{general.delete}" th:attr="aria-label=#{general.delete}">
+                        <button class="btn-delete btn-icon" type="submit" th:title="#{general.delete}" th:attr="aria-label=#{general.delete}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366"
                                  viewBox="0 0 18.669 20.366">
                                 <path d="M12.637,4a1.634,1.634,0,0,0-1.7,1.7v.849H5v1.7h.928L7.546,23.6l.08.769H21.043l.08-.769L22.741,8.243h.928v-1.7h-5.94V5.7a1.727,1.727,0,0,0-.477-1.22A1.727,1.727,0,0,0,16.031,4Zm0,1.7h3.394v.849H12.637ZM7.652,8.243H21.017L19.505,22.669H9.163Zm3.288,2.546v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Z"
