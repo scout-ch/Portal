@@ -8,7 +8,7 @@
   function init() {
     messages = document.querySelectorAll('.messages .message');
     filter = document.getElementById('message-filter-sender');
-    totalCount = document.querySelector('.message-count-total');
+    totalCount = document.querySelectorAll('.message-count-total');
     var mLength = messages.length;
 
     for (var i = 0; i < mLength; i+=1) {
@@ -90,13 +90,16 @@
 
 
   function reduceTotalCount() {
-    if (!totalCount) {
-      return;
-    }
+    var tCount = totalCount.length;
 
-    var current = parseInt(totalCount.textContent);
-    if (!isNaN(current) && current > 0) {
-      totalCount.textContent = current - 1;
+    if (tCount > 0) {
+      var current = parseInt(totalCount[0].textContent);
+
+      for (var i = 0; i < tCount; i+=1) {
+        if (!isNaN(current) && current > 0) {
+          totalCount[i].textContent = current - 1;
+        }
+      }
     }
   }
 

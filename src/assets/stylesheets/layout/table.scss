@@ -36,6 +36,7 @@
     background-repeat: no-repeat;
     background-size: 2rem 2rem;
     cursor: pointer;
+    padding-right: 3rem;
 
     &:hover {
       @include bg-icon-sort($color-primary-escaped);
@@ -43,6 +44,8 @@
 
     &[data-sort-method="none"] {
       cursor: default;
+      padding-right: 1rem;
+
       &:hover { background-image: none; }
     }
 
@@ -65,5 +68,33 @@
 
   .grip-handle {
     cursor: move;
+  }
+}
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-sm) {
+  .table {
+    thead {
+      display: none;
+    }
+
+    td {
+      min-width: 5rem;
+    }
+
+    .hide-mobile {
+      display: none;
+    }
+  }
+
+  .table-draggable {
+    .grip-handle {
+      height: 5rem;
+      margin: -1rem;
+      padding: 1rem;
+      width: 5rem;
+    }
   }
 }

@@ -27,3 +27,19 @@
     }
   }
 }
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-sm) {
+  #notifications {
+    left: 0;
+    max-width: none;
+    right: 0;
+    top: 0;
+
+    .alert {
+      width: 100%;
+    }
+  }
+}

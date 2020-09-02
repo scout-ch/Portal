@@ -14,3 +14,17 @@
     color: $color-bright;
   }
 }
+
+
+
+@media (max-width: $break-xs) {
+  .page-footer {
+    text-align: center;
+
+    .links {
+      text-align: center;
+
+      li { margin: 0 1rem; }
+    }
+  }
+}

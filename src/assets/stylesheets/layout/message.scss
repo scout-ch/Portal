@@ -28,6 +28,10 @@
     }
   }
 
+  .accordion-header {
+    height: 3rem;
+  }
+
   .message {
     border: 0.3rem solid $color-bright;
     padding: 0.7rem;
@@ -59,13 +63,19 @@
       }
     }
 
-    .accordion-header {
-      height: 3rem;
-    }
-
     .accordion-body {
       padding-top: 0;
       transition: padding-top $animation-time;
+
+      .title {
+        font-weight: $font-weight-semi-bold;
+        margin-bottom: 2.5rem;
+        max-width: 90rem;
+      }
+
+      .content {
+        max-width: 90rem;
+      }
     }
 
     .indicator-close {
@@ -83,6 +93,62 @@
 
     &.hidden {
       display: none;
+    }
+  }
+}
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-md) {
+  .messages {
+    .header {
+      display: none;
+    }
+
+    .accordion-header {
+      display: block;
+      height: auto;
+      padding-right: 4rem;
+      position: relative;
+
+      .sender,
+      .title,
+      .date {
+        width: 100%;
+      }
+
+      .read {
+        position: absolute;
+        right: 0;
+        top: 4rem;
+        width: auto;
+        z-index: 1;
+      }
+
+      .controls {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+
+        .btn-delete {
+          position: absolute;
+          right: -1rem;
+          top: 4rem;
+          z-index: 1;
+        }
+      }
+    }
+
+    .message.open {
+      .accordion-body {
+        padding-top: 2rem;
+
+        .title {
+          margin-bottom: 1rem;
+        }
+      }
     }
   }
 }

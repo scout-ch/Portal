@@ -15,24 +15,46 @@
     position: relative;
   }
 
-  .col-block { height: 100%; }
-
-  .col {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    margin-bottom: 0;
-  }
-
   .logo {
-    display: block;
+    display: inline-block;
     height: $header-height - ($header-padding * 2);
     text-decoration: none;
+    width: calc(100% / 3);
 
     img {
       height: 100%;
       max-width: none;
       width: auto;
+    }
+  }
+
+  .navigation {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    float: right;
+    height: 100%;
+    margin-bottom: 0;
+    position: relative;
+    vertical-align: top;
+    width: calc(100% / 3 * 2);
+  }
+
+  .links {
+    text-align: right;
+    width: calc(50% - #{$container-horizontal-padding});
+  }
+
+  .functions {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    width: calc(50% - #{$container-horizontal-padding});
+  }
+
+  .language-switch {
+    li:first-child {
+      margin-left: 0;
     }
   }
 
@@ -52,5 +74,89 @@
     height: $header-height-small;
 
     .logo { height: $header-height-small - ($header-padding * 2); }
+  }
+}
+
+#btn-menu {
+  color: $color-bright;
+  display: none;
+  position: absolute;
+  right: $container-horizontal-padding;
+  top: 1rem;
+  z-index: 1;
+
+  &:hover {
+    color: $color-secondary;
+  }
+}
+
+#btn-message-mobile {
+  display: none;
+  padding: 1.3rem;
+  position: absolute;
+  right: $container-horizontal-padding + 5rem;
+  top: 1rem;
+  z-index: 1;
+
+  .badge {
+    position: static;
+  }
+}
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-md) {
+  .page-header {
+    height: $header-height-small;
+    padding: 0.5rem 0;
+
+    .logo {
+      height: 7rem;
+    }
+
+    .navigation {
+      background-color: $color-primary;
+      bottom: 0;
+      display: none;
+      left: 0;
+      padding: $container-horizontal-padding;
+      position: fixed;
+      right: 0;
+      top: $header-height-small;
+      width: 100%;
+      z-index: 100;
+
+      body.nav-open & {
+        display: block;
+      }
+    }
+
+    .links,
+    .functions {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .links {
+      li {
+        display: block;
+        margin: 0;
+      }
+    }
+
+    nav li a {
+      padding: 1rem 0;
+    }
+
+    .icons {
+      margin-left: 0;
+    }
+  }
+
+  #btn-menu,
+  #btn-message-mobile {
+    display: block;
   }
 }
