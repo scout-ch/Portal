@@ -26,7 +26,7 @@ public class LogoutController {
 
         model.addAttribute("localizedLogoutUrl", url);
 
-        return "/logoutMidata";
+        return "logoutMidata";
     }
 
 }
