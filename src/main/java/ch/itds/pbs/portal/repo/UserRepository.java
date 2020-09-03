@@ -16,4 +16,7 @@ public interface UserRepository extends BaseEntityRepository<User> {
     @Modifying
     @Query("UPDATE User SET language = :language WHERE id = :userId")
     void setLanguage(@Param("userId") Long userId, @Param("language") Language language);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username")
+    Optional<User> findByUsernameWithRoles(@Param("username") String username);
 }

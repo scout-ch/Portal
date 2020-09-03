@@ -18,3 +18,12 @@ services:
       - POSTGRES_DB=pbsportal-test
       - POSTGRES_USER=pbsportal-test
       - POSTGRES_PASSWORD=pbsportal-test
+  selenium-firefox:
+    image: docker-registry.itds.ch/selenium/standalone-firefox:3.141.59-titanium
+    ports:
+      - 4444
+    environment:
+      SCREEN_WIDTH: 2970
+      SCREEN_HEIGHT: 1160
+    volumes:
+      - "/dev/shm:/dev/shm"

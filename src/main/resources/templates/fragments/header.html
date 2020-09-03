@@ -13,6 +13,7 @@
            th:href="@{/message}"
         >
             <span class="badge message-count-total"
+                  th:if="${T(ch.itds.pbs.portal.security.UserPrincipal).isInstance(#authentication.principal)}"
                   th:text="${@messageService.countUnreadMessages(#authentication.principal)}">3</span>
         </a>
 
@@ -28,6 +29,7 @@
                     <li sec:authorize="isAuthenticated()">
                         <a th:href="@{/message}" th:text="#{general.menu.messages}">Messages</a>
                         <span class="badge message-count-total hide-md"
+                              th:if="${T(ch.itds.pbs.portal.security.UserPrincipal).isInstance(#authentication.principal)}"
                               th:text="${@messageService.countUnreadMessages(#authentication.principal)}">3</span>
                     </li>
                     <li>

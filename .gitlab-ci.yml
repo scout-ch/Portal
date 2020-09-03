@@ -1,0 +1,87 @@
+image: docker-registry.itds.ch/debian-openjdk14:latest
+
+before_script:
+  - uname -a
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - if [ ! -e $GRADLE_USER_HOME ] ; then mkdir -p $GRADLE_USER_HOME ; fi
+  - if [ ! -e $GRADLE_USER_HOME/gradle.properties ] ; then echo "" > $GRADLE_USER_HOME/gradle.properties ; fi
+
+variables:
+  JAVA_HOME: /usr/lib/jvm/adoptopenjdk-14-hotspot-amd64
+  GIT_SUBMODULE_STRATEGY: recursive
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  INT_PROJECT_NAME: pbs-portal
+  INT_PROJECT_SHORT_NAME: pbsportal
+
+cache:
+  key: "$CI_JOB_STAGE"
+  policy: pull-push
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+stages:
+  - build-and-test
+  - deploy
+  - report
+
+build:integration:
+  stage: build-and-test
+  script:
+    - ./gradlew -Dfile.encoding=UTF-8 -Dspring.profiles.active=${ITDS_ENV} build
+  except:
+    - master
+    - tags
+    - schedules
+  tags:
+    - docker
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - build/reports
+      - build/test-results
+      - build/geb-reports
+      - build/libs/${INT_PROJECT_NAME}-${ITDS_ENV}.jar
+  reports:
+    junit: build/test-results/test/TEST-*.xml
+  variables:
+    ITDS_ENV: integration
+    POSTGRES_DB: pbsportal-test
+    POSTGRES_USER: pbsportal-test
+    POSTGRES_PASSWORD: pbsportal-test
+  services:
+    - name: docker-registry.itds.ch/postgres:9.6
+      alias: database
+    - name: docker-registry.itds.ch/selenium/standalone-firefox:3.141.59-titanium
+      alias: selenium
+
+build:production:
+  stage: build-and-test
+  script:
+    - ./gradlew -Dfile.encoding=UTF-8 -Dspring.profiles.active=${ITDS_ENV} build
+  only:
+    - master
+  tags:
+    - docker
+  artifacts:
+    expire_in: 6 mos
+    paths:
+      - build/reports
+      - build/test-results
+      - build/geb-reports
+      - build/libs/${INT_PROJECT_NAME}-${ITDS_ENV}.jar
+  reports:
+    junit: build/test-results/test/TEST-*.xml
+  variables:
+    ITDS_ENV: production
+    POSTGRES_DB: pbsportal-test
+    POSTGRES_USER: pbsportal-test
+    POSTGRES_PASSWORD: pbsportal-test
+  services:
+    - name: docker-registry.itds.ch/postgres:9.6
+      alias: database
+    - name: docker-registry.itds.ch/selenium/standalone-firefox:3.141.59-titanium
+      alias: selenium
+
+include:
+  local: .gitlab-ci-deployment.yml

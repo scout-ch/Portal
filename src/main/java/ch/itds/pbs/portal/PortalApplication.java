@@ -10,12 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.net.InetSocketAddress;
 
 @Slf4j
-@EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = {"ch.itds.pbs.portal", "asset.pipeline.springboot"})
 public class PortalApplication {
 

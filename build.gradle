@@ -76,6 +76,7 @@ dependencies {
 
 	implementation 'org.liquibase:liquibase-core'
 	compileOnly 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	compile 'com.vladmihalcea:hibernate-types-52:2.9.12'
@@ -83,6 +84,7 @@ dependencies {
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
@@ -102,6 +104,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	testCompile("org.assertj:assertj-core:3.16.1")
+	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
+	testCompile('io.github.bonigarcia:selenium-jupiter:3.3.0')
 
 	compile 'log4j:log4j:1.2.17'
 	compile 'org.slf4j:log4j-over-slf4j:1.7.30' // required for asset pipeline
