@@ -124,8 +124,8 @@
                         >
                             <option th:each="theme: ${colorList}"
                                     th:selected="${entity.backgroundColor != null && theme == entity.backgroundColor}"
-                                    th:text="${theme}"
-                                    th:value="${theme}">
+                                    th:value="${theme}"
+                                    th:text="#{__${theme.getMessageKey(theme)}__}">
                         </select>
                         <label th:for="theme-select" th:text="#{masterTile.theme.label}"></label>
                         <div class="invalid-feedback">

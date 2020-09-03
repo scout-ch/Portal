@@ -1,6 +1,8 @@
 package ch.itds.pbs.portal.domain;
 
-public enum Language {
+import ch.itds.pbs.portal.util.I18nEnum;
+
+public enum Language implements I18nEnum {
     DE, FR, IT, EN;
 
     public static Language valueOfOrDefault(String key) {

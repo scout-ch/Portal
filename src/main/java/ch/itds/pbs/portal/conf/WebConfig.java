@@ -68,6 +68,7 @@ public class WebConfig implements WebMvcConfigurer {
     public MessageSource messageSource(@Qualifier("messageSourceCacheDuration") Integer messageSourceCacheDuration) {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames(
+                "classpath:/i18n/color",
                 "classpath:/i18n/message",
                 "classpath:/i18n/messages",
                 "classpath:/i18n/masterTile"
