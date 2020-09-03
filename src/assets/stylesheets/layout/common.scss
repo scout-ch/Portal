@@ -157,6 +157,10 @@
   position: absolute;
   right: $container-horizontal-padding;
   top: 1.5rem;
+
+  a {
+    display: block;
+  }
 }
 
 .list-striped {
