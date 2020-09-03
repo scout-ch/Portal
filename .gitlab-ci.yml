@@ -42,8 +42,8 @@ build:integration:
       - build/test-results
       - build/geb-reports
       - build/libs/${INT_PROJECT_NAME}-${ITDS_ENV}.jar
-  reports:
-    junit: build/test-results/test/TEST-*.xml
+    reports:
+      junit: build/test-results/test/TEST-*.xml
   variables:
     ITDS_ENV: integration
     POSTGRES_DB: pbsportal-test
@@ -70,8 +70,8 @@ build:production:
       - build/test-results
       - build/geb-reports
       - build/libs/${INT_PROJECT_NAME}-${ITDS_ENV}.jar
-  reports:
-    junit: build/test-results/test/TEST-*.xml
+    reports:
+      junit: build/test-results/test/TEST-*.xml
   variables:
     ITDS_ENV: production
     POSTGRES_DB: pbsportal-test
