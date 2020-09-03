@@ -1,1 +1,8 @@
 # file is overridden in hosting project
+
+deploy:intg:
+  stage: deploy
+  script:
+    - echo "dummy"
+  only:
+    - non-existing-branch
