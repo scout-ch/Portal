@@ -76,10 +76,20 @@ public class TileService {
     @Transactional
     public void provisioning(UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
+        provisioning(user);
+    }
+
+    public void provisioningAll() {
+        for (User u : userRepository.findAll()) {
+            provisioning(u);
+        }
+    }
+
+    private void provisioning(User user) {
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).collect(Collectors.toList());
         List<UserTile> newTiles = masterTileRepository.findAll().stream()
-                .filter(mt -> !existingMasterTileIds.contains(mt.getId()))
+                .filter(mt -> mt.isEnabled() && !existingMasterTileIds.contains(mt.getId()))
                 .map(mt -> {
                     UserTile ut = new UserTile();
                     ut.setUser(user);
@@ -88,4 +98,5 @@ public class TileService {
                 }).collect(Collectors.toList());
         userTileRepository.saveAll(newTiles);
     }
+
 }

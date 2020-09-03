@@ -7,6 +7,7 @@ import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.service.FileService;
+import ch.itds.pbs.portal.service.TileService;
 import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -39,12 +40,14 @@ public class MasterTileController {
     private final transient CategoryRepository categoryRepository;
     private final transient MessageSource messageSource;
     private final transient FileService fileService;
+    private final transient TileService tileService;
 
-    public MasterTileController(MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, MessageSource messageSource, FileService fileService) {
+    public MasterTileController(MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, MessageSource messageSource, FileService fileService, TileService tileService) {
         this.masterTileRepository = masterTileRepository;
         this.categoryRepository = categoryRepository;
         this.messageSource = messageSource;
         this.fileService = fileService;
+        this.tileService = tileService;
     }
 
     @GetMapping("")
@@ -166,7 +169,7 @@ public class MasterTileController {
         MasterTile masterTile = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         try {
             masterTileRepository.delete(masterTile);
-            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.success", null, locale));
+            redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.delete.success", null, locale));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.error", new String[]{e.getMessage()}, locale));
         }
@@ -188,6 +191,17 @@ public class MasterTileController {
                         .message(messageSource.getMessage("masterTile.updateSort.success", null, locale))
                         .build()
                 );
+    }
+
+    @RequestMapping("/provisioningAll")
+    public String provisioningAll(RedirectAttributes redirectAttributes, Locale locale) {
+        try {
+            tileService.provisioningAll();
+            redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.provisioningAll.success", null, locale));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.provisioningAll.error", new String[]{e.getMessage()}, locale));
+        }
+        return "redirect:/admin/masterTile";
     }
 
 }
