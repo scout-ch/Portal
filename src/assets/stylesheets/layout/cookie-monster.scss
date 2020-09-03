@@ -1,0 +1,29 @@
+.itds-privacy-notice {
+  @include clearfix;
+  background-color: $color-bright;
+  bottom: 0;
+  box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 12px;
+  display: flex;
+  left: 0;
+  padding: $container-horizontal-padding;
+  position: fixed;
+  right: 0;
+  z-index: 200;
+
+  .privacy-button { margin-left: $container-horizontal-padding }
+}
+
+
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-sm) {
+  .itds-privacy-notice {
+    display: block;
+
+    .privacy-button {
+      float: right;
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+}
