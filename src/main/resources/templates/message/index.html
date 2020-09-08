@@ -74,7 +74,7 @@
             <div class="accordion-body">
                 <div class="title" th:text="${entity.title}"></div>
                 <div class="content" th:text="${entity.content}"></div>
-                <div class="url" th:text="${entity.url}" th:if="${entity.url}"></div>
+                <a class="url" th:text="${entity.url}" th:if="${entity.url}" target="_blank" rel="noopener" th:href="${entity.url}"></a>
             </div>
         </li>
     </ul>

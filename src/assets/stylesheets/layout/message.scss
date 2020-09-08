@@ -88,7 +88,13 @@
     }
 
     .url {
+      display: block;
       margin-top: 3rem;
+      word-break: break-word;
+
+      &:hover {
+        color: $color-secondary;
+      }
     }
 
     &.hidden {
