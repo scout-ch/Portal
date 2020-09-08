@@ -13,15 +13,17 @@
 
     <div class="login-wrapper">
         <div class="login-box">
-            <div class="title" th:text="#{general.login.title}">Login</div>
+            <div class="content-wrap">
+                <div class="title" th:text="#{general.login.title}">Login</div>
 
-            <div>
-                <a class="btn"
-                   th:href="@{/oauth2/authorize/midata}"
-                   th:text="#{general.login.midata}"
-                >
-                    mit MiData anmelden
-                </a>
+                <div>
+                    <a class="btn"
+                       th:href="@{/oauth2/authorize/midata}"
+                       th:text="#{general.login.midata}"
+                    >
+                        mit MiData anmelden
+                    </a>
+                </div>
             </div>
         </div>
     </div>

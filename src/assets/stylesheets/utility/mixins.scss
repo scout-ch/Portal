@@ -54,10 +54,14 @@
   background-color: $color-bright;
   border: 0.3rem solid $color-bright;
   hyphens: auto;
-  padding: $tile-padding $tile-padding 8rem;
+  padding-bottom: 6rem;
   position: relative;
   transition: border-color $animation-time;
   word-break: break-word;
+
+  .content-wrap {
+    padding: $tile-padding;
+  }
 
   .title {
     font-size: 2.4rem;

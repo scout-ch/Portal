@@ -2,6 +2,10 @@
   .tile {
     @include tile;
 
+    a {
+      text-decoration: none;
+    }
+
     .image {
       line-height: 0;
     }
@@ -42,6 +46,10 @@
 
     &[class*="theme-"] {
       color: $color-bright;
+
+      a {
+        color: $color-bright;
+      }
 
       .label,
       .badge {
@@ -109,7 +117,11 @@
 @media (max-width: $break-xs) {
   .tiles {
     .tile {
-      padding: $tile-padding-small $tile-padding-small 6rem;
+      padding-bottom: 5rem;
+
+      .content-wrap {
+        padding: $tile-padding-small;
+      }
 
       .title {
         padding-right: 4rem;
