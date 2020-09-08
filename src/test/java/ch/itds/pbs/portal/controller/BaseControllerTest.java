@@ -3,7 +3,6 @@ package ch.itds.pbs.portal.controller;
 import ch.itds.pbs.portal.TestAnnotationHolder;
 import ch.itds.pbs.portal.security.CustomUserDetailsService;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
-import ch.itds.pbs.portal.security.MidataLogoutSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
 import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import ch.itds.pbs.portal.service.MessageService;
@@ -42,8 +41,6 @@ public abstract class BaseControllerTest {
     MidataOAuth2UserService midataOAuth2UserService;
     @MockBean
     LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
-    @MockBean
-    MidataLogoutSuccessHandler midataLogoutSuccessHandler;
     @MockBean
     TileAuthenticationProvider tileAuthenticationProvider;
 
