@@ -71,7 +71,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, MidataOAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
         user.setMidataUserId(oAuth2UserInfo.getId());
-        user.setUsername(oAuth2UserInfo.getEmail());
+        user.setUsername(Long.toString(oAuth2UserInfo.getId()));
         user.setMail(oAuth2UserInfo.getEmail());
         user.setFirstName(oAuth2UserInfo.getFirstName());
         user.setLastName(oAuth2UserInfo.getLastName());
@@ -86,7 +86,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User updateExistingUser(User existingUser, MidataOAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setUsername(oAuth2UserInfo.getEmail());
+        existingUser.setUsername(Long.toString(oAuth2UserInfo.getId()));
         existingUser.setMidataUserId(oAuth2UserInfo.getId());
         existingUser.setMail(oAuth2UserInfo.getEmail());
         existingUser.setFirstName(oAuth2UserInfo.getFirstName());

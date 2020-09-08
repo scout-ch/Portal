@@ -46,13 +46,14 @@ abstract class IntegrationTest {
 
         log.setLevel(Level.INFO);
 
-        User testUser = userRepository.findByUsernameWithRoles("test@pbs.portal").orElseGet(() -> {
+        User testUser = userRepository.findByUsernameWithRoles("3113").orElseGet(() -> {
             User u = new User();
-            u.setUsername("test@pbs.portal");
             u.setRoles(new HashSet<>());
             u = userRepository.save(u);
             return u;
         });
+        testUser.setUsername("3113");
+        testUser.setMidataUserId(3113L);
         testUser.setEnabled(true);
         testUser.setAccountExpired(false);
         testUser.setPasswordExpired(false);
@@ -75,7 +76,7 @@ abstract class IntegrationTest {
             testUser.getRoles().add(admin);
             testUser = userRepository.save(testUser);
         }
-        mockUserFilter.authenticateNextRequestAs("test@pbs.portal");
+        mockUserFilter.authenticateNextRequestAs("3113");
 
         seleniumHelper = new SeleniumHelper(port);
 

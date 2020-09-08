@@ -183,4 +183,10 @@
             UPDATE "user" SET language = 'DE' where language IS NULL;
         </sql>
     </changeSet>
+    <changeSet id="20200908-01" author="mkobel">
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE "user" SET username = midata_user_id::text WHERE TRUE;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

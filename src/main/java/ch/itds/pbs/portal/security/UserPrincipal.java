@@ -15,6 +15,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private static final long serialVersionUID = 2007945438850451254L;
 
     private final Long id;
+    private final Long midataUserId;
     private final String email;
     private final String nickName;
     private final String password;
@@ -27,9 +28,10 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     private final Locale locale;
 
-    public UserPrincipal(Long id, String email, String nickName, String password, Collection<? extends GrantedAuthority> authorities,
+    public UserPrincipal(Long id, Long midataUserId, String email, String nickName, String password, Collection<? extends GrantedAuthority> authorities,
                          boolean enabled, boolean locked, boolean expired, boolean credentialsExpired, Locale locale) {
         this.id = id;
+        this.midataUserId = midataUserId;
         this.email = email;
         this.nickName = nickName;
         this.password = password;
@@ -53,6 +55,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
         return new UserPrincipal(
                 user.getId(),
+                user.getMidataUserId(),
                 user.getMail(),
                 user.getNickName(),
                 user.getPassword(),
@@ -72,7 +75,7 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return email;
+        return Long.toString(midataUserId);
     }
 
     @Override

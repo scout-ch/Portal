@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepository extends BaseEntityRepository<User> {
-    Optional<User> findByUsername(String email);
+    Optional<User> findByUsername(String midataUserId);
 
     Optional<User> findByMidataUserId(Long email);
 
