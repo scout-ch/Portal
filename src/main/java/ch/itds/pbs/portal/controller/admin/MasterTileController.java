@@ -195,12 +195,13 @@ public class MasterTileController {
     }
 
     @PostMapping(path = "/generateApiKey", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiKey> generateApiKey() {
+    public ResponseEntity<ApiKey> generateApiKey(Locale locale) {
 
         return ResponseEntity
                 .ok(ApiKey
                         .builder()
                         .apiKey(UUID.randomUUID().toString())
+                        .message(messageSource.getMessage("masterTile.generateApiKey.success", null, locale))
                         .build()
                 );
     }

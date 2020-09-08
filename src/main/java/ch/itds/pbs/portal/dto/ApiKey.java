@@ -1,13 +1,13 @@
 package ch.itds.pbs.portal.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-public class ApiKey {
+@SuperBuilder
+public class ApiKey extends ActionMessage {
 
     private String apiKey;
 }
