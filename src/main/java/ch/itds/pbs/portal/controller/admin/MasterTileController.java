@@ -4,6 +4,7 @@ import ch.itds.pbs.portal.domain.Color;
 import ch.itds.pbs.portal.domain.FileMeta;
 import ch.itds.pbs.portal.domain.MasterTile;
 import ch.itds.pbs.portal.dto.ActionMessage;
+import ch.itds.pbs.portal.dto.ApiKey;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.service.FileService;
@@ -189,6 +190,17 @@ public class MasterTileController {
                 .ok(ActionMessage
                         .builder()
                         .message(messageSource.getMessage("masterTile.updateSort.success", null, locale))
+                        .build()
+                );
+    }
+
+    @PostMapping(path = "/generateApiKey", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiKey> generateApiKey() {
+
+        return ResponseEntity
+                .ok(ApiKey
+                        .builder()
+                        .apiKey(UUID.randomUUID().toString())
                         .build()
                 );
     }
