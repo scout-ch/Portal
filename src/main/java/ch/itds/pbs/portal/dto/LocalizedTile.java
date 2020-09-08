@@ -28,7 +28,7 @@ public class LocalizedTile {
     private long unreadMessageCount = 0;
 
     public boolean getHasUrl() {
-        return StringUtils.isEmpty(url);
+        return !StringUtils.isEmpty(url);
     }
 
 }
