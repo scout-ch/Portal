@@ -1,31 +1,29 @@
-
 .login-wrapper {
-  @extend .tiles;
+  display: flex;
+  justify-content: center;
 
   .login-box {
-    @extend .tile;
-    @extend .tile:hover;
-    max-width: 33%;
-    margin-left: 33%;
+    @include tile;
+    width: calc(100% / 3);
   }
 }
 
+
+
 // ===== MEDIA QUERIES =====
 @media (max-width: $break-md) {
-  .tiles {
-    .tile {
-      max-width: 50%;
-      margin-left: 25%;
+  .login-wrapper {
+    .login-box {
+      width: 50%;
     }
   }
 }
 
 
-@media (max-width: $break-xs) {
-  .tiles {
-    .tile {
-      max-width: 100%;
-      margin-left: 0;
+@media (max-width: $break-sm) {
+  .login-wrapper {
+    .login-box {
+      width: 100%;
     }
   }
 }

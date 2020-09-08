@@ -1,17 +1,6 @@
 .tiles {
   .tile {
-    background-color: $color-bright;
-    border: 0.3rem solid $color-bright;
-    padding: $tile-padding $tile-padding 8rem;
-    position: relative;
-    transition: border-color $animation-time;
-
-    .title {
-      font-size: 2.4rem;
-      font-weight: $font-weight-semi-bold;
-      margin-bottom: 4rem;
-      padding-right: 5rem;
-    }
+    @include tile;
 
     .image {
       line-height: 0;
