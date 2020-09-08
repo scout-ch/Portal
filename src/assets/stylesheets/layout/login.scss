@@ -1,0 +1,31 @@
+
+.login-wrapper {
+  @extend .tiles;
+
+  .login-box {
+    @extend .tile;
+    @extend .tile:hover;
+    max-width: 33%;
+    margin-left: 33%;
+  }
+}
+
+// ===== MEDIA QUERIES =====
+@media (max-width: $break-md) {
+  .tiles {
+    .tile {
+      max-width: 50%;
+      margin-left: 25%;
+    }
+  }
+}
+
+
+@media (max-width: $break-xs) {
+  .tiles {
+    .tile {
+      max-width: 100%;
+      margin-left: 0;
+    }
+  }
+}

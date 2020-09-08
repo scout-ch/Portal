@@ -11,8 +11,7 @@ public class AuthController {
     @GetMapping("/login")
     public String loginForm() {
 
-        //noinspection SpringMVCViewInspection
-        return "redirect:/oauth2/authorize/midata";
+        return "/auth/login";
     }
 
 }

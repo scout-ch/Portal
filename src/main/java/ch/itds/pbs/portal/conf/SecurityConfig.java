@@ -3,7 +3,6 @@ package ch.itds.pbs.portal.conf;
 
 import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
-import ch.itds.pbs.portal.security.MidataLogoutSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
 import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,16 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final transient MidataOAuth2UserService midataOAuth2UserService;
     private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
     private final transient TileAuthenticationProvider tileAuthenticationProvider;
-    private final transient MidataLogoutSuccessHandler midataLogoutSuccessHandler;
 
-    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider, MidataLogoutSuccessHandler midataLogoutSuccessHandler) {
+    public SecurityConfig(@Qualifier("customUserDetailsService") UserDetailsService userDetailsService, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
         super();
         this.userDetailsService = userDetailsService;
 
         this.midataOAuth2UserService = midataOAuth2UserService;
         this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
         this.tileAuthenticationProvider = tileAuthenticationProvider;
-        this.midataLogoutSuccessHandler = midataLogoutSuccessHandler;
     }
 
     @Override
@@ -82,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .logout()
-                .logoutSuccessHandler(midataLogoutSuccessHandler)
+                .logoutSuccessUrl("/")
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title>Portal</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{general.app.title}">Pfadibewegung Schweiz - Portal</h1>
+
+    <div class="login-wrapper">
+        <div class="login-box">
+            <div class="title" th:text="#{general.login.title}">Login</div>
+
+            <div>
+                <a th:href="@{/oauth2/authorize/midata}"
+                   th:text="#{general.login.midata}"
+                >
+                    mit MiData anmelden
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>
