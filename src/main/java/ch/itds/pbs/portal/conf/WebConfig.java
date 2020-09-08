@@ -69,8 +69,8 @@ public class WebConfig implements WebMvcConfigurer {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames(
                 "classpath:/i18n/color",
+                "classpath:/i18n/general",
                 "classpath:/i18n/message",
-                "classpath:/i18n/messages",
                 "classpath:/i18n/masterTile"
         );
         messageSource.setDefaultEncoding("UTF-8");
