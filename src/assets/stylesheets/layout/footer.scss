@@ -4,7 +4,9 @@
   margin-top: 15rem;
   padding: 1.5rem 0;
 
-  .col { margin-bottom: 0; }
+  .col {
+    margin-bottom: 0;
+  }
 
   ul {
     @include link-list;
@@ -13,6 +15,16 @@
   a {
     color: $color-bright;
   }
+
+  small a {
+    color: $color-bright;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-secondary;
+    }
+  }
+
 }
 
 

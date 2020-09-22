@@ -6,15 +6,20 @@
         <div class="container">
             <div class="col-block col-2">
                 <div class="col">
-                    <strong th:text="#{footer.copyright}"></strong>
+                    <strong th:text="#{general.footer.copyright}"></strong>
                     <th:block th:replace="fragments/version"/>
+                    <br/>
+                    <small>
+                        <th:block th:text="#{general.footer.developed-by}"></th:block>
+                        <a href="https://www.itds.ch/" target="_blank">IT &amp; Design Solutions GmbH</a>
+                    </small>
                 </div>
 
                 <div class="col text-right">
                     <nav class="links">
                         <ul>
-                            <li><a href="">Datenschutz</a></li>
-                            <li><a href="">Impressum</a></li>
+                            <li><a href="" th:text="#{general.footer.privacy}">Datenschutz</a></li>
+                            <li><a href="" th:text="#{general.footer.legal-notice}">Impressum</a></li>
                         </ul>
                     </nav>
                 </div>
