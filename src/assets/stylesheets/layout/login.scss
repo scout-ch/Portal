@@ -8,6 +8,21 @@
   }
 }
 
+.btn-midata-login {
+  color: #fff;
+  background-color: #99bf62;
+  border-color: #99bf62;
+  background-image: url('/assets/midata.svg');
+  background-position: 6px 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding-left: 59px;
+
+  &:hover {
+    background-color: #87b249;
+    border-color: #80a945;
+  }
+}
 
 
 // ===== MEDIA QUERIES =====
