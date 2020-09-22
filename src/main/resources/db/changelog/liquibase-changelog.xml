@@ -189,4 +189,21 @@
             UPDATE "user" SET username = midata_user_id::text WHERE TRUE;
         </sql>
     </changeSet>
+    <changeSet id="20200920-01" author="mkobel">
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE master_tile SET title_color = 'GREEN' WHERE title_color = 'OPTION_1';
+            UPDATE master_tile SET title_color = 'BLUE' WHERE title_color = 'OPTION_2';
+            UPDATE master_tile SET title_color = 'INVERTED_DEFAULT' WHERE title_color = 'OPTION_3';
+            UPDATE master_tile SET title_color = 'OCHER' WHERE title_color = 'OPTION_4';
+            UPDATE master_tile SET content_color = 'GREEN' WHERE content_color = 'OPTION_1';
+            UPDATE master_tile SET content_color = 'BLUE' WHERE content_color = 'OPTION_2';
+            UPDATE master_tile SET content_color = 'INVERTED_DEFAULT' WHERE content_color = 'OPTION_3';
+            UPDATE master_tile SET content_color = 'OCHER' WHERE content_color = 'OPTION_4';
+            UPDATE master_tile SET background_color = 'GREEN' WHERE background_color = 'OPTION_1';
+            UPDATE master_tile SET background_color = 'BLUE' WHERE background_color = 'OPTION_2';
+            UPDATE master_tile SET background_color = 'INVERTED_DEFAULT' WHERE background_color = 'OPTION_3';
+            UPDATE master_tile SET background_color = 'OCHER' WHERE background_color = 'OPTION_4';
+        </sql>
+    </changeSet>
 </databaseChangeLog>
