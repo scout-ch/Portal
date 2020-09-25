@@ -53,7 +53,7 @@ public class TileService {
         if (userTile.getMasterTile().getUrl() != null) {
             localizedTile.setUrl(userTile.getMasterTile().getUrl().getOrDefault(language, null));
         }
-        localizedTile.setCategory(userTile.getMasterTile().getCategory().getName());
+        localizedTile.setCategory(userTile.getMasterTile().getCategory().getName().getOrDefault(language, null));
 
         localizedTile.setMasterTileId(userTile.getMasterTile().getId());
         localizedTile.setMasterTileVersion(userTile.getMasterTile().getVersion());

@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -15,7 +13,14 @@ import java.util.Set;
 @Setter
 public class Category extends BaseEntity {
 
-    private String name;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "de", column = @Column(name = "name_de")),
+            @AttributeOverride(name = "fr", column = @Column(name = "name_fr")),
+            @AttributeOverride(name = "it", column = @Column(name = "name_it")),
+            @AttributeOverride(name = "en", column = @Column(name = "name_en"))
+    })
+    private LocalizedString name = new LocalizedString();
 
     @OneToMany
     private Set<MasterTile> tiles;

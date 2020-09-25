@@ -206,4 +206,18 @@
             UPDATE master_tile SET background_color = 'OCHER' WHERE background_color = 'OPTION_4';
         </sql>
     </changeSet>
+    <changeSet id="20200925-01" author="mkobel">
+        <renameColumn tableName="category" oldColumnName="name" newColumnName="name_de"/>
+        <addColumn tableName="category">
+            <column name="name_fr" type="text"/>
+            <column name="name_it" type="text"/>
+            <column name="name_en" type="text"/>
+        </addColumn>
+        <sql splitStatements="false"
+             stripComments="true">
+            UPDATE category SET name_fr = name_de WHERE name_fr IS NULL;
+            UPDATE category SET name_it = name_de WHERE name_it IS NULL;
+            UPDATE category SET name_en = name_de WHERE name_en IS NULL;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

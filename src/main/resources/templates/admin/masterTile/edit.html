@@ -87,7 +87,7 @@
                         >
                             <option th:each="category: ${categoryList}"
                                     th:selected="${entity.category != null && category.id == entity.category.id}"
-                                    th:text="${category.name}"
+                                    th:text="${category.name.getLocalized(#locale)}"
                                     th:value="${category.id}">
                         </select>
                         <label th:for="category-input" th:text="#{masterTile.category.label}"></label>

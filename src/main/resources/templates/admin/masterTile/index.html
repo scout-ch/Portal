@@ -50,7 +50,7 @@
                 </td>
                 <td th:text="${entity.title.getLocalized(#locale)}"></td>
                 <td class="hide-mobile">
-                    <div class="label" th:text="${entity.category.name}"></div>
+                    <div class="label" th:text="${entity.category.name.getLocalized(#locale)}"></div>
                 </td>
                 <td class="hide-mobile" data-sort-method="none" th:text="${#strings.listJoin(entity.availableLanguages, ', ')}">
                 </td>

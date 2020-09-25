@@ -45,22 +45,22 @@ public class DevelopmentInitializer {
 
             if (developmentBootstrapData.getCategories() != null) {
                 for (Category c : developmentBootstrapData.getCategories()) {
-                    Category savedCategory = categoryRepository.findByName(c.getName()).orElseGet(() -> new Category());
+                    Category savedCategory = categoryRepository.findByNameDe(c.getName().getDe()).orElseGet(Category::new);
                     BeanUtils.copyProperties(c, savedCategory, "id", "version", "dateCreated", "lastUpdated", "tiles");
                     categoryRepository.save(savedCategory);
                 }
             }
             if (developmentBootstrapData.getMasterTiles() != null) {
                 for (MasterTile mt : developmentBootstrapData.getMasterTiles()) {
-                    mt.setCategory(categoryRepository.findByName(mt.getCategory().getName()).orElse(null));
-                    MasterTile savedMasterTile = masterTileRepository.findFirstByTitleDe(mt.getTitle().getDe()).orElseGet(() -> new MasterTile());
+                    mt.setCategory(categoryRepository.findByNameDe(mt.getCategory().getName().getDe()).orElse(null));
+                    MasterTile savedMasterTile = masterTileRepository.findFirstByTitleDe(mt.getTitle().getDe()).orElseGet(MasterTile::new);
                     BeanUtils.copyProperties(mt, savedMasterTile, "id", "version", "dateCreated", "lastUpdated", "image");
                     masterTileRepository.save(savedMasterTile);
                 }
             }
 
 
-            Role admin = roleRepository.findByName("ADMIN").orElseGet(() -> new Role());
+            Role admin = roleRepository.findByName("ADMIN").orElseGet(Role::new);
             admin.setName("ADMIN");
             admin = roleRepository.save(admin);
 
