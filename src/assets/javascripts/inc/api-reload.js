@@ -8,6 +8,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/admin/masterTile/generateApiKey', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        portal.addCsrfHeader(xhr);
         xhr.onreadystatechange = function () {
           if (this.readyState !== 4) return;
 

@@ -4,6 +4,7 @@
 //= require portal.js
 
 //= require inc/notification.js
+//= require inc/csrf.js
 //= require inc/menu.js
 //= require inc/copy-to-clipboard.js
 //= require inc/tabs.js

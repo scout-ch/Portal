@@ -61,6 +61,7 @@
 
     xhr.open('POST', '/message/setRead/' + messageId, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
+    portal.addCsrfHeader(xhr);
     xhr.onreadystatechange = function () {
       if (this.readyState !== 4) return;
 
