@@ -285,3 +285,10 @@ test {
 		exceptionFormat = 'full'
 	}
 }
+
+task firefoxOpenJacocoReport {
+	group = JavaBasePlugin.VERIFICATION_GROUP
+	doLast {
+		java.awt.Desktop.desktop.browse "file://${projectDir}/build/reports/jacoco/test/html/index.html".toURI()
+	}
+}

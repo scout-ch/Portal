@@ -28,7 +28,8 @@ public abstract class BaseControllerTest {
     @MockBean
     RestTemplateBuilder restTemplateBuilder;
 
-    @MockBean(name = "messageService") // name required for thymeleaf
+    @MockBean(name = "messageService")
+    protected // name required for thymeleaf
     MessageService messageService;
 
     @MockBean
