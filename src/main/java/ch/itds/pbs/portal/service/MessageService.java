@@ -34,12 +34,11 @@ public class MessageService {
 
     public int createMessages(Long tileId, MessageCreateRequest messageCreateRequest) {
 
-        List<UserTile> targets;
         if (messageCreateRequest.getLimitToUserIds() == null || messageCreateRequest.getLimitToUserIds().isEmpty()) {
-            targets = userTileRepository.findAllByMasterTileIdWithUser(tileId);
-        } else {
-            targets = userTileRepository.findAllByMasterTileIdAndUserMidataIdWithUser(tileId, messageCreateRequest.getLimitToUserIds());
+            return 0;
         }
+
+        List<UserTile> targets = userTileRepository.findAllByMasterTileIdAndUserMidataIdWithUser(tileId, messageCreateRequest.getLimitToUserIds());
 
         List<Message> messages = new ArrayList<>();
 

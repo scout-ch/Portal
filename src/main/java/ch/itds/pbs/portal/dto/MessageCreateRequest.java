@@ -22,7 +22,7 @@ public class MessageCreateRequest {
     @Schema(description = "Optional URL related to the message")
     private LocalizedString url = new LocalizedString();
 
-    @Schema(description = "Without limit, the message is sent to all users of the authenticating tile. The message can be limited to specified users. The ID is the one provided by MiData")
+    @Schema(description = "The message can be limited to specified users. The ID is the one provided by MiData", required = true)
     private List<Long> limitToUserIds = new ArrayList<>();
 
 }
