@@ -4,12 +4,12 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/portal}">
 <head>
-    <title>Portal</title>
+    <title th:text="#{general.app.login.title}">Login</title>
 </head>
 <body>
 <div layout:fragment="content">
 
-    <h1 th:text="#{general.app.title}">Pfadibewegung Schweiz - Portal</h1>
+    <h1 th:text="#{general.app.login.title}">Login</h1>
 
     <div class="login-wrapper">
         <div class="login-box">
