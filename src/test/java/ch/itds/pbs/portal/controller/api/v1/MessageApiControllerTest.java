@@ -30,7 +30,7 @@ public class MessageApiControllerTest extends BaseControllerTest {
     @Test
     public void postMessage() throws Exception {
 
-        String rcontent = "{\"title\": {\"de\": \"Title\"},\"content\": {\"de\": \"Content...\"}, limitToUserIds:[1,2,3]}";
+        String rcontent = "{\"title\": {\"de\": \"Title\"},\"content\": {\"de\": \"Content...\"}, \"limitToUserIds\": [1,2,3]}";
 
         mockMvc.perform(put("/api/v1/message")
                 .content(rcontent)
