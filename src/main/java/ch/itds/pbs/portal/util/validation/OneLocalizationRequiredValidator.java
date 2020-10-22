@@ -31,6 +31,9 @@ public class OneLocalizationRequiredValidator implements
 
         for (String fieldExpression : fields) {
             LocalizedString field = (LocalizedString) spelExprParser.parseExpression(fieldExpression).getValue(value);
+            if (field == null) {
+                return false;
+            }
             if (Strings.isEmpty(field.getDe())) {
                 completeLocalizations.remove(Language.DE);
             }
