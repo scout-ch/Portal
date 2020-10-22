@@ -19,7 +19,7 @@ public class IndexIntegrationTest extends IntegrationTest {
 
         System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());
 
-        final WebElement customerNav = seleniumHelper.getDriver().findElement(By.linkText("Nachrichten"));
+        final WebElement customerNav = seleniumHelper.getDriver().findElement(By.partialLinkText("Nachrichten"));
         customerNav.click();
 
         Thread.sleep(1500);
