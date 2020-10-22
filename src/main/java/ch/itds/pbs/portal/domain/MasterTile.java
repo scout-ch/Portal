@@ -1,5 +1,6 @@
 package ch.itds.pbs.portal.domain;
 
+import ch.itds.pbs.portal.util.validation.OneLocalizationRequired;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.util.Strings;
@@ -15,6 +16,7 @@ import java.util.Set;
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
+@OneLocalizationRequired(fields = {"title", "content"})
 public class MasterTile extends BaseEntity {
 
     @Embedded

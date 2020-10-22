@@ -49,6 +49,7 @@
                             <label th:for="${'title_' + langLow + '-input'}" th:text="#{masterTile.title.label}"></label>
                             <div class="invalid-feedback">
                                 <p th:each="error: ${#fields.errors('title.' + langLow)}" th:text="${error}">Invalid data</p>
+                                <p th:each="error: ${#fields.errors('title')}" th:text="${error}">Invalid data</p>
                             </div>
                         </div>
                         <div class="form-wrap char-count">
@@ -60,6 +61,7 @@
                             <label th:for="${'content_' + langLow + '-input'}" th:text="#{masterTile.content.label}"></label>
                             <div class="invalid-feedback">
                                 <p th:each="error: ${#fields.errors('content.' + langLow)}" th:text="${error}">Invalid data</p>
+                                <p th:each="error: ${#fields.errors('content')}" th:text="${error}">Invalid data</p>
                             </div>
                         </div>
                         <div class="form-wrap">
@@ -72,6 +74,7 @@
                             <label th:for="${'url_' + langLow + '-input'}" th:text="#{masterTile.url.label}"></label>
                             <div class="invalid-feedback">
                                 <p th:each="error: ${#fields.errors('url.' + langLow)}" th:text="${error}">Invalid data</p>
+                                <p th:each="error: ${#fields.errors('url')}" th:text="${error}">Invalid data</p>
                             </div>
                         </div>
                     </div>

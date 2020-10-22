@@ -3,6 +3,7 @@ package ch.itds.pbs.portal.web.page.admin;
 
 import ch.itds.pbs.portal.web.page.PortalPage;
 import ch.itds.pbs.portal.web.util.SeleniumHelper;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -33,4 +34,12 @@ public class MasterTileIndexPage extends PortalPage {
         return page;
     }
 
+    public void clickOnDelete(Long id) {
+
+        WebElement form = helper.getDriver().findElement(By.cssSelector("form[action='/admin/masterTile/delete/" + id + "']"));
+        WebElement btn = form.findElement(By.cssSelector("button"));
+        btn.click();
+        helper.getDriver().switchTo().alert().accept();
+
+    }
 }

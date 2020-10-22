@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,6 +69,51 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testEdit() throws InterruptedException {
 
+        MasterTile masterTile = ensureMasterTile();
+
+
+        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId());
+
+        Thread.sleep(1500);
+
+        editPage.acceptPrivacyNotice();
+        editPage.requestApiKey();
+        editPage.fillForm("Titel1", "Content1", null, null, null, "/etc/hosts");
+
+        Thread.sleep(1500);
+
+        editPage.submit();
+
+        Thread.sleep(1500);
+
+        final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
+        assertThat(currentUrl).endsWith("/admin/masterTile");
+    }
+
+    @Test
+    public void testDelete() throws InterruptedException {
+
+        MasterTile masterTile = ensureMasterTile();
+
+        MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper);
+
+        Thread.sleep(1500);
+
+
+        System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());
+
+        indexPage.clickOnDelete(masterTile.getId());
+
+        Thread.sleep(1500);
+
+        final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
+        assertThat(currentUrl).endsWith("/admin/masterTile");
+
+        assertThat(masterTileRepository.findById(masterTile.getId())).isEqualTo(Optional.empty());
+
+    }
+
+    private MasterTile ensureMasterTile() {
         List<MasterTile> masterTiles = masterTileRepository.findAll();
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
@@ -98,23 +144,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         } else {
             masterTile = masterTiles.get(0);
         }
-
-
-        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId());
-
-        Thread.sleep(1500);
-
-        editPage.acceptPrivacyNotice();
-        editPage.requestApiKey();
-        editPage.fillForm("Titel1", "Content1", null, null, null, "/etc/hosts");
-
-        Thread.sleep(1500);
-
-        editPage.submit();
-
-        Thread.sleep(1500);
-
-        final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile");
+        return masterTile;
     }
+
 }

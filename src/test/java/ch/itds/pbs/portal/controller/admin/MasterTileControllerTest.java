@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -81,7 +82,8 @@ public class MasterTileControllerTest extends BaseControllerTest {
         masterTile.setBackgroundColor(Color.DEFAULT);
 
         Mockito.when(masterTileRepository.findAllWithCategory()).thenReturn(List.of(masterTile));
-        Mockito.when(masterTileRepository.findById(any())).thenReturn(Optional.of(masterTile));
+        Mockito.when(masterTileRepository.findById(eq(1L))).thenReturn(Optional.of(masterTile));
+        Mockito.when(masterTileRepository.findById(eq(2L))).thenReturn(Optional.empty());
 
         mockedWebConversion.register(category);
         Mockito.when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
@@ -109,7 +111,25 @@ public class MasterTileControllerTest extends BaseControllerTest {
     }
 
     @Test
-    public void createSave() throws Exception {
+    public void createSaveWithFile() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "content...".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/create")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/masterTile"));
+    }
+
+    @Test
+    public void createSaveWithEmptyFile() throws Exception {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set("title.de", "Titel");
@@ -127,13 +147,36 @@ public class MasterTileControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void createSaveWithMissingTitle() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        //params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/create")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void edit() throws Exception {
         mockMvc.perform(get("/admin/masterTile/edit/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void editSave() throws Exception {
+    public void editNotFound() throws Exception {
+        mockMvc.perform(get("/admin/masterTile/edit/2"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void editSaveWithFileReplacement() throws Exception {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.set("title.de", "Titel");
@@ -149,6 +192,43 @@ public class MasterTileControllerTest extends BaseControllerTest {
                 .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/masterTile"));
+    }
+
+    @Test
+    public void editSaveWithNoFile() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+        params.set("imageUpload-delete", "true");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/edit/1")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/masterTile"));
+    }
+
+    @Test
+    public void editSaveWithMissingTitle() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        //params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+        params.set("imageUpload-delete", "true");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "test data".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/edit/1")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().isOk());
     }
 
     @Test
