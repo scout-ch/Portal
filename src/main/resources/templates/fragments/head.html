@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,600;0,700;1,300;1,600;1,700&display=swap"
           rel="stylesheet">
 
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <meta name="_csrf_token" th:content="${_csrf.token}">
+    <meta th:if="${_csrf!=null}" name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta th:if="${_csrf!=null}" name="_csrf_token" th:content="${_csrf.token}">
     <!-- end: fragments/head -->
 </th:block>
