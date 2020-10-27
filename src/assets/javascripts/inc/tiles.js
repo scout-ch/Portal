@@ -1,17 +1,41 @@
 (function() {
   function init() {
-    var tiles = document.querySelectorAll('.tiles');
-    var tLength = tiles.length;
+    var tileLists = document.querySelectorAll('.tiles');
+    var tLength = tileLists.length;
 
     for (var i = 0; i < tLength; i+=1) {
-      new Isotope(tiles[i], {
-        itemSelector: '.tile',
-        masonry: {
-          columnWidth: '.grid-sizer',
-          gutter: '.gutter-sizer'
-        },
-        percentPosition: true
-      });
+      setupIsotopeInstance(tileLists[i]);
+    }
+  }
+
+
+
+  function setupIsotopeInstance(tiles) {
+    var iso = new Isotope(tiles, {
+      itemSelector: '.tile',
+      masonry: {
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer'
+      },
+      percentPosition: true
+    });
+
+    var imagesLoaded = 0;
+    var images = tiles.querySelectorAll('.tile .image img');
+    var iLength = images.length;
+    var onImageLoaded = function() {
+      imagesLoaded++;
+      if (imagesLoaded === iLength) {
+        iso.arrange();
+      }
+    };
+
+    for (var j = 0; j < iLength; j++) {
+      if (images[j].complete) {
+        onImageLoaded();
+      } else {
+        images[j].addEventListener('load', onImageLoaded);
+      }
     }
   }
 
