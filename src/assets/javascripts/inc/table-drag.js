@@ -8,8 +8,9 @@
       new Sortable(body, {
         draggable: 'tr',
         handle: '.grip-handle',
+        forceFallback: true, // required for automated testing
         onUpdate: (function (tableBody) {
-          return function() {
+          return function () {
             var rows = tableBody.querySelectorAll('tr');
             var rLength = rows.length;
             var tileIdMap = {};

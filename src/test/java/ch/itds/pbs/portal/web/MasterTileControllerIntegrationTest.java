@@ -10,6 +10,9 @@ import ch.itds.pbs.portal.web.page.admin.MasterTileCreatePage;
 import ch.itds.pbs.portal.web.page.admin.MasterTileEditPage;
 import ch.itds.pbs.portal.web.page.admin.MasterTileIndexPage;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -117,18 +120,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         List<MasterTile> masterTiles = masterTileRepository.findAll();
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
-            Category category;
-            List<Category> categories = categoryRepository.findAll();
-            if (categories.isEmpty()) {
-                LocalizedString categoryName = new LocalizedString();
-                categoryName.setDe("Kategorie");
-
-                category = new Category();
-                category.setName(categoryName);
-                category = categoryRepository.save(category);
-            } else {
-                category = categories.get(0);
-            }
+            Category category = ensureACategory();
 
             LocalizedString title = new LocalizedString();
             title.setDe("Titel");
@@ -145,6 +137,79 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
             masterTile = masterTiles.get(0);
         }
         return masterTile;
+    }
+
+    @Test
+    public void updatePositionsUsingDragAndDrop() throws InterruptedException {
+
+        Category category = ensureACategory();
+        List<MasterTile> tileList = masterTileRepository.findAll();
+        int c = 1;
+        while (tileList.size() < 3) {
+            MasterTile tile = new MasterTile();
+            tile.setCategory(category);
+            LocalizedString t = new LocalizedString();
+            t.setDe("Tile " + c);
+            tile.setTitle(t);
+            LocalizedString cont = new LocalizedString();
+            cont.setDe("Content " + c);
+            tile.setContent(cont);
+            tile.setPosition(c);
+            masterTileRepository.save(tile);
+            tileList = masterTileRepository.findAll();
+            c++;
+        }
+        for (MasterTile p : tileList) {
+            log.info("Tile {} @ {}: {}", p.getId(), p.getPosition(), p.getTitle().getDe());
+        }
+
+        seleniumHelper.navigateTo("/admin/masterTile");
+
+        seleniumHelper.screenshot("start");
+
+
+        List<WebElement> elementList = seleniumHelper.getDriver().findElements(By.cssSelector(".table-draggable .grip-handle"));
+
+        WebElement from = elementList.get(0);
+        WebElement to = elementList.get(2);
+
+        long newSecondId = Long.parseLong(from.findElement(By.xpath("./../..")).getAttribute("data-id"));
+
+        Actions act = new Actions(seleniumHelper.getDriver());
+
+        act.moveToElement(from).clickAndHold().moveToElement(to).release().perform();
+
+        Thread.sleep(250);
+
+        seleniumHelper.screenshot("end");
+
+
+        tileList = masterTileRepository.findAll();
+        Integer newSecondPosition = null;
+        for (MasterTile tile : tileList) {
+            log.info("Tile {} @ {}: {}", tile.getId(), tile.getPosition(), tile.getTitle().getDe());
+            if (tile.getId().equals(newSecondId)) {
+                newSecondPosition = tile.getPosition();
+            }
+        }
+        assertThat(newSecondPosition).isEqualTo(1);
+
+    }
+
+    private Category ensureACategory() {
+        Category category;
+        List<Category> categories = categoryRepository.findAll();
+        if (categories.isEmpty()) {
+            LocalizedString categoryName = new LocalizedString();
+            categoryName.setDe("Kategorie");
+
+            category = new Category();
+            category.setName(categoryName);
+            category = categoryRepository.save(category);
+        } else {
+            category = categories.get(0);
+        }
+        return category;
     }
 
 }

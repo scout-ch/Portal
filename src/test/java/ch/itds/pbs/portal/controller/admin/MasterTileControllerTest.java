@@ -11,6 +11,7 @@ import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.service.FileService;
 import ch.itds.pbs.portal.service.TileService;
+import ch.itds.pbs.portal.util.Flash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,8 +35,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = MasterTileController.class)
 @WithMockUser(roles = {"USER", "ADMIN"})
@@ -164,6 +164,28 @@ public class MasterTileControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void createSaveWitSaveException() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "".getBytes());
+
+        Mockito.doAnswer(invocation -> {
+            throw new Exception("expected exception");
+        }).when(masterTileRepository).save(any());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/create")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists(Flash.ERROR));
+    }
+
+    @Test
     public void edit() throws Exception {
         mockMvc.perform(get("/admin/masterTile/edit/1"))
                 .andExpect(status().isOk());
@@ -232,10 +254,69 @@ public class MasterTileControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void editSaveWitSaveException() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "".getBytes());
+
+        Mockito.doAnswer(invocation -> {
+            throw new Exception("expected exception");
+        }).when(masterTileRepository).save(any());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/masterTile/edit/1")
+                .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists(Flash.ERROR));
+    }
+
+    @Test
     public void delete() throws Exception {
         mockMvc.perform(post("/admin/masterTile/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/masterTile"));
     }
 
+    @Test
+    public void deleteWithException() throws Exception {
+
+        Mockito.doAnswer(invocation -> {
+            throw new Exception("expected exception");
+        }).when(masterTileRepository).delete(any());
+
+        mockMvc.perform(post("/admin/masterTile/delete/1").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/masterTile"))
+                .andExpect(flash().attributeExists(Flash.ERROR));
+    }
+
+    @Test
+    public void provisioningAll() throws Exception {
+
+        mockMvc.perform(post("/admin/masterTile/provisioningAll").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/masterTile"))
+                .andExpect(flash().attributeExists(Flash.SUCCESS));
+
+        Mockito.verify(tileService, Mockito.times(1)).provisioningAll();
+    }
+
+    @Test
+    public void provisioningAllError() throws Exception {
+
+        Mockito.doAnswer(invocation -> {
+            throw new Exception("expected exception");
+        }).when(tileService).provisioningAll();
+
+        mockMvc.perform(post("/admin/masterTile/provisioningAll").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/masterTile"))
+                .andExpect(flash().attributeExists(Flash.ERROR));
+
+    }
 }

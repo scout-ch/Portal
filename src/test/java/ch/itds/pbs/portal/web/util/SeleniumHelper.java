@@ -1,12 +1,14 @@
 package ch.itds.pbs.portal.web.util;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -95,18 +97,4 @@ public class SeleniumHelper {
 
     }
 
-    /**
-     * Adds visible mouse hack & console.log redirect to a visible div (bottom right)
-     */
-    public void enableDebugUtils() {
-
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        try {
-            js.executeScript(new String(new ClassPathResource("mouse-follow.js").getInputStream().readAllBytes()));
-            js.executeScript(new String(new ClassPathResource("inline-log.js").getInputStream().readAllBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 }
