@@ -12,6 +12,9 @@ public interface MasterTileRepository extends BaseEntityRepository<MasterTile> {
     @Query(value = "SELECT mt.* FROM master_tile mt WHERE mt.title_de = :title LIMIT 1", nativeQuery = true)
     Optional<MasterTile> findFirstByTitleDe(@Param("title") String title);
 
+    @Query(value = "SELECT mt.* FROM master_tile mt WHERE mt.title_en = :title LIMIT 1", nativeQuery = true)
+    Optional<MasterTile> findFirstByTitleEn(@Param("title") String title);
+
     @Query("SELECT mt FROM MasterTile mt LEFT JOIN FETCH mt.category ORDER BY mt.position ASC")
     List<MasterTile> findAllWithCategory();
 

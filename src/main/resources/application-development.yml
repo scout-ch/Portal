@@ -11,7 +11,7 @@ bootstrap:
           fr: Lager & Kurse
           it: Lager & Kurse
           en: Lager & Kurse
-    masterTiles: # tiles are referenced by title.de
+    masterTiles: # tiles are referenced by title.de (if available) or title.en (as fallback)
       - title:
           de: MiData DE
           fr: MiData FR
@@ -48,3 +48,13 @@ bootstrap:
         position: 2
         enabled: true
         titleColor: DEFAULT
+      - title:
+          en: EN-Only
+        content:
+          en: EN-Only Content
+        category.name:
+          de: Hauptkategorie
+        position: 3
+        enabled: true
+        titleColor: DEFAULT
+        apiKey: DEMO-KEY-EN-ONLY

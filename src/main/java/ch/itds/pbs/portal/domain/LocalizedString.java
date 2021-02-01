@@ -3,6 +3,7 @@ package ch.itds.pbs.portal.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
 import java.util.Locale;
@@ -26,22 +27,28 @@ public class LocalizedString {
     private String en = null;
 
     public String getOrDefault(Language language, String defaultValue) {
+        String value;
         switch (language) {
             case DE -> {
-                return de;
+                value = de;
             }
             case FR -> {
-                return fr;
+                value = fr;
             }
             case IT -> {
-                return it;
+                value = it;
             }
             case EN -> {
-                return en;
+                value = en;
             }
             default -> {
-                return defaultValue;
+                value = defaultValue;
             }
+        }
+        if (StringUtils.hasText(value)) {
+            return value;
+        } else {
+            return defaultValue;
         }
     }
 

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
@@ -91,6 +92,36 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/masterTile");
+
+        MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
+        assertEquals("hosts", updatedMasterTile.getImage().getName());
+    }
+
+    @Test
+    public void testEditAnotherFile() throws InterruptedException {
+
+        MasterTile masterTile = ensureMasterTile();
+
+
+        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId());
+
+        Thread.sleep(1500);
+
+        editPage.acceptPrivacyNotice();
+        editPage.requestApiKey();
+        editPage.fillForm("Titel1", "Content1", null, null, null, "/etc/hostname");
+
+        Thread.sleep(1500);
+
+        editPage.submit();
+
+        Thread.sleep(1500);
+
+        final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
+        assertThat(currentUrl).endsWith("/admin/masterTile");
+
+        MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
+        assertEquals("hostname", updatedMasterTile.getImage().getName());
     }
 
     @Test
