@@ -280,7 +280,7 @@ test {
 	forkEvery = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
 	//testLogging.showStandardStreams = true
 
-	systemProperty 'spring.profiles.active', activeProfile+',demodata'
+	systemProperty 'spring.profiles.active', activeProfile+',test,demodata'
 	testLogging {
 		exceptionFormat = 'full'
 	}
