@@ -42,7 +42,7 @@ public class DevelopmentInitializer {
 
     @PostConstruct
     public void init() {
-        if (environment.acceptsProfiles(Profiles.of("development"))) {
+        if (environment.acceptsProfiles(Profiles.of("development", "test"))) {
 
             if (developmentBootstrapData.getCategories() != null) {
                 for (Category c : developmentBootstrapData.getCategories()) {
