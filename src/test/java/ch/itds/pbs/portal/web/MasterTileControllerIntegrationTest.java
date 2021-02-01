@@ -147,29 +147,9 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
     }
 
-    private MasterTile ensureMasterTile() {
-        List<MasterTile> masterTiles = masterTileRepository.findAll();
-        MasterTile masterTile;
-        if (masterTiles.isEmpty()) {
-            Category category = ensureACategory();
-
-            LocalizedString title = new LocalizedString();
-            title.setDe("Titel");
-            LocalizedString content = new LocalizedString();
-            content.setDe("Content...");
-
-            masterTile = new MasterTile();
-            masterTile.setCategory(category);
-            masterTile.setTitle(title);
-            masterTile.setContent(content);
-            masterTile.setBackgroundColor(Color.DEFAULT);
-            masterTile = masterTileRepository.saveAndFlush(masterTile);
-        } else {
-            masterTile = masterTiles.get(0);
-        }
-        return masterTile;
-    }
-
+    /**
+     * Test if tile order update by drag & drop works in the webbrowser
+     */
     @Test
     public void updatePositionsUsingDragAndDrop() throws InterruptedException {
 
@@ -225,6 +205,29 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         }
         assertThat(newSecondPosition).isEqualTo(1);
 
+    }
+
+    private MasterTile ensureMasterTile() {
+        List<MasterTile> masterTiles = masterTileRepository.findAll();
+        MasterTile masterTile;
+        if (masterTiles.isEmpty()) {
+            Category category = ensureACategory();
+
+            LocalizedString title = new LocalizedString();
+            title.setDe("Titel");
+            LocalizedString content = new LocalizedString();
+            content.setDe("Content...");
+
+            masterTile = new MasterTile();
+            masterTile.setCategory(category);
+            masterTile.setTitle(title);
+            masterTile.setContent(content);
+            masterTile.setBackgroundColor(Color.DEFAULT);
+            masterTile = masterTileRepository.saveAndFlush(masterTile);
+        } else {
+            masterTile = masterTiles.get(0);
+        }
+        return masterTile;
     }
 
     private Category ensureACategory() {

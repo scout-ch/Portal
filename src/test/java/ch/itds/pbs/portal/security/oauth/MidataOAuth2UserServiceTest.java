@@ -43,6 +43,14 @@ class MidataOAuth2UserServiceTest {
     @Autowired
     MessageRepository messageRepository;
 
+    /**
+     * Test MidataOAuth2UserService
+     * * remove user 3110 with it's messages and tiles if existing
+     * * load user (will be created based on mocked user profile)
+     * * ensure user profile data is saved to the database
+     * * load user again (will be updated based on changed mocked user profile)
+     * * ensure user profile data is updated in the database
+     */
     @Test
     void loadUserWithCreateAndUpdate() {
 

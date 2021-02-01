@@ -76,6 +76,11 @@ public class SeleniumHelper {
         return baseUrl;
     }
 
+    /**
+     * Create a screenshot with name prefixed by count, test class and test method
+     *
+     * @param name
+     */
     public void screenshot(String name) {
 
         byte[] screenshot = ((RemoteWebDriver) driver).getScreenshotAs(OutputType.BYTES);

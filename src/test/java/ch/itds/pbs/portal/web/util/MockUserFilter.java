@@ -48,6 +48,11 @@ public class MockUserFilter extends GenericFilterBean {
         chain.doFilter(request, response);
     }
 
+    /**
+     * Fake authentication
+     *
+     * @param username the MiData UserID
+     */
     public void authenticateNextRequestAs(String username) {
         UserDetails principal = userDetailsService.loadUserByUsername(username);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());

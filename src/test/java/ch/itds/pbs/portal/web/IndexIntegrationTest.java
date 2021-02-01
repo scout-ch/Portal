@@ -31,6 +31,9 @@ public class IndexIntegrationTest extends IntegrationTest {
         assertThat(currentUrl).endsWith("/message");
     }
 
+    /**
+     * Test if locale change is saved by {@link ch.itds.pbs.portal.util.UserUpdatingSessionLocaleResolver}
+     */
     @Test
     public void testLocaleSave() throws InterruptedException {
 

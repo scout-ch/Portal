@@ -36,6 +36,9 @@ public class MessageControllerIntegrationTest extends IntegrationTest {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
+    /**
+     * Creates two messages (service call), set them to read=true, delete the first one
+     */
     @Test
     public void testMessageSetReadAndDelete() throws InterruptedException {
 
