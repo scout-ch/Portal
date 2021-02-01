@@ -32,7 +32,7 @@ public class MessageEndpoint {
     @Operation(description = "Send a message to the tile users")
     @PutMapping("/message")
     @Transactional
-    public ResponseEntity<MessageCreateResponse> list(@RequestBody MessageCreateRequest messageCreateRequest, @CurrentUser TileAuthentication authentication) {
+    public ResponseEntity<MessageCreateResponse> create(@RequestBody MessageCreateRequest messageCreateRequest, @CurrentUser TileAuthentication authentication) {
         int count = messageService.createMessages(authentication.getTileId(), messageCreateRequest);
 
         return ResponseEntity.ok(MessageCreateResponse.builder().messagesCreated(count).build());

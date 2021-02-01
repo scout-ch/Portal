@@ -38,7 +38,7 @@ public class TileAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return tileId;
+        return this;
     }
 
     @Override

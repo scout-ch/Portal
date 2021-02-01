@@ -17,11 +17,11 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
-		classpath "com.github.ben-manes:gradle-versions-plugin:0.29.0"
-		classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.4.5"
+		classpath "com.github.ben-manes:gradle-versions-plugin:0.36.0"
+		classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.6.0"
 		classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
-		classpath "com.avast.gradle:gradle-docker-compose-plugin:0.13.0"
-		classpath 'com.browserstack:browserstack-local-java:1.0.3'
+		classpath "com.avast.gradle:gradle-docker-compose-plugin:0.14.0"
+		classpath 'com.browserstack:browserstack-local-java:1.0.6'
 		classpath "io.bit3:jsass:${jsassVersion}"
 	}
 }
@@ -79,8 +79,8 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	compile 'com.vladmihalcea:hibernate-types-52:2.9.12'
-	implementation 'org.postgresql:postgresql:42.2.14'
+	compile 'com.vladmihalcea:hibernate-types-52:2.10.2'
+	implementation 'org.postgresql:postgresql:42.2.18'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -88,10 +88,10 @@ dependencies {
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-	compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1'
+	compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.2'
 	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
 	compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
-	compile 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.0.0'
+	compile 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.1.0'
 
 	runtime "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
 	assets "com.bertramlabs.plugins:sass-asset-pipeline:${assetPipelineVersion}"
@@ -103,33 +103,32 @@ dependencies {
 
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	testCompile("org.assertj:assertj-core:3.16.1")
+	testCompile("org.assertj:assertj-core:3.19.0")
 	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
 	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
-	testCompile('io.github.bonigarcia:selenium-jupiter:3.3.0')
+	testCompile('io.github.bonigarcia:selenium-jupiter:3.4.0')
 
 	compile 'log4j:log4j:1.2.17'
 	compile 'org.slf4j:log4j-over-slf4j:1.7.30' // required for asset pipeline
 
 	// Logging to Logstash
-	compile "net.logstash.logback:logstash-logback-encoder:6.4"
-	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.1' // required for logback (does not start otherwise)
+	compile "net.logstash.logback:logstash-logback-encoder:6.6"
 
 	// for spotBugs @SuppressFBWarnings annotation
 	compileOnly 'net.jcip:jcip-annotations:1.0'
-	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.6'
+	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.2.0'
 
 	// required to run with intellij as plain spring boot application. running with gradle works without
 	compile group: 'io.bit3', name: 'jsass', version: jsassVersion
 
 	// web frontend libraries
-	compile 'org.webjars:font-awesome:5.13.0'
+	compile 'org.webjars:font-awesome:5.15.2'
 
 	compile 'org.webjars.npm:tablesort:5.2.0'
 
 	// rest api doc
-	compile 'org.springdoc:springdoc-openapi-ui:1.4.4'
-	compile 'org.springdoc:springdoc-openapi-security:1.4.4'
+	compile 'org.springdoc:springdoc-openapi-ui:1.5.3'
+	compile 'org.springdoc:springdoc-openapi-security:1.5.3'
 
 }
 
@@ -171,7 +170,7 @@ assets {
 
 	includes = [
 			'extensions/*',
-			'webjars/font-awesome/5.13.0/webfonts/**',
+			'webjars/font-awesome/5.15.2/webfonts/**',
 	]
 	excludes = ['**/*.less', '**/*.scss', 'webjars/**', '**/*.es6', 'inc/**'] //Example Exclude GLOB pattern
 
