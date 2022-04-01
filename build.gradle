@@ -44,6 +44,8 @@ group = 'ch.itds.pbs'
 version = project.version
 sourceCompatibility = '14'
 
+ext['spring-framework.version'] = '5.3.18'
+
 configurations {
 	developmentOnly
 	runtimeClasspath {
