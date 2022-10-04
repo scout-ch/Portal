@@ -1,28 +1,27 @@
 import java.text.SimpleDateFormat
 
 String activeProfile = System.properties['spring.profiles.active'] ?: 'development,local,demodata'
-println("Active profiles = ${activeProfile}")
+
+println "active profile = ${activeProfile}"
 
 buildscript {
 	repositories {
 		mavenCentral()
-		jcenter()
 		maven {
-			url "https://repo1.maven.org/maven2/"
+			url 'https://repo1.maven.org/maven2/'
 		}
 		maven {
-			url "https://plugins.gradle.org/m2/"
+			url 'https://plugins.gradle.org/m2/'
 		}
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
 		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
-		classpath "com.github.ben-manes:gradle-versions-plugin:0.36.0"
-		classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.6.0"
+		classpath 'org.openjdk.nashorn:nashorn-core:15.4'
+		classpath 'com.github.ben-manes:gradle-versions-plugin:0.42.0'
 		classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
-		classpath "com.avast.gradle:gradle-docker-compose-plugin:0.14.0"
+		classpath 'com.avast.gradle:gradle-docker-compose-plugin:0.16.9'
 		classpath 'com.browserstack:browserstack-local-java:1.0.6'
-		classpath "io.bit3:jsass:${jsassVersion}"
 	}
 }
 
@@ -35,16 +34,18 @@ apply plugin: "com.github.ben-manes.versions"
 apply plugin: "com.bertramlabs.asset-pipeline"
 apply plugin: 'war'
 apply plugin: 'pmd'
-apply plugin: "com.github.spotbugs"
 apply plugin: 'org.kordamp.gradle.stats'
 apply plugin: 'docker-compose'
 apply plugin: 'jacoco'
 
 group = 'ch.itds.pbs'
 version = project.version
-sourceCompatibility = '14'
 
-ext['spring-framework.version'] = '5.3.18'
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(17))
+	}
+}
 
 configurations {
 	developmentOnly
@@ -54,15 +55,14 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	runtime.exclude group: "log4j", module: "log4j"
-	assets.exclude group: "log4j", module: "log4j"
+	runtime.exclude group: 'log4j', module: 'log4j'
+	assets.exclude group: 'log4j', module: 'log4j'
 }
 
 repositories {
 	mavenCentral()
-	jcenter()
 	maven {
-		url "https://repo1.maven.org/maven2/"
+		url 'https://repo1.maven.org/maven2/'
 	}
 }
 
@@ -76,13 +76,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'org.liquibase:liquibase-core'
-	compileOnly 'org.projectlombok:lombok'
-	testCompileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	compile 'com.vladmihalcea:hibernate-types-52:2.10.2'
-	implementation 'org.postgresql:postgresql:42.2.18'
+	compileOnly 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+
+
+	implementation 'com.vladmihalcea:hibernate-types-52:2.19.2'
+	implementation 'org.postgresql:postgresql'
+	implementation 'org.liquibase:liquibase-core'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -90,14 +92,17 @@ dependencies {
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-	compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.2'
-	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
-	compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
-	compile 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.1.0'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+	implementation 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.1.1'
 
-	runtime "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
-	assets "com.bertramlabs.plugins:sass-asset-pipeline:${assetPipelineVersion}"
-	testCompile "com.bertramlabs.plugins:sass-asset-pipeline:${assetPipelineVersion}" //does not work for tests otherwise
+	runtimeOnly "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
+	assets "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
+	implementation "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
+	//does not work for tests otherwise
+	assets 'org.openjdk.nashorn:nashorn-core:15.4'
+	implementation 'org.openjdk.nashorn:nashorn-core:15.4'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -106,45 +111,41 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
 
-	testCompile("org.assertj:assertj-core:3.19.0")
-	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
-	testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
-	testCompile('io.github.bonigarcia:selenium-jupiter:3.4.0')
+	testImplementation 'org.assertj:assertj-core'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.5.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.5.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-api:4.5.0'
+	testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.1'
 
-	compile 'log4j:log4j:1.2.17'
-	compile 'org.slf4j:log4j-over-slf4j:1.7.30' // required for asset pipeline
+	implementation 'log4j:log4j:1.2.17'
+	implementation 'org.slf4j:log4j-over-slf4j:1.7.36' // required for asset pipeline
 
 	// Logging to Logstash
-	compile "net.logstash.logback:logstash-logback-encoder:6.6"
-
-	// for spotBugs @SuppressFBWarnings annotation
-	compileOnly 'net.jcip:jcip-annotations:1.0'
-	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.2.0'
-
-	// required to run with intellij as plain spring boot application. running with gradle works without
-	compile group: 'io.bit3', name: 'jsass', version: jsassVersion
+	implementation "net.logstash.logback:logstash-logback-encoder:7.2"
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4'
+	// required for logback (does not start otherwise)
 
 	// web frontend libraries
-	compile 'org.webjars:font-awesome:5.15.2'
-
-	compile 'org.webjars.npm:tablesort:5.2.0'
+	implementation 'org.webjars:font-awesome:5.15.2'
+	implementation 'org.webjars.npm:tablesort:5.2.0'
 
 	// rest api doc
-	compile 'org.springdoc:springdoc-openapi-ui:1.5.3'
-	compile 'org.springdoc:springdoc-openapi-security:1.5.3'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+	implementation 'org.springdoc:springdoc-openapi-security:1.6.11'
 
 }
 
 sourceSets {
 	main {
 		resources {
-			srcDir "src/assets"
+			srcDir 'src/assets'
 		}
 	}
 }
 
 bootRun {
-	systemProperty "spring.profiles.active", activeProfile
+	systemProperty 'spring.profiles.active', activeProfile
 }
 
 bootJar {
@@ -168,7 +169,7 @@ assets {
 
 	minifyOptions = [
 			optimizationLevel: 'SIMPLE',
-			targetLanguage   : 'ES5',
+			targetLanguage   : 'ES6',
 	]
 
 	includes = [
@@ -186,14 +187,18 @@ assets {
 
 task generateItdsFooter {
 	doLast {
-		println '** Generate ITDS Footer **'
+		println '** Generate Qube AG Footer **'
+
+		def applicationProps = new Properties()
+		file("src/main/resources/application.properties")
+				.withInputStream { applicationProps.load(it) }
 
 		Date now = new Date()
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy")
 
 		Map<String, String> m = [
-				"appName"       : project.name,
+				"appName"       : applicationProps.getProperty('spring.application.name'),
 				"version"       : project.version,
 				"buildTimestamp": sdf.format(now),
 				"buildYear"     : sdfYear.format(now),
@@ -204,7 +209,7 @@ task generateItdsFooter {
 				"buildHostName" : System.getenv("CI_RUNNER_DESCRIPTION") ?: "unknown",
 				"pipelineNumber": System.getenv("CI_PIPELINE_ID") ?: "unknown"
 		]
-		String versionInfo = "<span class=\"versioninfo\" title=\"&copy; ${m.buildYear} IT &amp; Design Solutions GmbH - ${m.appName} ${m.version} - Build: ${m.pipelineNumber}/${m.buildNumber} (${m.branch}) ${m.buildTimestamp}\">${m.appName} ${m.version}</span>"
+		String versionInfo = "<span class=\"versioninfo\" title=\"&copy; ${m.buildYear} Qube AG - ${m.appName} ${m.version} - Build: ${m.pipelineNumber}/${m.buildNumber} (${m.branch}) ${m.buildTimestamp}\">${m.appName} ${m.version}</span>"
 
 
 		File footer = project.file("src/main/resources/templates/fragments/version.html")
@@ -238,19 +243,6 @@ dependencyUpdates {
 	outputFormatter = "text,xml"
 }
 
-spotbugs {
-	//ignoreFailures=true
-	spotbugsTest.enabled = false
-	excludeFilter = file("config/spotbugs/exclude.xml")
-}
-
-spotbugsMain {
-	reports {
-		xml.enabled = false
-		html.enabled = true
-	}
-}
-
 pmd {
 	toolVersion = '6.14.0'
 	//ignoreFailures = true
@@ -267,10 +259,34 @@ tasks.withType(Pmd) {
 }
 
 dockerCompose {
-	stopContainers = false // reconnect instead of recreate
+	// reconnect instead of recreate: https://github.com/avast/gradle-docker-compose-plugin#reconnecting
+	stopContainers = false
+	projectName = null
+}
+
+/* extract database port for 3rd party usage
+   * .idea/dataSources.xml for IntelliJ database module
+   * build/resources/main/application-development.properties for application built & executed without gradle
+ */
+task writeDbPort {
+	doLast {
+		def dbInfo = dockerCompose.servicesInfos.postgres.firstContainer
+		File file = new File("build/databaseport")
+		file.write Integer.toString(dbInfo.ports[5432])
+		file = new File(".idea/dataSources.xml")
+		if (file.exists()) {
+			String dbName = dbInfo.properties.inspection.Config.Env.grep { it.startsWith('POSTGRES_DB=') }[0].split('=')[1]
+			file.write file.text.replaceAll("jdbc:postgresql:\\/\\/localhost:(\\d+)\\/${dbName}", "jdbc:postgresql://localhost:${dbInfo.ports[5432]}/${dbName}")
+		}
+		file = new File("build/resources/main/application-development.properties")
+		if (file.exists()) {
+			file.write file.text.replaceAll('TCP_5432:5432', "TCP_5432:${dbInfo.ports[5432]}")
+		}
+	}
 }
 
 dockerCompose.isRequiredBy(bootRun)
+composeUp.finalizedBy(writeDbPort)
 
 if (!System.getenv("CI_SERVER")) {
 	dockerCompose.isRequiredBy(test)
@@ -278,17 +294,26 @@ if (!System.getenv("CI_SERVER")) {
 
 test {
 	useJUnitPlatform()
+	systemProperty 'spring.profiles.active', activeProfile + ',test,demodata'
 
-	forkEvery = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
-	//testLogging.showStandardStreams = true
+	// via https://groups.google.com/g/geb-user/c/ps9rErAmX9k/m/tekG5l1jCwAJ
+	// disabled due to load issues: slower in GitLab-CI than with 1 fork
+	//maxParallelForks = Runtime.runtime.availableProcessors() - 2
+	maxParallelForks = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
+	forkEvery = 50
+	systemProperty 'runner.parallel.enabled', 'false'
 
-	systemProperty 'spring.profiles.active', activeProfile+',test,demodata'
 	testLogging {
 		exceptionFormat = 'full'
+		//showStandardStreams = true
+	}
+
+	jacoco {
+		excludes = ["com/gargoylesoftware/**"]
 	}
 }
 
-task firefoxOpenJacocoReport {
+task browserOpenJacocoReport {
 	group = JavaBasePlugin.VERIFICATION_GROUP
 	doLast {
 		java.awt.Desktop.desktop.browse "file://${projectDir}/build/reports/jacoco/test/html/index.html".toURI()

@@ -52,8 +52,6 @@ public class MessagePage extends PortalPage {
 
         Thread.sleep(200);
 
-        helper.screenshot("before-delete-confirm");
-
         Alert alert = helper.getDriver().switchTo().alert();
         alert.accept();
 

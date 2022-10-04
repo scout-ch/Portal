@@ -1,22 +1,19 @@
 package ch.itds.pbs.portal.web.util;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Level;
 
 public class SeleniumHelper {
 
@@ -30,22 +27,30 @@ public class SeleniumHelper {
         try {
             String envFfHost = System.getenv("SELENIUM-FIREFOX_HOST");
             String envFfPort = System.getenv("SELENIUM-FIREFOX_TCP_4444");
-            Capabilities browserCapabilities = new FirefoxOptions();
+            FirefoxOptions browserCapabilities = new FirefoxOptions();
+            browserCapabilities.setHeadless(true);
+            browserCapabilities.setAcceptInsecureCerts(true);
+            browserCapabilities.addArguments("use-fake-device-for-media-stream");
+            browserCapabilities.addArguments("use-fake-ui-for-media-stream");
+
             String seleniumHub = "http://" + (envFfHost != null ? envFfHost : "selenium") + ':' + (envFfPort != null ? envFfPort : 4444) + "/wd/hub";
 
-            LoggingPreferences logs = new LoggingPreferences();
-            logs.enable(LogType.BROWSER, Level.ALL);
-            ((FirefoxOptions) browserCapabilities).setCapability(CapabilityType.LOGGING_PREFS, logs);
+            String baseUrlProtocol = "http";
 
-            baseUrl = "http://localhost:" + port;
+            baseUrl = baseUrlProtocol + "://localhost:" + port;
 
             String localAddress = InetAddress.getLocalHost() != null ? InetAddress.getLocalHost().getHostAddress() : null;
 
             if (localAddress != null && localAddress.trim().length() > 0) {
-                if (baseUrl != null && baseUrl.matches("/localhost/"))
+                try (final DatagramSocket socket = new DatagramSocket()) {
+                    socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+                    localAddress = socket.getLocalAddress().getHostAddress();
+                }
+
+                if (baseUrl.matches("/localhost/"))
                     baseUrl = baseUrl.replaceAll("localhost", localAddress);
                 else
-                    baseUrl = "http://" + localAddress + ":" + port;
+                    baseUrl = baseUrlProtocol + "://" + localAddress + ":" + port;
                 System.out.println("use new baseUrl: " + baseUrl);
             }
 
@@ -56,7 +61,8 @@ public class SeleniumHelper {
     }
 
     public void close() {
-        driver.close();
+        driver.quit();
+        //driver.close();
     }
 
     public void navigateTo(String url) {
@@ -76,14 +82,10 @@ public class SeleniumHelper {
         return baseUrl;
     }
 
-    /**
-     * Create a screenshot with name prefixed by count, test class and test method
-     *
-     * @param name
-     */
     public void screenshot(String name) {
 
-        byte[] screenshot = ((RemoteWebDriver) driver).getScreenshotAs(OutputType.BYTES);
+
+        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
         try {
             Path path = Paths

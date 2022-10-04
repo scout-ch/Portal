@@ -12,12 +12,14 @@
                 <list>
                     <option value=":test"/>
                     <option value=":jacocoTestReport"/>
-                    <option value=":firefoxOpenJacocoReport"/>
+                    <option value=":browserOpenJacocoReport"/>
                 </list>
             </option>
             <option name="vmOptions" value=""/>
         </ExternalSystemSettings>
-        <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
         <method v="2"/>
     </configuration>
 </component>

@@ -11,7 +11,7 @@ import ch.itds.pbs.portal.web.util.SeleniumHelper;
 import ch.itds.pbs.portal.web.util.SetScreenshotDataExtension;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.github.bonigarcia.seljup.SeleniumJupiter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -19,11 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.util.HashSet;
 
-@ExtendWith({SeleniumExtension.class, ScreenshotOnFailureExtension.class, SetScreenshotDataExtension.class})
+@ExtendWith({SeleniumJupiter.class, ScreenshotOnFailureExtension.class, SetScreenshotDataExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class IntegrationTest {
@@ -86,7 +86,9 @@ abstract class IntegrationTest {
 
     @AfterAll
     public void tearDown() {
-        seleniumHelper.close();
+        if (seleniumHelper != null) {
+            seleniumHelper.close();
+        }
     }
 
 }

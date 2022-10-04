@@ -1,4 +1,4 @@
-image: docker-registry.itds.ch/debian-openjdk14:latest
+image: docker-registry.itds.ch/debian-openjdk17:latest
 
 before_script:
   - uname -a
@@ -7,7 +7,7 @@ before_script:
   - if [ ! -e $GRADLE_USER_HOME/gradle.properties ] ; then echo "" > $GRADLE_USER_HOME/gradle.properties ; fi
 
 variables:
-  JAVA_HOME: /usr/lib/jvm/adoptopenjdk-14-hotspot-amd64
+  JAVA_HOME: /usr/lib/jvm/temurin-17-jdk-amd64
   GIT_SUBMODULE_STRATEGY: recursive
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   INT_PROJECT_NAME: pbs-portal
@@ -50,9 +50,9 @@ build:integration:
     POSTGRES_USER: pbsportal-test
     POSTGRES_PASSWORD: pbsportal-test
   services:
-    - name: docker-registry.itds.ch/postgres:9.6
+    - name: docker-registry.itds.ch/postgres:13
       alias: database
-    - name: docker-registry.itds.ch/selenium/standalone-firefox:3.141.59-titanium
+    - name: docker-registry.itds.ch/selenium/standalone-firefox:4.5.0
       alias: selenium
 
 build:production:
@@ -78,9 +78,9 @@ build:production:
     POSTGRES_USER: pbsportal-test
     POSTGRES_PASSWORD: pbsportal-test
   services:
-    - name: docker-registry.itds.ch/postgres:9.6
+    - name: docker-registry.itds.ch/postgres:13
       alias: database
-    - name: docker-registry.itds.ch/selenium/standalone-firefox:3.141.59-titanium
+    - name: docker-registry.itds.ch/selenium/standalone-firefox:4.5.0
       alias: selenium
 
 include:
