@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="PortalApplication" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot">
+        <option name="ACTIVE_PROFILES" value="development,local,demodata"/>
+        <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
         <module name="PBS_Portal.main"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="ch.itds.pbs.portal.PortalApplication"/>
-        <option name="ALTERNATIVE_JRE_PATH"/>
         <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndTriggerFile"/>
-        <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
         <method v="2">
             <option name="Make" enabled="true"/>
             <option name="Gradle.BeforeRunTask" enabled="true" tasks="composeUp" externalProjectPath="$PROJECT_DIR$"

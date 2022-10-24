@@ -2,7 +2,7 @@
 
 ## Development setup
 
-* Requires Java 14 and Docker
+* Requires Java 17 and Docker
 * MiData credentials in `src/main/resources/application-local.properties`
    ```properties
   spring.security.oauth2.client.registration.midata.client-id=MIDATA_CLIENT_ID
