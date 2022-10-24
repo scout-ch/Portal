@@ -13,6 +13,7 @@
 .btn-text {
   @include btn;
   text-align: left;
+  background-color: transparent;
 
   svg {
     height: 2rem;

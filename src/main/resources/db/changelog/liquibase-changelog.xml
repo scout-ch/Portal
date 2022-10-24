@@ -215,9 +215,90 @@
         </addColumn>
         <sql splitStatements="false"
              stripComments="true">
-            UPDATE category SET name_fr = name_de WHERE name_fr IS NULL;
-            UPDATE category SET name_it = name_de WHERE name_it IS NULL;
-            UPDATE category SET name_en = name_de WHERE name_en IS NULL;
+            UPDATE category
+            SET name_fr = name_de
+            WHERE name_fr IS NULL;
+            UPDATE category
+            SET name_it = name_de
+            WHERE name_it IS NULL;
+            UPDATE category
+            SET name_en = name_de
+            WHERE name_en IS NULL;
+        </sql>
+    </changeSet>
+    <changeSet id="20221006-01" author="mkobel">
+        <createTable tableName="midata_group">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="midata_id" type="int4"/>
+            <column name="name" type="text"/>
+        </createTable>
+        <addUniqueConstraint tableName="midata_group" columnNames="midata_id"/>
+        <createTable tableName="midata_role">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="group_id" type="bigint">
+                <constraints foreignKeyName="fk_group_id" references="midata_group(id)"/>
+            </column>
+            <column name="name" type="text"/>
+            <column name="clazz" type="text"/>
+        </createTable>
+        <addUniqueConstraint tableName="midata_role" columnNames="group_id,name"/>
+        <createTable tableName="midata_permission">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints foreignKeyName="fk_role_id" references="midata_role(id)"/>
+            </column>
+            <column name="permission" type="text"/>
+        </createTable>
+        <addUniqueConstraint tableName="midata_permission" columnNames="user_id,role_id,permission"/>
+    </changeSet>
+    <changeSet id="20221006-02" author="mkobel">
+        <addColumn tableName="user">
+            <column name="primary_midata_group_id" type="bigint">
+                <constraints foreignKeyName="fk_primary_midata_group_id" references="midata_group(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20221006-03" author="mkobel">
+        <addColumn tableName="user_tile">
+            <column name="position" type="int"/>
+        </addColumn>
+        <createTable tableName="group_tile">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="master_tile_id" type="bigint">
+                <constraints foreignKeyName="fk_master_tile_id" references="master_tile(id)"/>
+            </column>
+            <column name="group_id" type="bigint">
+                <constraints foreignKeyName="fk_group_id" references="midata_group(id)"/>
+            </column>
+            <column name="position" type="int"/>
+        </createTable>
+        <sql splitStatements="false">
+            UPDATE user_tile ut
+            SET position = mt.position FROM master_tile mt
+            WHERE mt.id = ut.master_tile_id AND ut.position IS NULL;
         </sql>
     </changeSet>
 </databaseChangeLog>

@@ -79,23 +79,18 @@ public class TileService {
         provisioning(user);
     }
 
-    public void provisioningAll() {
-        for (User u : userRepository.findAll()) {
-            provisioning(u);
-        }
-    }
-
     private void provisioning(User user) {
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
-        List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).collect(Collectors.toList());
+        List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).toList();
         List<UserTile> newTiles = masterTileRepository.findAll().stream()
                 .filter(mt -> mt.isEnabled() && !existingMasterTileIds.contains(mt.getId()))
                 .map(mt -> {
                     UserTile ut = new UserTile();
                     ut.setUser(user);
                     ut.setMasterTile(mt);
+                    ut.setPosition(mt.getPosition());
                     return ut;
-                }).collect(Collectors.toList());
+                }).toList();
         userTileRepository.saveAll(newTiles);
     }
 

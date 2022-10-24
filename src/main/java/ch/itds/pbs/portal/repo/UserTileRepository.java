@@ -12,7 +12,7 @@ public interface UserTileRepository extends BaseEntityRepository<UserTile> {
 
     List<UserTile> findAllByUser(User user);
 
-    @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.masterTile mt LEFT JOIN FETCH ut.messages LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE ut.user.id = :userId AND mt.enabled = TRUE ORDER BY mt.position")
+    @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.masterTile mt LEFT JOIN FETCH ut.messages LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE ut.user.id = :userId AND mt.enabled = TRUE ORDER BY ut.position")
     Stream<UserTile> findAllEnabledWithFetchForUserId(@Param("userId") Long id);
 
     @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.user u WHERE ut.masterTile.id = :masterTileId AND u.midataUserId IN :limitToUserIds")

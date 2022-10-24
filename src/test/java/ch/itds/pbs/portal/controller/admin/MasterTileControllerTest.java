@@ -295,28 +295,4 @@ public class MasterTileControllerTest extends BaseControllerTest {
                 .andExpect(flash().attributeExists(Flash.ERROR));
     }
 
-    @Test
-    public void provisioningAll() throws Exception {
-
-        mockMvc.perform(post("/admin/masterTile/provisioningAll").with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/masterTile"))
-                .andExpect(flash().attributeExists(Flash.SUCCESS));
-
-        Mockito.verify(tileService, Mockito.times(1)).provisioningAll();
-    }
-
-    @Test
-    public void provisioningAllError() throws Exception {
-
-        Mockito.doAnswer(invocation -> {
-            throw new Exception("expected exception");
-        }).when(tileService).provisioningAll();
-
-        mockMvc.perform(post("/admin/masterTile/provisioningAll").with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/masterTile"))
-                .andExpect(flash().attributeExists(Flash.ERROR));
-
-    }
 }

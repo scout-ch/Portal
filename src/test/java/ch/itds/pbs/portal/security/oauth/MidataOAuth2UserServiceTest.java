@@ -3,9 +3,7 @@ package ch.itds.pbs.portal.security.oauth;
 import ch.itds.pbs.portal.WireMockInitializer;
 import ch.itds.pbs.portal.domain.Language;
 import ch.itds.pbs.portal.domain.User;
-import ch.itds.pbs.portal.repo.MessageRepository;
-import ch.itds.pbs.portal.repo.UserRepository;
-import ch.itds.pbs.portal.repo.UserTileRepository;
+import ch.itds.pbs.portal.repo.*;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
@@ -43,18 +41,28 @@ class MidataOAuth2UserServiceTest {
     @Autowired
     MessageRepository messageRepository;
 
+    @Autowired
+    MidataGroupRepository midataGroupRepository;
+
+    @Autowired
+    MidataRoleRepository midataRoleRepository;
+
+    @Autowired
+    MidataPermissionRepository midataPermissionRepository;
+
     /**
      * Test MidataOAuth2UserService
      * * remove user 3110 with it's messages and tiles if existing
      * * load user (will be created based on mocked user profile)
      * * ensure user profile data is saved to the database
-     * * load user again (will be updated based on changed mocked user profile)
+     * * load user again (will be updated based on changed mocked user profile containing midata permissions and primary group)
      * * ensure user profile data is updated in the database
      */
     @Test
     void loadUserWithCreateAndUpdate() {
 
         userRepository.findByUsername("3110").ifPresent((u) -> {
+            midataPermissionRepository.deleteAll(midataPermissionRepository.findByUser(u));
             messageRepository.deleteAll(messageRepository.findAllCompleteByUserId(u.getId()));
             userTileRepository.deleteAll(userTileRepository.findAllByUser(u));
             userRepository.delete(u);
@@ -89,17 +97,21 @@ class MidataOAuth2UserServiceTest {
         assertEquals(Language.FR, user.getLanguage());
 
         wireMockServer.stubFor(get(urlPathEqualTo("/oauth2/user"))
-                .willReturn(okJson("{\"id\":3110,\"email\":\"oauth-married@example.com\",\"nickname\":\"oAuth\",\"first_name\":\"oAuthilius\",\"last_name\":\"Testfamily - Married\",\"correspondence_language\":\"de\"}")));
+                .willReturn(okJson("{\"id\":3110,\"email\":\"oauth-married@example.com\",\"nickname\":\"oAuth\",\"first_name\":\"oAuthilius\",\"last_name\":\"Testfamily - Married\",\"correspondence_language\":\"de\",\"primary_group_id\": 42,\"roles\": [{\"group_id\": 84, \"group_name\": \"Testgruppe\", \"role_name\": \"IT Support\", \"role_class\": \"Group::Bund::ItSupport\",\n" +
+                        "  \"permissions\": [\"layer_and_below_full\",\"admin\"]\n" +
+                        "}]}")));
 
 
         oAuth2User = (UserPrincipal) midataOAuth2UserService.loadUser(req);
 
-        user = userRepository.findByUsername(oAuth2User.getUsername()).get();
+        user = userRepository.findByUsernameWithPrimaryMidataGroupAndMidataPermissions(oAuth2User.getUsername()).get();
         assertEquals("oauth-married@example.com", user.getMail());
         assertEquals("Testfamily - Married", user.getLastName());
         assertEquals("oAuthilius", user.getFirstName());
         assertEquals("oAuth", user.getNickName());
         assertEquals(Language.FR, user.getLanguage()); // language should not be updated!
+        assertEquals(42, user.getPrimaryMidataGroup().getMidataId());
+        assertEquals(2, user.getMidataPermissions().size());
 
         userRepository.findByUsername("3110").ifPresent((u) -> userRepository.delete(u));
     }

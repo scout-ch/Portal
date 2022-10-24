@@ -6,27 +6,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 @Entity
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
-public class UserTile extends BaseEntity {
+public class MidataRole extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn
     @NotNull
-    private MasterTile masterTile;
+    private MidataGroup group;
 
-    @ManyToOne(optional = false)
-    @JoinColumn
-    @NotNull
-    private User user;
+    @Column(nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "userTile", cascade = CascadeType.REMOVE)
-    private Set<Message> messages;
-
-    private int position = -1;
+    @Column(nullable = false)
+    private String clazz;
 
 }

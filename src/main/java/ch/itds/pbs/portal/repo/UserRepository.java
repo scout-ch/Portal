@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface UserRepository extends BaseEntityRepository<User> {
     Optional<User> findByUsername(String midataUserId);
 
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.primaryMidataGroup LEFT JOIN FETCH u.midataPermissions WHERE u.username = :midataUserId")
+    Optional<User> findByUsernameWithPrimaryMidataGroupAndMidataPermissions(String midataUserId);
+
     Optional<User> findByMidataUserId(Long email);
 
     @Modifying

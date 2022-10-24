@@ -206,15 +206,4 @@ public class MasterTileController {
                 );
     }
 
-    @RequestMapping("/provisioningAll")
-    public String provisioningAll(RedirectAttributes redirectAttributes, Locale locale) {
-        try {
-            tileService.provisioningAll();
-            redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.provisioningAll.success", null, locale));
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.provisioningAll.error", new String[]{e.getMessage()}, locale));
-        }
-        return "redirect:/admin/masterTile";
-    }
-
 }

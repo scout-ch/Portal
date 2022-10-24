@@ -52,5 +52,10 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MidataGroup primaryMidataGroup;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<MidataPermission> midataPermissions;
 
 }
