@@ -16,9 +16,9 @@
   background-color: transparent;
 
   svg {
-    height: 2rem;
+    height: 1.5rem;
     vertical-align: middle;
-    width: 2rem;
+    width: 1.5rem;
   }
 
   &:hover {
@@ -155,12 +155,23 @@
 }
 
 .top-buttons {
-  position: absolute;
-  right: $container-horizontal-padding;
-  top: 1.5rem;
+  text-align: right;
+  margin-bottom: 2rem;
 
-  a {
-    display: block;
+  a,
+  button {
+    display: inline-flex;
+    align-content: center;
+    align-items: center;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+
+  button {
+    color: $color-primary;
+    padding: 0;
   }
 }
 
@@ -205,12 +216,6 @@
 
 
 @media (max-width: $break-md) {
-  .top-buttons {
-    margin-bottom: 2rem;
-    position: static;
-    text-align: right;
-  }
-
   .tab-controls {
     .btn-tab {
       margin-left: 0.5rem;
@@ -236,6 +241,10 @@
 
 
 @media (max-width: $break-xs) {
+  .top-buttons {
+    text-align: left;
+  }
+
   .btn {
     display: block;
     width: 100%;
