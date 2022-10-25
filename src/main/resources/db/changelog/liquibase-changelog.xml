@@ -301,4 +301,36 @@
             WHERE mt.id = ut.master_tile_id AND ut.position IS NULL;
         </sql>
     </changeSet>
+    <changeSet id="20221006-04" author="mkobel">
+        <renameTable oldTableName="group_tile" newTableName="group_default_tile"/>
+        <addColumn tableName="category">
+            <column name="midata_group_only_id" type="bigint">
+                <constraints foreignKeyName="fk_midata_group_only_id" references="midata_group(id)"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="master_tile">
+            <column name="midata_group_only_id" type="bigint">
+                <constraints foreignKeyName="fk_midata_group_only_id" references="midata_group(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20221006-05" author="mkobel">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(id)
+                                         FROM midata_group
+                                         WHERE midata_id = 1;</sqlCheck>
+        </preConditions>
+        <sql splitStatements="false">
+            INSERT INTO midata_group (id, version, date_created, last_updated, name, midata_id)
+            VALUES (nextval('hibernate_sequence'), 0, current_timestamp, current_timestamp, 'Pfadibewegung Schweiz', 1);
+        </sql>
+    </changeSet>
+    <changeSet id="20221006-06" author="mkobel">
+        <sql splitStatements="false">
+            UPDATE master_tile
+            SET midata_group_only_id = (SELECT id FROM midata_group WHERE midata_id = 1)
+            WHERE midata_group_only_id IS NULL;
+        </sql>
+        <addNotNullConstraint tableName="master_tile" columnName="midata_group_only_id"/>
+    </changeSet>
 </databaseChangeLog>

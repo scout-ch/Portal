@@ -1,6 +1,7 @@
 package ch.itds.pbs.portal.service;
 
 import ch.itds.pbs.portal.domain.Language;
+import ch.itds.pbs.portal.domain.MasterTile;
 import ch.itds.pbs.portal.domain.User;
 import ch.itds.pbs.portal.domain.UserTile;
 import ch.itds.pbs.portal.dto.LocalizedTile;
@@ -39,35 +40,45 @@ public class TileService {
     }
 
     private LocalizedTile convertToLocalized(UserTile userTile, Language language) {
-        if (userTile.getMasterTile().getTitle() == null
-                || userTile.getMasterTile().getContent() == null
-                || Strings.isEmpty(userTile.getMasterTile().getTitle().getOrDefault(language, null))
-                || Strings.isEmpty(userTile.getMasterTile().getContent().getOrDefault(language, null))) {
+
+        LocalizedTile localizedTile = convertToLocalized(userTile.getMasterTile(), language);
+        if (localizedTile != null) {
+            localizedTile.setUserTileId(userTile.getId());
+            localizedTile.setPosition(userTile.getPosition());
+            localizedTile.setUnreadMessageCount(userTile.getMessages().stream().filter(msg -> !msg.isRead()).count());
+        }
+
+        return localizedTile;
+    }
+
+    public LocalizedTile convertToLocalized(MasterTile masterTile, Language language) {
+        if (masterTile.getTitle() == null
+                || masterTile.getContent() == null
+                || Strings.isEmpty(masterTile.getTitle().getOrDefault(language, null))
+                || Strings.isEmpty(masterTile.getContent().getOrDefault(language, null))) {
             return null;
         }
 
         LocalizedTile localizedTile = new LocalizedTile();
 
-        localizedTile.setTitle(userTile.getMasterTile().getTitle().getOrDefault(language, null));
-        localizedTile.setContent(userTile.getMasterTile().getContent().getOrDefault(language, null));
-        if (userTile.getMasterTile().getUrl() != null) {
-            localizedTile.setUrl(userTile.getMasterTile().getUrl().getOrDefault(language, null));
+        localizedTile.setTitle(masterTile.getTitle().getOrDefault(language, null));
+        localizedTile.setContent(masterTile.getContent().getOrDefault(language, null));
+        if (masterTile.getUrl() != null) {
+            localizedTile.setUrl(masterTile.getUrl().getOrDefault(language, null));
         }
-        localizedTile.setCategory(userTile.getMasterTile().getCategory().getName().getOrDefault(language, null));
+        localizedTile.setCategory(masterTile.getCategory().getName().getOrDefault(language, null));
 
-        localizedTile.setMasterTileId(userTile.getMasterTile().getId());
-        localizedTile.setMasterTileVersion(userTile.getMasterTile().getVersion());
-        localizedTile.setUserTileId(userTile.getId());
-        localizedTile.setCategoryId(userTile.getMasterTile().getCategory().getId());
+        localizedTile.setMasterTileId(masterTile.getId());
+        localizedTile.setMasterTileVersion(masterTile.getVersion());
+        localizedTile.setCategoryId(masterTile.getCategory().getId());
 
-        localizedTile.setImage(userTile.getMasterTile().getImage());
+        localizedTile.setImage(masterTile.getImage());
 
-        localizedTile.setTitleColor(userTile.getMasterTile().getTitleColor());
-        localizedTile.setContentColor(userTile.getMasterTile().getContentColor());
-        localizedTile.setBackgroundColor(userTile.getMasterTile().getBackgroundColor());
+        localizedTile.setTitleColor(masterTile.getTitleColor());
+        localizedTile.setContentColor(masterTile.getContentColor());
+        localizedTile.setBackgroundColor(masterTile.getBackgroundColor());
 
-        localizedTile.setPosition(userTile.getMasterTile().getPosition());
-        localizedTile.setUnreadMessageCount(userTile.getMessages().stream().filter(msg -> !msg.isRead()).count());
+        localizedTile.setPosition(masterTile.getPosition());
 
         return localizedTile;
 
@@ -94,4 +105,11 @@ public class TileService {
         userTileRepository.saveAll(newTiles);
     }
 
+    @Transactional(readOnly = true)
+    public List<LocalizedTile> listTilesByGroups(UserPrincipal userPrincipal, Language language) {
+        return masterTileRepository.findAllEnabledWithFetchForUserByGroups(userPrincipal.getId())
+                .map(mt -> convertToLocalized(mt, language))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }

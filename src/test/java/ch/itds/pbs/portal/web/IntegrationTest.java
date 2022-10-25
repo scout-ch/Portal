@@ -1,10 +1,8 @@
 package ch.itds.pbs.portal.web;
 
 
-import ch.itds.pbs.portal.domain.Role;
-import ch.itds.pbs.portal.domain.User;
-import ch.itds.pbs.portal.repo.RoleRepository;
-import ch.itds.pbs.portal.repo.UserRepository;
+import ch.itds.pbs.portal.domain.*;
+import ch.itds.pbs.portal.repo.*;
 import ch.itds.pbs.portal.web.util.MockUserFilter;
 import ch.itds.pbs.portal.web.util.ScreenshotOnFailureExtension;
 import ch.itds.pbs.portal.web.util.SeleniumHelper;
@@ -37,6 +35,15 @@ abstract class IntegrationTest {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    MidataGroupRepository midataGroupRepository;
+
+    @Autowired
+    MidataPermissionRepository midataPermissionRepository;
+
+    @Autowired
+    MidataRoleRepository midataRoleRepository;
 
     @LocalServerPort
     private int port;
@@ -76,6 +83,31 @@ abstract class IntegrationTest {
             testUser.getRoles().add(admin);
             testUser = userRepository.save(testUser);
         }
+
+        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
+        if (pbsGroup == null) {
+            pbsGroup = new MidataGroup();
+            pbsGroup.setName("Pfadibewegung Schweiz");
+            pbsGroup.setMidataId(1);
+            pbsGroup = midataGroupRepository.save(pbsGroup);
+        }
+        MidataRole pbsItSupport = midataRoleRepository.findByGroupAndName(pbsGroup, "IT Support");
+        if (pbsItSupport == null) {
+            pbsItSupport = new MidataRole();
+            pbsItSupport.setName("IT Support");
+            pbsItSupport.setClazz("Group::Bund::ItSupport");
+            pbsItSupport.setGroup(pbsGroup);
+            pbsItSupport = midataRoleRepository.save(pbsItSupport);
+        }
+        MidataPermission pbsItSupportAdmin = midataPermissionRepository.findByUserAndRoleAndPermission(testUser, pbsItSupport, "admin");
+        if (pbsItSupportAdmin == null) {
+            pbsItSupportAdmin = new MidataPermission();
+            pbsItSupportAdmin.setUser(testUser);
+            pbsItSupportAdmin.setRole(pbsItSupport);
+            pbsItSupportAdmin.setPermission("admin");
+            pbsItSupportAdmin = midataPermissionRepository.save(pbsItSupportAdmin);
+        }
+
         mockUserFilter.authenticateNextRequestAs("3113");
 
         seleniumHelper = new SeleniumHelper(port);

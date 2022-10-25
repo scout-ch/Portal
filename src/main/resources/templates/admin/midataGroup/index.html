@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title th:text="#{midataGroup.index.titel}">Edit</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{midataGroup.index.titel}">Admin Portal</h1>
+
+    <div class="top-buttons">
+
+    </div>
+
+    <table class="table">
+        <tr th:each="group : ${groups}">
+            <td th:text="${group.name}">
+            </td>
+            <td>
+                <a th:href="@{/admin/midataGroup/{id}/defaultTile(id=${group.id})}">Icon:Standardansicht</a>
+            </td>
+            <td>
+                <a th:href="@{/admin/midataGroup/{id}/masterTile(id=${group.id})}">Icon:Kacheln</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>

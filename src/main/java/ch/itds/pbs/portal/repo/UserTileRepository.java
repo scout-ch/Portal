@@ -1,5 +1,6 @@
 package ch.itds.pbs.portal.repo;
 
+import ch.itds.pbs.portal.domain.MasterTile;
 import ch.itds.pbs.portal.domain.User;
 import ch.itds.pbs.portal.domain.UserTile;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,6 @@ public interface UserTileRepository extends BaseEntityRepository<UserTile> {
 
     @Query("SELECT ut FROM UserTile ut LEFT JOIN FETCH ut.user u WHERE ut.masterTile.id = :masterTileId AND u.midataUserId IN :limitToUserIds")
     List<UserTile> findAllByMasterTileIdAndUserMidataIdWithUser(@Param("masterTileId") Long masterTileId, @Param("limitToUserIds") List<Long> limitToUserIds);
+
+    List<UserTile> findAllByUserAndMasterTile(User user, MasterTile masterTile);
 }

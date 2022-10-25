@@ -25,4 +25,11 @@ public class Category extends BaseEntity {
     @OneToMany
     private Set<MasterTile> tiles;
 
+    /**
+     * The category is only available for members of this group
+     */
+    @ManyToOne
+    @JoinColumn
+    private MidataGroup midataGroupOnly;
+
 }

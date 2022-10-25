@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html
+        layout:decorate="~{layouts/portal}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{userTile.create.verboseTitle}">Add user tile</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{userTile.create.verboseTitle}"></h1>
+    <div th:text="#{userTile.create.question(${localizedTile.title})}"></div>
+
+    <form th:action="@{/userTile.create/{masterTileId}(masterTileId=${tile.masterTileId})}" method="post">
+        <button class="btn btn-outline-primary" type="submit" th:text="#{userTile.create.title}">
+
+        </button>
+    </form>
+
+    <button class="btn btn-outline-secondary" onclick="window.history.back();" th:text="#{general.back}"></button>
+
+
+</div>
+
+<th:block layout:fragment="scripts">
+</th:block>
+
+</body>
+</html>

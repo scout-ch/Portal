@@ -44,8 +44,8 @@ public class MasterTileEditPage extends PortalPage {
         super(helper);
     }
 
-    public static MasterTileEditPage open(SeleniumHelper helper, long id) {
-        helper.navigateTo("/admin/masterTile/edit/" + id);
+    public static MasterTileEditPage open(SeleniumHelper helper, long id, long midataGroupId) {
+        helper.navigateTo("/admin/midataGroup/" + midataGroupId + "/masterTile/edit/" + id);
         MasterTileEditPage indexPage = new MasterTileEditPage(helper);
         PageFactory.initElements(helper.getDriver(), indexPage);
 

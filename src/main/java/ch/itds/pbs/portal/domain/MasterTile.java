@@ -75,6 +75,14 @@ public class MasterTile extends BaseEntity {
 
     private boolean enabled = true;
 
+    /**
+     * The tile is only available for members of this group
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn
+    @NotNull
+    private MidataGroup midataGroupOnly;
+
     public List<Language> getAvailableLanguages() {
         List<Language> languages = new ArrayList<>();
         for (Language l : Language.values()) {

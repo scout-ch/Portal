@@ -71,7 +71,9 @@ public class WebConfig implements WebMvcConfigurer {
                 "classpath:/i18n/color",
                 "classpath:/i18n/general",
                 "classpath:/i18n/message",
-                "classpath:/i18n/masterTile"
+                "classpath:/i18n/masterTile",
+                "classpath:/i18n/midataGroup",
+                "classpath:/i18n/userTile"
         );
         messageSource.setDefaultEncoding("UTF-8");
         //messageSource.setUseCodeAsDefaultMessage(true); // must be default=false to /beefOrder/create : options fallback

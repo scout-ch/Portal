@@ -3,12 +3,15 @@ package ch.itds.pbs.portal.controller.admin;
 import ch.itds.pbs.portal.domain.Color;
 import ch.itds.pbs.portal.domain.FileMeta;
 import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.domain.MidataGroup;
 import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.dto.ApiKey;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
+import ch.itds.pbs.portal.security.CurrentUser;
+import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.FileService;
-import ch.itds.pbs.portal.service.TileService;
+import ch.itds.pbs.portal.service.MidataGroupService;
 import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -32,39 +35,47 @@ import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
 @Controller("masterTileAdminController")
-@RequestMapping("/admin/masterTile")
+@RequestMapping("/admin/midataGroup/{midataGroupId:\\d+}/masterTile")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class MasterTileController {
 
     private final transient MasterTileRepository masterTileRepository;
     private final transient CategoryRepository categoryRepository;
     private final transient MessageSource messageSource;
     private final transient FileService fileService;
-    private final transient TileService tileService;
 
-    public MasterTileController(MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, MessageSource messageSource, FileService fileService, TileService tileService) {
+    private final transient MidataGroupService midataGroupService;
+
+    public MasterTileController(MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, MessageSource messageSource, FileService fileService, MidataGroupService midataGroupService) {
         this.masterTileRepository = masterTileRepository;
         this.categoryRepository = categoryRepository;
         this.messageSource = messageSource;
         this.fileService = fileService;
-        this.tileService = tileService;
+        this.midataGroupService = midataGroupService;
     }
 
     @GetMapping("")
-    public String index(Model model) {
+    public String index(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal, Model model) {
 
-        model.addAttribute("entityList", masterTileRepository.findAllWithCategory());
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
+        model.addAttribute("midataGroup", midataGroup);
+        model.addAttribute("entityList", masterTileRepository.findAllByGroupWithCategory(midataGroup));
 
         return "admin/masterTile/index";
     }
 
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String createForm(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal, Model model) {
+
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
 
         MasterTile entity = new MasterTile();
+        entity.setMidataGroupOnly(midataGroup);
         entity.setApiKey(UUID.randomUUID().toString());
 
+        model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("entity", entity);
         model.addAttribute("categoryList", categoryRepository.findAll());
         model.addAttribute("colorList", Color.values());
@@ -73,11 +84,15 @@ public class MasterTileController {
     }
 
     @PostMapping("/create")
-    public String createSave(@Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
+    public String createSave(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                             @Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
                              @RequestParam("imageUpload") MultipartFile imageUpload,
                              Model model, RedirectAttributes redirectAttributes, Locale locale) {
 
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAll());
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
@@ -87,11 +102,15 @@ public class MasterTileController {
             FileMeta image = fileService.upload(imageUpload);
             entity.setImage(image);
         }
+
+        entity.setMidataGroupOnly(midataGroup);
+
         try {
             masterTileRepository.save(entity);
         } catch (Exception e) {
             log.error("unable to save entity {}: {}", entity.getClass().getSimpleName(), e.getMessage(), e);
             model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.create.error", new String[]{e.getMessage()}, locale));
+            model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAll());
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
@@ -99,14 +118,17 @@ public class MasterTileController {
 
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.create.success", null, locale));
 
-        return "redirect:/admin/masterTile";
+        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable long id, Model model) {
+    public String editForm(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal, @PathVariable long id, Model model) {
 
-        MasterTile entity = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
 
+        MasterTile entity = masterTileRepository.findByIdAndMidataGroupOnly(id, midataGroup).orElseThrow(EntityNotFoundException::new);
+
+        model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("entity", entity);
         model.addAttribute("categoryList", categoryRepository.findAll());
         model.addAttribute("colorList", Color.values());
@@ -115,20 +137,24 @@ public class MasterTileController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editSave(@PathVariable long id, @Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
+    public String editSave(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                           @PathVariable long id, @Validated @ModelAttribute("entity") MasterTile entity, BindingResult bindingResult,
                            @RequestParam("imageUpload") MultipartFile imageUpload,
                            @RequestParam(required = false, name = "imageUpload-delete") boolean imageDelete,
                            Model model, RedirectAttributes redirectAttributes, Locale locale) {
 
-        MasterTile savedEntity = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
+        MasterTile savedEntity = masterTileRepository.findByIdAndMidataGroupOnly(id, midataGroup).orElseThrow(EntityNotFoundException::new);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAll());
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
         }
 
-        BeanUtils.copyProperties(entity, savedEntity, "id", "version", "dateCreated", "lastUpdated", "image");
+        BeanUtils.copyProperties(entity, savedEntity, "id", "version", "dateCreated", "lastUpdated", "image", "midataGroupOnly");
         FileMeta imageToDelete = null;
 
         if (imageUpload != null && !imageUpload.isEmpty()) {
@@ -153,6 +179,7 @@ public class MasterTileController {
         } catch (Exception e) {
             log.error("unable to save entity {}: {}", savedEntity.getClass().getSimpleName(), e.getMessage(), e);
             model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.edit.error", new String[]{e.getMessage()}, locale));
+            model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAll());
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
@@ -160,27 +187,34 @@ public class MasterTileController {
 
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.edit.success", null, locale));
 
-        return "redirect:/admin/masterTile";
+        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @PostMapping("/delete/{id}")
     @Transactional
-    public String delete(@PathVariable long id, RedirectAttributes redirectAttributes, Locale locale) {
+    public String delete(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                         @PathVariable long id, RedirectAttributes redirectAttributes, Locale locale) {
 
-        MasterTile masterTile = masterTileRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
+        MasterTile masterTile = masterTileRepository.findByIdAndMidataGroupOnly(id, midataGroup).orElseThrow(EntityNotFoundException::new);
+
         try {
             masterTileRepository.delete(masterTile);
             redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.delete.success", null, locale));
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.error", new String[]{e.getMessage()}, locale));
         }
-        return "redirect:/admin/masterTile";
+        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @PostMapping(path = "/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ActionMessage> updateSort(@RequestBody Map<Long, Integer> data, Locale locale) {
+    public ResponseEntity<ActionMessage> updateSort(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                                                    @RequestBody Map<Long, Integer> data, Locale locale) {
 
-        List<MasterTile> items = masterTileRepository.findAll();
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
+        List<MasterTile> items = masterTileRepository.findAllByMidataGroupOnly(midataGroup);
         for (MasterTile i : items) {
             i.setPosition(data.get(i.getId()));
         }
@@ -195,7 +229,10 @@ public class MasterTileController {
     }
 
     @PostMapping(path = "/generateApiKey", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiKey> generateApiKey(Locale locale) {
+    public ResponseEntity<ApiKey> generateApiKey(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                                                 Locale locale) {
+
+        midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
 
         return ResponseEntity
                 .ok(ApiKey

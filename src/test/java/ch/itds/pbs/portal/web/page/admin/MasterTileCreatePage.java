@@ -44,8 +44,8 @@ public class MasterTileCreatePage extends PortalPage {
         super(helper);
     }
 
-    public static MasterTileCreatePage open(SeleniumHelper helper) {
-        helper.navigateTo("/admin/masterTile/create");
+    public static MasterTileCreatePage open(SeleniumHelper helper, long midataGroupId) {
+        helper.navigateTo("/admin/midataGroup/" + midataGroupId + "/masterTile/create");
         MasterTileCreatePage indexPage = new MasterTileCreatePage(helper);
         PageFactory.initElements(helper.getDriver(), indexPage);
 

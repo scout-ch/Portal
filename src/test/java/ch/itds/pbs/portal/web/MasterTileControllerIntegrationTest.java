@@ -1,11 +1,9 @@
 package ch.itds.pbs.portal.web;
 
-import ch.itds.pbs.portal.domain.Category;
-import ch.itds.pbs.portal.domain.Color;
-import ch.itds.pbs.portal.domain.LocalizedString;
-import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
+import ch.itds.pbs.portal.repo.MidataGroupRepository;
 import ch.itds.pbs.portal.web.page.admin.MasterTileCreatePage;
 import ch.itds.pbs.portal.web.page.admin.MasterTileEditPage;
 import ch.itds.pbs.portal.web.page.admin.MasterTileIndexPage;
@@ -29,11 +27,15 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    MidataGroupRepository midataGroupRepository;
+
+
     @Test
     public void testIndex() throws InterruptedException {
 
 
-        MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper);
+        MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper, ensurePbsGroup().getId());
 
         Thread.sleep(1500);
 
@@ -45,14 +47,14 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         Thread.sleep(1500);
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile/create");
+        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile/create");
     }
 
     @Test
     public void testCreate() throws InterruptedException {
 
 
-        MasterTileCreatePage createPage = MasterTileCreatePage.open(seleniumHelper);
+        MasterTileCreatePage createPage = MasterTileCreatePage.open(seleniumHelper, ensurePbsGroup().getId());
 
         Thread.sleep(1500);
 
@@ -67,7 +69,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         Thread.sleep(1500);
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile");
+        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
     }
 
     @Test
@@ -76,7 +78,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         MasterTile masterTile = ensureMasterTile();
 
 
-        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId());
+        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId(), ensurePbsGroup().getId());
 
         Thread.sleep(1500);
 
@@ -91,7 +93,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         Thread.sleep(1500);
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile");
+        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
         assertEquals("hosts", updatedMasterTile.getImage().getName());
@@ -103,7 +105,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         MasterTile masterTile = ensureMasterTile();
 
 
-        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId());
+        MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId(), ensurePbsGroup().getId());
 
         Thread.sleep(1500);
 
@@ -118,7 +120,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         Thread.sleep(1500);
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile");
+        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
         assertEquals("hostname", updatedMasterTile.getImage().getName());
@@ -129,7 +131,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         MasterTile masterTile = ensureMasterTile();
 
-        MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper);
+        MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper, ensurePbsGroup().getId());
 
         Thread.sleep(1500);
 
@@ -141,7 +143,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         Thread.sleep(1500);
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/masterTile");
+        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         assertThat(masterTileRepository.findById(masterTile.getId())).isEqualTo(Optional.empty());
 
@@ -154,11 +156,12 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     public void updatePositionsUsingDragAndDrop() throws InterruptedException {
 
         Category category = ensureACategory();
-        List<MasterTile> tileList = masterTileRepository.findAll();
+        List<MasterTile> tileList = masterTileRepository.findAllByMidataGroupOnly(ensurePbsGroup());
         int c = 1;
         while (tileList.size() < 3) {
             MasterTile tile = new MasterTile();
             tile.setCategory(category);
+            tile.setMidataGroupOnly(ensurePbsGroup());
             LocalizedString t = new LocalizedString();
             t.setDe("Tile " + c);
             tile.setTitle(t);
@@ -174,7 +177,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
             log.info("Tile {} @ {}: {}", p.getId(), p.getPosition(), p.getTitle().getDe());
         }
 
-        seleniumHelper.navigateTo("/admin/masterTile");
+        seleniumHelper.navigateTo("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         seleniumHelper.screenshot("start");
 
@@ -220,6 +223,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
             masterTile = new MasterTile();
             masterTile.setCategory(category);
+            masterTile.setMidataGroupOnly(ensurePbsGroup());
             masterTile.setTitle(title);
             masterTile.setContent(content);
             masterTile.setBackgroundColor(Color.DEFAULT);
@@ -244,6 +248,17 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
             category = categories.get(0);
         }
         return category;
+    }
+
+    private MidataGroup ensurePbsGroup() {
+        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
+        if (pbsGroup == null) {
+            pbsGroup = new MidataGroup();
+            pbsGroup.setName("Pfadibewegung Schweiz");
+            pbsGroup.setMidataId(1);
+            pbsGroup = midataGroupRepository.save(pbsGroup);
+        }
+        return pbsGroup;
     }
 
 }

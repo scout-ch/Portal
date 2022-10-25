@@ -1,5 +1,8 @@
 bootstrap:
   data:
+    midataGroups:
+      - name: Pfadibewegung Schweiz
+        midata-id: 1
     categories: # categories are referenced by name
       - name:
           de: Hauptkategorie
@@ -22,12 +25,15 @@ bootstrap:
           fr: MiData Content FR
           it: MiData Content IT
           en: MiData Content EN
-        category.name:
-          de: Hauptkategorie
+        category:
+          name:
+            de: Hauptkategorie
         position: 1
         enabled: true
         titleColor: DEFAULT
         apiKey: DEMO-KEY
+        midata-group-only:
+          midata-id: 1
       - title:
           de: Lagerkochbuch DE
           fr: Lagerkochbuch FR
@@ -43,18 +49,24 @@ bootstrap:
           fr: https://www.lagerkochbuch.ch
           it: https://www.lagerkochbuch.ch
           en: https://www.lagerkochbuch.ch
-        category.name:
-          de: Lager & Kurse
+        category:
+          name:
+            de: Lager & Kurse
         position: 2
         enabled: true
         titleColor: DEFAULT
+        midata-group-only:
+          midata-id: 1
       - title:
           en: EN-Only
         content:
           en: EN-Only Content
-        category.name:
-          de: Hauptkategorie
+        category:
+          name:
+            de: Hauptkategorie
         position: 3
         enabled: true
         titleColor: DEFAULT
         apiKey: DEMO-KEY-EN-ONLY
+        midata-group-only:
+          midata-id: 1

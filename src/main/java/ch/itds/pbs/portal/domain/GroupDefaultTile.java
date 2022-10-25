@@ -14,12 +14,17 @@ import javax.validation.constraints.NotNull;
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
-public class GroupTile extends BaseEntity {
+public class GroupDefaultTile extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn
     @NotNull
     private MasterTile masterTile;
+
+    @ManyToOne(optional = false)
+    @JoinColumn
+    @NotNull
+    private MidataGroup group;
 
     private int position = -1;
 

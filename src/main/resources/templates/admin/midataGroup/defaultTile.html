@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title th:text="#{midataGroup.defaultTile.titel(${midataGroup.name})}">Edit</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{midataGroup.defaultTile.titel(${midataGroup.name})}">Admin Portal</h1>
+
+    <div class="top-buttons">
+        <a class="btn-text" th:href="@{/catalog(selectForMidataGroupId=${midataGroup.id})}">
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 448 512">
+                <path fill="currentColor"
+                      d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+            </svg>
+            <th:block th:text="#{midataGroup.topButtons.create}">New</th:block>
+        </a>
+    </div>
+
+    <table class="table table-sortable table-draggable">
+        <thead>
+        <tr>
+            <th data-sort-default class="order" th:text="#{masterTile.table.heading.order}">Order</th>
+            <th th:text="#{masterTile.table.heading.name}">Name</th>
+            <th th:text="#{masterTile.table.heading.category}">Category</th>
+            <th data-sort-method="none" th:text="#{masterTile.table.heading.languages}">Languages</th>
+            <th data-sort-method="none"></th>
+        </tr>
+        </thead>
+        <tbody th:attr="data-sort-url=@{/admin/midataGroup/{midataGroupId}/updateSort(midataGroupId=${midataGroup.id})}">
+        <tr th:each="entity : ${groupDefaultTiles}" th:attr="data-id=${entity.id}">
+            <td th:attr="data-sort=${entity.position}">
+                <div class="icon grip-handle">
+                    <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 512 512">
+                        <path fill="currentColor"
+                              d="M496 288H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm0-128H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16z"></path>
+                    </svg>
+                </div>
+            </td>
+            <td th:text="${entity.masterTile.title.getLocalized(#locale)}"></td>
+            <td class="hide-mobile">
+                <div class="label" th:text="${entity.masterTile.category.name.getLocalized(#locale)}"></div>
+            </td>
+            <td class="hide-mobile" data-sort-method="none"
+                th:text="${#strings.listJoin(entity.masterTile.availableLanguages, ', ')}">
+            </td>
+            <td data-sort-method="none" class="no-padding text-right">
+                <form th:action="@{/admin/midataGroup/{midataGroupId}/defaultTile/delete/{id}(midataGroupId=${midataGroup.id},id=${entity.id})}"
+                      method="post"
+                      onsubmit="return confirm('Wirklich löschen?');"
+                >
+                    <button class="btn-icon" type="submit" th:title="#{general.delete}"
+                            th:attr="aria-label=#{general.delete}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366"
+                             viewBox="0 0 18.669 20.366">
+                            <path d="M12.637,4a1.634,1.634,0,0,0-1.7,1.7v.849H5v1.7h.928L7.546,23.6l.08.769H21.043l.08-.769L22.741,8.243h.928v-1.7h-5.94V5.7a1.727,1.727,0,0,0-.477-1.22A1.727,1.727,0,0,0,16.031,4Zm0,1.7h3.394v.849H12.637ZM7.652,8.243H21.017L19.505,22.669H9.163Zm3.288,2.546v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Zm2.546,0v9.334h1.7V10.789Z"
+                                  transform="translate(-5 -4)" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>

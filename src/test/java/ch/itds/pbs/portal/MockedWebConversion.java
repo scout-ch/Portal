@@ -29,7 +29,8 @@ public class MockedWebConversion {
 
         Mockito.doReturn(obj)
                 .when(mvcConversionService)
-                .convert(eq(obj.getId().toString()), any(TypeDescriptor.class), any(TypeDescriptor.class));
+                .convert(eq(obj.getId().toString()), any(TypeDescriptor.class), argThat(argument
+                        -> argument.getObjectType().equals(obj.getClass())));
     }
 
 }

@@ -5,7 +5,6 @@ import ch.itds.pbs.portal.domain.Language;
 import ch.itds.pbs.portal.dto.LocalizedTile;
 import ch.itds.pbs.portal.service.LanguageService;
 import ch.itds.pbs.portal.service.TileService;
-import ch.itds.pbs.portal.util.Flash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,10 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = IndexController.class)
 @WithMockUser
@@ -71,29 +68,5 @@ public class IndexControllerTest extends BaseControllerTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    @Test
-    public void provisioning() throws Exception {
-
-        mockMvc.perform(post("/provisioning").with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(flash().attributeExists(Flash.SUCCESS));
-
-        Mockito.verify(tileService, Mockito.times(1)).provisioning(any());
-    }
-
-    @Test
-    public void provisioningError() throws Exception {
-
-        Mockito.doAnswer(invocation -> {
-            throw new Exception("expected exception");
-        }).when(tileService).provisioning(any());
-
-        mockMvc.perform(post("/provisioning").with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"))
-                .andExpect(flash().attributeExists(Flash.ERROR));
-
-    }
 
 }

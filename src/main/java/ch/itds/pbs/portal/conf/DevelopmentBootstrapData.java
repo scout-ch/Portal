@@ -2,6 +2,7 @@ package ch.itds.pbs.portal.conf;
 
 import ch.itds.pbs.portal.domain.Category;
 import ch.itds.pbs.portal.domain.MasterTile;
+import ch.itds.pbs.portal.domain.MidataGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,6 +17,7 @@ import java.util.List;
 @Setter
 public class DevelopmentBootstrapData {
 
+    private List<MidataGroup> midataGroups = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
     private List<MasterTile> masterTiles = new ArrayList<>();
 

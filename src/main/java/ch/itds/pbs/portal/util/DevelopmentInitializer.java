@@ -1,14 +1,8 @@
 package ch.itds.pbs.portal.util;
 
 import ch.itds.pbs.portal.conf.DevelopmentBootstrapData;
-import ch.itds.pbs.portal.domain.Category;
-import ch.itds.pbs.portal.domain.MasterTile;
-import ch.itds.pbs.portal.domain.Role;
-import ch.itds.pbs.portal.domain.User;
-import ch.itds.pbs.portal.repo.CategoryRepository;
-import ch.itds.pbs.portal.repo.MasterTileRepository;
-import ch.itds.pbs.portal.repo.RoleRepository;
-import ch.itds.pbs.portal.repo.UserRepository;
+import ch.itds.pbs.portal.domain.*;
+import ch.itds.pbs.portal.repo.*;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.TileService;
 import org.springframework.beans.BeanUtils;
@@ -28,15 +22,18 @@ public class DevelopmentInitializer {
     private final transient RoleRepository roleRepository;
     private final transient MasterTileRepository masterTileRepository;
     private final transient CategoryRepository categoryRepository;
+
+    private final transient MidataGroupRepository midataGroupRepository;
     private final transient DevelopmentBootstrapData developmentBootstrapData;
 
-    public DevelopmentInitializer(Environment environment, TileService tileService, UserRepository userRepository, RoleRepository roleRepository, MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, DevelopmentBootstrapData developmentBootstrapData) {
+    public DevelopmentInitializer(Environment environment, TileService tileService, UserRepository userRepository, RoleRepository roleRepository, MasterTileRepository masterTileRepository, CategoryRepository categoryRepository, MidataGroupRepository midataGroupRepository, DevelopmentBootstrapData developmentBootstrapData) {
         this.environment = environment;
         this.tileService = tileService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.masterTileRepository = masterTileRepository;
         this.categoryRepository = categoryRepository;
+        this.midataGroupRepository = midataGroupRepository;
         this.developmentBootstrapData = developmentBootstrapData;
     }
 
@@ -44,6 +41,13 @@ public class DevelopmentInitializer {
     public void init() {
         if (environment.acceptsProfiles(Profiles.of("development", "test"))) {
 
+            if (developmentBootstrapData.getMidataGroups() != null) {
+                for (MidataGroup g : developmentBootstrapData.getMidataGroups()) {
+                    MidataGroup savedGroup = midataGroupRepository.findByMidataId(g.getMidataId());
+                    BeanUtils.copyProperties(g, savedGroup, "id", "version", "dateCreated", "lastUpdated", "roles", "defaultTiles");
+                    midataGroupRepository.save(savedGroup);
+                }
+            }
             if (developmentBootstrapData.getCategories() != null) {
                 for (Category c : developmentBootstrapData.getCategories()) {
                     Category savedCategory = categoryRepository.findByNameDe(c.getName().getDe()).orElseGet(Category::new);
@@ -54,7 +58,7 @@ public class DevelopmentInitializer {
             if (developmentBootstrapData.getMasterTiles() != null) {
                 for (MasterTile mt : developmentBootstrapData.getMasterTiles()) {
                     mt.setCategory(categoryRepository.findByNameDe(mt.getCategory().getName().getDe()).orElse(null));
-
+                    mt.setMidataGroupOnly(midataGroupRepository.findByMidataId(mt.getMidataGroupOnly().getMidataId()));
                     MasterTile savedMasterTile;
                     if (StringUtils.hasText(mt.getTitle().getDe())) {
                         savedMasterTile = masterTileRepository.findFirstByTitleDe(mt.getTitle().getDe()).orElseGet(MasterTile::new);

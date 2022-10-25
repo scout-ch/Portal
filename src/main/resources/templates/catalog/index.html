@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/portal}">
+<head>
+    <title th:text="#{masterTile.catalog.titel}">Portal</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="#{masterTile.catalog.titel}">Portal</h1>
+
+    <div class="top-buttons">
+
+    </div>
+
+    <div>
+        FILTER
+    </div>
+
+    <div class="tiles col-block col-3 flex-align-start">
+        <div class="grid-sizer"></div>
+        <div class="gutter-sizer"></div>
+
+        <div class="tile col" th:each="tile : ${tiles}"
+             th:classappend="${tile.backgroundColor != T(ch.itds.pbs.portal.domain.Color).DEFAULT ? 'theme-' + tile.backgroundColor: ''}"
+        >
+            <a th:if="${tile.hasUrl}" target="_blank" rel="noopener" th:href="${tile.url}">
+                <div class="content-wrap">
+                    <div class="title" th:text="${tile.title}"></div>
+                    <div class="content" th:text="${tile.content}"></div>
+                    <div class="image" th:if="${tile.image}">
+                        <img th:src="@{/tile/masterFile/{tileId}/{tileVersion}/{name}(tileId=${tile.masterTileId},tileVersion=${tile.masterTileVersion},name=${tile.image.name})}">
+                    </div>
+
+                    <div class="btn-icon btn-link">
+                        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 576 512">
+                            <path fill="currentColor"
+                                  d="M195.515 374.828c-4.686-4.686-4.686-12.284 0-16.971l323.15-323.15-.707-.707-89.958.342c-6.627 0-12-5.373-12-12v-9.999c0-6.628 5.372-12 12-12L564 0c6.627 0 12 5.372 12 12l-.343 136c0 6.627-5.373 12-12 12h-9.999c-6.627 0-12-5.373-12-12L542 58.042l-.707-.707-323.15 323.15c-4.686 4.686-12.284 4.686-16.971 0l-5.657-5.657zm232-155.633l-8 8A12 12 0 0 0 416 235.68V464c0 8.837-7.164 16-16 16H48c-8.836 0-16-7.163-16-16V112c0-8.837 7.164-16 16-16h339.976c3.183 0 6.235-1.264 8.485-3.515l8-8c7.56-7.56 2.206-20.485-8.485-20.485H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V227.681c0-10.691-12.926-16.045-20.485-8.486z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <div th:unless="${tile.hasUrl}" class="content-wrap">
+                <div class="title" th:text="${tile.title}"></div>
+                <div class="content" th:text="${tile.content}"></div>
+                <div class="image" th:if="${tile.image}">
+                    <img th:src="@{/tile/masterFile/{tileId}/{tileVersion}/{name}(tileId=${tile.masterTileId},tileVersion=${tile.masterTileVersion},name=${tile.image.name})}">
+                </div>
+            </div>
+
+            <div class="category label" th:text="${tile.category}"></div>
+
+            <form th:if="${selectForMidataGroup==null}"
+                  th:action="@{/userTile/create/{masterTileId}(masterTileId=${tile.masterTileId})}" method="post">
+                <button class="btn-text" type="submit" th:title="#{userTile.create.verboseTitle}">
+                    <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 448 512">
+                        <path fill="currentColor"
+                              d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                    </svg>
+                </button>
+            </form>
+            <form th:if="${selectForMidataGroup!=null}"
+                  th:action="@{/admin/midataGroup/{midataGroupId}/defaultTile/create/{masterTileId}(midataGroupId=${selectForMidataGroup.id},masterTileId=${tile.masterTileId})}"
+                  method="post">
+                <button class="btn-text" type="submit"
+                        th:title="#{midataGroup.defaultTile.verboseCreate(${selectForMidataGroup.name})}">
+                    <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 448 512">
+                        <path fill="currentColor"
+                              d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+</body>
+</html>
