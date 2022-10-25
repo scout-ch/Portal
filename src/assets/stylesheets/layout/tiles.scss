@@ -11,21 +11,33 @@
       margin-top: 2rem;
     }
 
-    .label {
-      bottom: $tile-padding;
-      left: $tile-padding;
-      position: absolute;
-      z-index: 1;
+    .meta-wrap,
+    .label-wrap {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+    }
+
+    .label-wrap {
+      flex-wrap: wrap;
+      width: 50%;
+      padding: 1rem 0;
+    }
+
+    .meta-inner-wrap {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-end;
+      width: 50%;
     }
 
     .message-count {
       background-color: $color-primary;
-      bottom: $tile-padding;
       color: $color-bright;
-      position: absolute;
-      right: $tile-padding;
       text-decoration: none;
-      top: auto;
+      top: unset;
+      margin-right: 1rem;
     }
 
     .btn-link {
@@ -118,19 +130,27 @@
 @media (max-width: $break-xs) {
   .tiles {
     .tile {
-      padding-bottom: 5rem;
-
       .content-wrap {
         padding: $tile-padding-small;
       }
 
-      .title {
-        padding-right: 4rem;
+      .meta-wrap {
+        padding: 0 $tile-padding-small 1.5rem $tile-padding-small;
+        flex-wrap: wrap;
       }
 
-      .label {
-        bottom: $tile-padding-small;
-        left: $tile-padding-small;
+      .label-wrap,
+      .meta-inner-wrap {
+        width: 100%;
+      }
+
+      .meta-inner-wrap {
+        justify-content: flex-start;
+        padding-top: 2rem;
+      }
+
+      .title {
+        padding-right: 4rem;
       }
 
       .btn-link {
@@ -138,10 +158,6 @@
         top: 0.1rem;
       }
 
-      .message-count {
-        bottom: $tile-padding-small;
-        right: $tile-padding-small;
-      }
     }
   }
 }
