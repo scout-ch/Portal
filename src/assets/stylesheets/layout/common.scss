@@ -165,13 +165,27 @@
     align-items: center;
 
     svg {
-      margin-right: 10px;
+      margin-right: 1rem;
     }
   }
 
   button {
     color: $color-primary;
     padding: 0;
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: nowrap;
+
+  .header-item {
+    width: 30%;
+  }
+
+  .header-item:first-child {
+    width: 70%;
+    padding-right: 1.5rem;
   }
 }
 
@@ -237,14 +251,23 @@
     &.col-2 .col,
     &.col-3 .col { width: calc(100% - #{$column-spacing * 2}); }
   }
+
+  .header-container {
+    flex-wrap: wrap;
+
+    .header-item,
+    .header-item:first-child {
+      width: 100%;
+    }
+  }
+
+  .top-buttons {
+    text-align: left;
+  }
 }
 
 
 @media (max-width: $break-xs) {
-  .top-buttons {
-    text-align: left;
-  }
-
   .btn {
     display: block;
     width: 100%;
