@@ -54,13 +54,17 @@
   background-color: $color-bright;
   border: 0.3rem solid $color-bright;
   hyphens: auto;
-  padding-bottom: 6rem;
+  padding-bottom: 0;
   position: relative;
   transition: border-color $animation-time;
   word-break: break-word;
 
   .content-wrap {
     padding: $tile-padding;
+  }
+
+  .meta-wrap {
+    padding: 0  $tile-padding 1.5rem $tile-padding;
   }
 
   .title {

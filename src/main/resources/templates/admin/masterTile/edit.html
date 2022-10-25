@@ -8,17 +8,23 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${entity.id} ? #{masterTile.edit.title} : #{masterTile.create.title}"></h1>
 
-    <div class="top-buttons">
-        <a class="btn-text" th:href="@{/admin/midataGroup/{midataGroupId}/masterTile(midataGroupId=${midataGroup.id})}">
-            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
+    <div class="header-container">
+        <div class="header-item">
+            <h1 th:text="${entity.id} ? #{masterTile.edit.title} : #{masterTile.create.title}"></h1>
+        </div>
+        <div class="header-item">
+            <div class="top-buttons">
+                <a class="btn-text" th:href="@{/admin/midataGroup/{midataGroupId}/masterTile(midataGroupId=${midataGroup.id})}">
+                    <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 512 512">
-                <path fill="currentColor"
+                        <path fill="currentColor"
                       d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z"></path>
-            </svg>
-            <th:block th:text="#{masterTile.topButtons.overview}">Overview</th:block>
-        </a>
+                    </svg>
+                    <th:block th:text="#{masterTile.topButtons.overview}">Overview</th:block>
+                </a>
+            </div>
+        </div>
     </div>
 
     <form th:action="${entity.id} ? @{/admin/midataGroup/{midataGroupId}/masterTile/edit/{id}(midataGroupId=${midataGroup.id},id=${entity.id})} : @{/admin/midataGroup/{midataGroupId}/masterTile/create(midataGroupId=${midataGroup.id})}"

@@ -16,9 +16,9 @@
   background-color: transparent;
 
   svg {
-    height: 2rem;
+    height: 1.5rem;
     vertical-align: middle;
-    width: 2rem;
+    width: 1.5rem;
   }
 
   &:hover {
@@ -155,12 +155,37 @@
 }
 
 .top-buttons {
-  position: absolute;
-  right: $container-horizontal-padding;
-  top: 1.5rem;
+  text-align: right;
+  margin-bottom: 2rem;
 
-  a {
-    display: block;
+  a,
+  button {
+    display: inline-flex;
+    align-content: center;
+    align-items: center;
+
+    svg {
+      margin-right: 1rem;
+    }
+  }
+
+  button {
+    color: $color-primary;
+    padding: 0;
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: nowrap;
+
+  .header-item {
+    width: 30%;
+  }
+
+  .header-item:first-child {
+    width: 70%;
+    padding-right: 1.5rem;
   }
 }
 
@@ -205,12 +230,6 @@
 
 
 @media (max-width: $break-md) {
-  .top-buttons {
-    margin-bottom: 2rem;
-    position: static;
-    text-align: right;
-  }
-
   .tab-controls {
     .btn-tab {
       margin-left: 0.5rem;
@@ -231,6 +250,19 @@
   .col-block {
     &.col-2 .col,
     &.col-3 .col { width: calc(100% - #{$column-spacing * 2}); }
+  }
+
+  .header-container {
+    flex-wrap: wrap;
+
+    .header-item,
+    .header-item:first-child {
+      width: 100%;
+    }
+  }
+
+  .top-buttons {
+    text-align: left;
   }
 }
 
