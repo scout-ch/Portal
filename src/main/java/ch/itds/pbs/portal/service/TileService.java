@@ -93,13 +93,16 @@ public class TileService {
     private void provisioning(User user) {
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).toList();
-        List<UserTile> newTiles = masterTileRepository.findAll().stream()
-                .filter(mt -> mt.isEnabled() && !existingMasterTileIds.contains(mt.getId()))
-                .map(mt -> {
+
+        List<UserTile> newTiles = user.getPrimaryMidataGroup().getDefaultTiles().stream()
+                .filter(gdt ->
+                        gdt.getMasterTile().isEnabled() &&
+                                !existingMasterTileIds.contains(gdt.getMasterTile().getId()))
+                .map(gdt -> {
                     UserTile ut = new UserTile();
                     ut.setUser(user);
-                    ut.setMasterTile(mt);
-                    ut.setPosition(mt.getPosition());
+                    ut.setMasterTile(gdt.getMasterTile());
+                    ut.setPosition(gdt.getPosition());
                     return ut;
                 }).toList();
         userTileRepository.saveAll(newTiles);
