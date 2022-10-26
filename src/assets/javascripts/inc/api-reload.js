@@ -2,10 +2,11 @@
   function init() {
     var reloadButton = document.getElementById('btn-reload-api');
     var apiInput = document.getElementById('apiKey-input');
-    var midataGroupId = reloadButton.dataset.midataGroupId;
+
 
     if (reloadButton && apiInput) {
       reloadButton.addEventListener('click', function onReloadApiClicked() {
+        var midataGroupId = reloadButton.dataset.midataGroupId;
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/admin/midataGroup/' + midataGroupId + '/masterTile/generateApiKey', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
