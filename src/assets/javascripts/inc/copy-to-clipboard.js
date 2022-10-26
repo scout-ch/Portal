@@ -17,8 +17,21 @@
       }(inputs[i])));
       wrapper.appendChild(button);
     }
-  }
 
+    var copysharelink = document.querySelectorAll('.copy-share-link');
+    var copysharelinkLength = copysharelink.length;
+
+    for (var i = 0; i < copysharelinkLength; i++) {
+      copysharelink[i].addEventListener('click', (function onCopyClicked (sharelink){
+        return function(event) {
+          event.preventDefault();
+          var sharelinkurl = sharelink.href;
+          copyTextToClipboard(sharelinkurl);
+          portal.notification('success', 'Link copied: ' + sharelinkurl);
+        };
+      }(copysharelink[i])));
+    }
+  }
 
   function copyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
@@ -48,8 +61,6 @@
 
     document.body.removeChild(textArea);
   }
-
-
 
   window.addEventListener('DOMContentLoaded', init);
 }());

@@ -9,8 +9,6 @@
     }
   }
 
-
-
   function addChangeListener(input) {
     var wrapper = input.parentElement;
 
@@ -29,7 +27,6 @@
       }
     });
   }
-
 
   function addDeleteButtonListener(input) {
     var wrapper = input.parentElement;
@@ -54,8 +51,6 @@
       }
     });
   }
-
-
 
   window.addEventListener('DOMContentLoaded', init);
 }());
