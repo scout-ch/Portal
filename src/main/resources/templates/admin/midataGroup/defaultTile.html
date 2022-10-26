@@ -22,7 +22,8 @@
         </a>
     </div>
 
-    <table class="table table-sortable table-draggable">
+    <table th:unless="${groupDefaultTiles.isEmpty()}"
+           class="table table-sortable table-draggable">
         <thead>
         <tr>
             <th data-sort-default class="order" th:text="#{masterTile.table.heading.order}">Order</th>
@@ -69,7 +70,7 @@
         </tbody>
     </table>
 
-    <th:block th:replace="fragments/infobox :: infobox"/>
+    <th:block th:if="${groupDefaultTiles.isEmpty()}" th:include="fragments/no-tiles :: no-tiles"/>
 </div>
 
 <th:block layout:fragment="scripts">
