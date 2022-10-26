@@ -17,7 +17,11 @@
         columnWidth: '.grid-sizer',
         gutter: '.gutter-sizer'
       },
-      percentPosition: true
+      percentPosition: true,
+      sortBy: 'position',
+      getSortData: {
+        position: '[data-position]'
+      }
     });
 
     var imagesLoaded = 0;
@@ -37,6 +41,15 @@
         images[j].addEventListener('load', onImageLoaded);
       }
     }
+
+    // handle updates from SortableJS
+    tiles.addEventListener('positions-updated', (function (iso) {
+      return function () {
+        iso.updateSortData();
+        iso.arrange();
+      }
+    })(iso));
+
   }
 
 

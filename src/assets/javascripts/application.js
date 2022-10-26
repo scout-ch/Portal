@@ -20,6 +20,7 @@
 
 //= require vendor/Sortable.min.js
 //= require inc/table-drag.js
+//= require inc/tile-drag.js
 
 //= require vendor/itds.cookie-monster.js
 

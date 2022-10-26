@@ -108,6 +108,9 @@
   .gutter-sizer { display: none; width: $column-spacing * 2; }
 }
 
+.tiles.tiles-not-editable .editable-only {
+  display: none;
+}
 
 
 // ===== MEDIA QUERIES =====

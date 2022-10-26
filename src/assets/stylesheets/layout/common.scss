@@ -173,6 +173,10 @@
     color: $color-primary;
     padding: 0;
   }
+
+  .active {
+    font-weight: bold;
+  }
 }
 
 .header-container {

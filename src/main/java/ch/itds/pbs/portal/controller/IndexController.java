@@ -6,7 +6,9 @@ import ch.itds.pbs.portal.security.CurrentUser;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.LanguageService;
 import ch.itds.pbs.portal.service.TileService;
+import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +26,12 @@ public class IndexController {
     private final transient TileService tileService;
     private final transient LanguageService languageService;
 
-    public IndexController(TileService tileService, LanguageService languageService) {
+    private final transient MessageSource messageSource;
+
+    public IndexController(TileService tileService, LanguageService languageService, MessageSource messageSource) {
         this.tileService = tileService;
         this.languageService = languageService;
+        this.messageSource = messageSource;
     }
 
     @RequestMapping("")
@@ -38,6 +43,7 @@ public class IndexController {
         if (tiles.isEmpty()) {
             tileService.provisioning(userPrincipal);
             tiles = tileService.listTiles(userPrincipal, language);
+            model.addAttribute(Flash.SUCCESS, messageSource.getMessage("userTile.provisioning.success", null, locale));
         }
 
         model.addAttribute("tiles", tiles);
