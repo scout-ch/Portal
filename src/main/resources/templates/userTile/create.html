@@ -12,7 +12,7 @@
     <h1 th:text="#{userTile.create.verboseTitle}"></h1>
     <div th:text="#{userTile.create.question(${localizedTile.title})}"></div>
 
-    <form th:action="@{/userTile.create/{masterTileId}(masterTileId=${tile.masterTileId})}" method="post">
+    <form th:action="@{/userTile/create/{masterTileId}(masterTileId=${localizedTile.masterTileId})}" method="post">
         <button class="btn btn-outline-primary" type="submit" th:text="#{userTile.create.title}">
 
         </button>

@@ -73,8 +73,13 @@
                     <div class="category label" th:text="${tile.category}"></div>
                 </div>
                 <div class="meta-inner-wrap">
+
+                    <a th:href="@{/share/tile/{tileId}(tileId=${tile.masterTileId})}"
+                       class="btn-text">SHARE</a>
+
                     <form th:if="${selectForMidataGroup==null}"
-                          th:action="@{/userTile/create/{masterTileId}(masterTileId=${tile.masterTileId})}" method="post">
+                          th:action="@{/userTile/create/{masterTileId}(masterTileId=${tile.masterTileId})}"
+                          method="post">
                         <button class="btn-text btn-icon" type="submit" th:title="#{userTile.create.verboseTitle}">
                             <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 448 512">
