@@ -30,6 +30,9 @@
                         <a th:href="@{/}" th:text="#{general.menu.portal}">Portal</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
+                        <a th:href="@{/}" th:text="#{general.menu.catalog}">Katalog</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
                         <a th:href="@{/message}">
                             <th:block th:text="#{general.menu.messages}">Messages</th:block>
                             <span class="badge message-count-total hide-md"
