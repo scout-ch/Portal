@@ -21,17 +21,15 @@
     </div>
 
     <div class="filter-catalog">
-        <select class="filter" aria-label="select">
-            <option selected>Filter</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-        </select>
-        <select class="filter" aria-label="select">
-            <option selected>Filter</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+        <input class="filter" type="text" name="title" th:value="${filterTitle}"
+               th:placeholder="#{userTile.catalog.filter.title.placeholder}">
+        <select class="filter" aria-label="select" name="category">
+            <option value="" th:text="#{userTile.catalog.filter.category.all}"></option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.key}"
+                    th:text="${category.value}"
+                    th:selected="${category.key==filterCategory}"
+            ></option>
         </select>
     </div>
 
@@ -41,6 +39,7 @@
 
         <div class="tile col" th:each="tile : ${tiles}"
              th:classappend="${tile.backgroundColor != T(ch.itds.pbs.portal.domain.Color).DEFAULT ? 'theme-' + tile.backgroundColor: ''}"
+             th:attr="data-tile-category-id=${tile.categoryId},data-tile-title=${tile.title}"
         >
             <a th:if="${tile.hasUrl}" target="_blank" rel="noopener" th:href="${tile.url}">
                 <div class="content-wrap">
