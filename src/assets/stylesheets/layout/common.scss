@@ -156,7 +156,7 @@
 
 .top-buttons {
   text-align: right;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 
   a,
   button {
@@ -193,6 +193,27 @@
   }
 }
 
+.info-box {
+  background-color: white;
+  padding: 1.5rem;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  &.border {
+    border: 0.3rem solid $color-primary;
+  }
+}
+
+.filter-catalog {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 1rem 1rem;
+  margin-bottom: 3rem;
+}
+
 .list-striped {
   @include unstyled-list;
 
@@ -217,8 +238,6 @@
 .text-right { text-align: right; }
 .flex-justify-end { justify-content: flex-end; }
 .flex-align-start { align-items: flex-start; }
-
-
 
 // ===== MEDIA QUERIES =====
 @media (max-width: $break-lg) {
@@ -263,6 +282,10 @@
     .header-item:first-child {
       width: 100%;
     }
+  }
+
+  .filter-catalog {
+    flex-wrap: wrap;
   }
 
   .top-buttons {
