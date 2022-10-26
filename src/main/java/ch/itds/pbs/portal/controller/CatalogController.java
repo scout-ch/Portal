@@ -14,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/catalog")
@@ -35,7 +33,10 @@ public class CatalogController {
     }
 
     @RequestMapping("")
-    public String index(@CurrentUser UserPrincipal userPrincipal, Model model, Locale locale, @RequestParam Optional<Long> selectForMidataGroupId) {
+    public String index(@CurrentUser UserPrincipal userPrincipal, Model model, Locale locale,
+                        @RequestParam Optional<Long> selectForMidataGroupId,
+                        @RequestParam Optional<String> filterTitle, @RequestParam Optional<Long> filterCategory
+    ) {
 
         Language language = languageService.convertToLanguage(locale);
 
@@ -46,7 +47,21 @@ public class CatalogController {
             model.addAttribute("selectForMidataGroup", selectForMidataGroup);
         }
 
+        Map<Long, String> categories = new HashMap<>();
+        for (LocalizedTile tile : tiles) {
+            if (!categories.containsKey(tile.getCategoryId())) {
+                categories.put(tile.getCategoryId(), tile.getCategory());
+            }
+        }
+
         model.addAttribute("tiles", tiles);
+        model.addAttribute("categories", categories);
+        filterTitle.ifPresent(title -> {
+            model.addAttribute("filterTitle", title);
+        });
+        filterCategory.ifPresent(category -> {
+            model.addAttribute("filterCategory", category);
+        });
 
         return "catalog/index";
     }
