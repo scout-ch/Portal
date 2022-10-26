@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface UserTileRepository extends BaseEntityRepository<UserTile> {
@@ -20,4 +21,6 @@ public interface UserTileRepository extends BaseEntityRepository<UserTile> {
     List<UserTile> findAllByMasterTileIdAndUserMidataIdWithUser(@Param("masterTileId") Long masterTileId, @Param("limitToUserIds") List<Long> limitToUserIds);
 
     List<UserTile> findAllByUserAndMasterTile(User user, MasterTile masterTile);
+
+    Optional<UserTile> findByIdAndUser(long id, User user);
 }

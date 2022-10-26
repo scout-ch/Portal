@@ -6,6 +6,7 @@ import ch.itds.pbs.portal.domain.MidataGroup;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupDefaultTileRepository extends BaseEntityRepository<GroupDefaultTile> {
 
@@ -15,4 +16,6 @@ public interface GroupDefaultTileRepository extends BaseEntityRepository<GroupDe
     List<GroupDefaultTile> findAllByGroup(MidataGroup midataGroup);
 
     List<GroupDefaultTile> findAllByGroupAndMasterTile(MidataGroup midataGroup, MasterTile masterTile);
+
+    Optional<GroupDefaultTile> findByIdAndGroup(long id, MidataGroup midataGroup);
 }

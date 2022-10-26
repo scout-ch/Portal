@@ -4,6 +4,7 @@ import ch.itds.pbs.portal.domain.Language;
 import ch.itds.pbs.portal.domain.MasterTile;
 import ch.itds.pbs.portal.domain.User;
 import ch.itds.pbs.portal.domain.UserTile;
+import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.repo.UserRepository;
 import ch.itds.pbs.portal.repo.UserTileRepository;
@@ -14,17 +15,19 @@ import ch.itds.pbs.portal.service.TileService;
 import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -124,6 +127,45 @@ public class UserTileController {
         }
 
         return "redirect:/";
+    }
+
+    @PostMapping("/delete/{id}")
+    @Transactional
+    public String delete(@CurrentUser UserPrincipal userPrincipal,
+                         @PathVariable long id, RedirectAttributes redirectAttributes, Locale locale) {
+
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
+        UserTile userTile = userTileRepository.findByIdAndUser(id, user).orElseThrow(EntityNotFoundException::new);
+
+        try {
+            userTileRepository.delete(userTile);
+            redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("userTile.delete.success", null, locale));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("userTile.delete.error", new String[]{e.getMessage()}, locale));
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping(path = "/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ActionMessage> updateSort(@CurrentUser UserPrincipal userPrincipal,
+                                                    @RequestBody Map<Long, Integer> data, Locale locale) {
+
+        User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
+        List<UserTile> items = userTileRepository.findAllByUser(user);
+
+        for (UserTile i : items) {
+            if (data.containsKey(i.getId())) {
+                i.setPosition(data.get(i.getId()));
+            }
+        }
+        userTileRepository.saveAll(items);
+
+        return ResponseEntity
+                .ok(ActionMessage
+                        .builder()
+                        .message(messageSource.getMessage("masterTile.updateSort.success", null, locale))
+                        .build()
+                );
     }
 
 }

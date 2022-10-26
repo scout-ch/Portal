@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -105,6 +107,24 @@ public class MidataGroupController {
         }
 
         return redirectToGroupUrl;
+    }
+
+    @PostMapping("/{midataGroupId:\\d+}/defaultTile/delete/{id}")
+    @Transactional
+    public String delete(@PathVariable long midataGroupId, @CurrentUser UserPrincipal userPrincipal,
+                         @PathVariable long id, RedirectAttributes redirectAttributes, Locale locale) {
+
+        MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
+
+        GroupDefaultTile groupDefaultTile = groupDefaultTileRepository.findByIdAndGroup(id, midataGroup).orElseThrow(EntityNotFoundException::new);
+
+        try {
+            groupDefaultTileRepository.delete(groupDefaultTile);
+            redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("midataGroup.defaultTile.delete.success", null, locale));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("midataGroup.defaultTile.delete.error", new String[]{e.getMessage()}, locale));
+        }
+        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/defaultTile";
     }
 
     @PostMapping(path = "/{midataGroupId:\\d+}/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)
