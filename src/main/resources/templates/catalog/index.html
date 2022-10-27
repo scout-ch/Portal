@@ -21,8 +21,11 @@
     </div>
 
     <div class="filter-catalog">
-        <input class="filter" type="text" name="title" th:value="${filterTitle}"
-               th:placeholder="#{userTile.catalog.filter.title.placeholder}">
+        <div class="form-wrap">
+            <input class="filter" type="text" name="title" th:value="${filterTitle}"
+                   th:placeholder="#{userTile.catalog.filter.title.placeholder}">
+        </div>
+
         <select class="filter" aria-label="select" name="category">
             <option value="" th:text="#{userTile.catalog.filter.category.all}"></option>
             <option th:each="category : ${categories}"

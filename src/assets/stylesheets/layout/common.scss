@@ -212,6 +212,21 @@
   justify-content: flex-start;
   gap: 1rem 1rem;
   margin-bottom: 3rem;
+
+  .form-wrap {
+    input[type="text"] {
+      border: 0.3rem solid $color-primary;
+      border-radius: 0.4rem;
+      background-color: $color-bright;
+      outline: none;
+
+      &:focus,
+      &:hover {
+        border: 0.3rem solid $color-secondary;
+        border-radius: 0.4rem;
+      }
+    }
+  }
 }
 
 .list-striped {
