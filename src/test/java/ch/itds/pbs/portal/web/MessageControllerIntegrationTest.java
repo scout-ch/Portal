@@ -7,6 +7,7 @@ import ch.itds.pbs.portal.dto.MessageCreateRequest;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.repo.MessageRepository;
 import ch.itds.pbs.portal.repo.UserRepository;
+import ch.itds.pbs.portal.repo.UserTileRepository;
 import ch.itds.pbs.portal.security.CustomUserDetailsService;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.MessageService;
@@ -38,6 +39,9 @@ public class MessageControllerIntegrationTest extends IntegrationTest {
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
+    UserTileRepository userTileRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     /**
@@ -46,10 +50,9 @@ public class MessageControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testMessageSetReadAndDelete() throws InterruptedException {
 
+        MasterTile tile = ensurePbsGroupDefaultTile().getMasterTile();
         messageRepository.deleteAll();
         userRepository.findAll().forEach(u -> tileService.provisioning(UserPrincipal.create(u)));
-
-        MasterTile tile = masterTileRepository.findAll().get(0);
 
         LocalizedString deLanguage = new LocalizedString();
         deLanguage.setDe("Text DE");

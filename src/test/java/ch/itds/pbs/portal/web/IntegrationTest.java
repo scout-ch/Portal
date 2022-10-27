@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.util.HashSet;
+import java.util.List;
 
 @ExtendWith({SeleniumJupiter.class, ScreenshotOnFailureExtension.class, SetScreenshotDataExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,6 +45,15 @@ abstract class IntegrationTest {
 
     @Autowired
     MidataRoleRepository midataRoleRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    MasterTileRepository masterTileRepository;
+
+    @Autowired
+    GroupDefaultTileRepository groupDefaultTileRepository;
 
     @LocalServerPort
     private int port;
@@ -71,6 +81,7 @@ abstract class IntegrationTest {
         for (Role r : testUser.getRoles()) {
             if (r.getName().equals("ADMIN")) {
                 isAdmin = true;
+                break;
             }
         }
         if (!isAdmin) {
@@ -90,6 +101,10 @@ abstract class IntegrationTest {
             pbsGroup.setName("Pfadibewegung Schweiz");
             pbsGroup.setMidataId(1);
             pbsGroup = midataGroupRepository.save(pbsGroup);
+        }
+        if (testUser.getPrimaryMidataGroup() == null) {
+            testUser.setPrimaryMidataGroup(pbsGroup);
+            testUser = userRepository.save(testUser);
         }
         MidataRole pbsItSupport = midataRoleRepository.findByGroupAndName(pbsGroup, "IT Support");
         if (pbsItSupport == null) {
@@ -120,6 +135,72 @@ abstract class IntegrationTest {
     public void tearDown() {
         if (seleniumHelper != null) {
             seleniumHelper.close();
+        }
+    }
+
+    protected MasterTile ensureMasterTile() {
+        List<MasterTile> masterTiles = masterTileRepository.findAll();
+        MasterTile masterTile;
+        if (masterTiles.isEmpty()) {
+            Category category = ensureACategory();
+
+            LocalizedString title = new LocalizedString();
+            title.setDe("Titel");
+            LocalizedString content = new LocalizedString();
+            content.setDe("Content...");
+
+            masterTile = new MasterTile();
+            masterTile.setCategory(category);
+            masterTile.setMidataGroupOnly(ensurePbsGroup());
+            masterTile.setTitle(title);
+            masterTile.setContent(content);
+            masterTile.setBackgroundColor(Color.DEFAULT);
+            masterTile = masterTileRepository.saveAndFlush(masterTile);
+        } else {
+            masterTile = masterTiles.get(0);
+        }
+        return masterTile;
+    }
+
+    protected Category ensureACategory() {
+        Category category;
+        List<Category> categories = categoryRepository.findAll();
+        if (categories.isEmpty()) {
+            LocalizedString categoryName = new LocalizedString();
+            categoryName.setDe("Kategorie");
+
+            category = new Category();
+            category.setName(categoryName);
+            category = categoryRepository.save(category);
+        } else {
+            category = categories.get(0);
+        }
+        return category;
+    }
+
+    protected MidataGroup ensurePbsGroup() {
+        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
+        if (pbsGroup == null) {
+            pbsGroup = new MidataGroup();
+            pbsGroup.setName("Pfadibewegung Schweiz");
+            pbsGroup.setMidataId(1);
+            pbsGroup = midataGroupRepository.save(pbsGroup);
+        }
+        return pbsGroup;
+    }
+
+    protected GroupDefaultTile ensurePbsGroupDefaultTile() {
+        MidataGroup group = ensurePbsGroup();
+        MasterTile tile = ensureMasterTile();
+        List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
+        if (groupDefaultTiles.isEmpty()) {
+            GroupDefaultTile groupDefaultTile = new GroupDefaultTile();
+            groupDefaultTile.setGroup(group);
+            groupDefaultTile.setMasterTile(tile);
+            groupDefaultTile.setPosition(1);
+            return groupDefaultTileRepository.save(groupDefaultTile);
+        } else {
+            return groupDefaultTiles.get(0);
         }
     }
 

@@ -1,6 +1,8 @@
 package ch.itds.pbs.portal.web;
 
-import ch.itds.pbs.portal.domain.*;
+import ch.itds.pbs.portal.domain.Category;
+import ch.itds.pbs.portal.domain.LocalizedString;
+import ch.itds.pbs.portal.domain.MasterTile;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
 import ch.itds.pbs.portal.repo.MidataGroupRepository;
@@ -208,57 +210,6 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         }
         assertThat(newSecondPosition).isEqualTo(1);
 
-    }
-
-    private MasterTile ensureMasterTile() {
-        List<MasterTile> masterTiles = masterTileRepository.findAll();
-        MasterTile masterTile;
-        if (masterTiles.isEmpty()) {
-            Category category = ensureACategory();
-
-            LocalizedString title = new LocalizedString();
-            title.setDe("Titel");
-            LocalizedString content = new LocalizedString();
-            content.setDe("Content...");
-
-            masterTile = new MasterTile();
-            masterTile.setCategory(category);
-            masterTile.setMidataGroupOnly(ensurePbsGroup());
-            masterTile.setTitle(title);
-            masterTile.setContent(content);
-            masterTile.setBackgroundColor(Color.DEFAULT);
-            masterTile = masterTileRepository.saveAndFlush(masterTile);
-        } else {
-            masterTile = masterTiles.get(0);
-        }
-        return masterTile;
-    }
-
-    private Category ensureACategory() {
-        Category category;
-        List<Category> categories = categoryRepository.findAll();
-        if (categories.isEmpty()) {
-            LocalizedString categoryName = new LocalizedString();
-            categoryName.setDe("Kategorie");
-
-            category = new Category();
-            category.setName(categoryName);
-            category = categoryRepository.save(category);
-        } else {
-            category = categories.get(0);
-        }
-        return category;
-    }
-
-    private MidataGroup ensurePbsGroup() {
-        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
-        if (pbsGroup == null) {
-            pbsGroup = new MidataGroup();
-            pbsGroup.setName("Pfadibewegung Schweiz");
-            pbsGroup.setMidataId(1);
-            pbsGroup = midataGroupRepository.save(pbsGroup);
-        }
-        return pbsGroup;
     }
 
 }

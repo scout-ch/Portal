@@ -1,11 +1,9 @@
 package ch.itds.pbs.portal.service;
 
-import ch.itds.pbs.portal.domain.Language;
-import ch.itds.pbs.portal.domain.MasterTile;
-import ch.itds.pbs.portal.domain.User;
-import ch.itds.pbs.portal.domain.UserTile;
+import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.dto.LocalizedTile;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
+import ch.itds.pbs.portal.repo.MidataGroupRepository;
 import ch.itds.pbs.portal.repo.UserRepository;
 import ch.itds.pbs.portal.repo.UserTileRepository;
 import ch.itds.pbs.portal.security.UserPrincipal;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,10 +24,13 @@ public class TileService {
     private final transient UserTileRepository userTileRepository;
     private final transient MasterTileRepository masterTileRepository;
 
-    public TileService(UserRepository userRepository, UserTileRepository userTileRepository, MasterTileRepository masterTileRepository) {
+    private final transient MidataGroupRepository midataGroupRepository;
+
+    public TileService(UserRepository userRepository, UserTileRepository userTileRepository, MasterTileRepository masterTileRepository, MidataGroupRepository midataGroupRepository) {
         this.userRepository = userRepository;
         this.userTileRepository = userTileRepository;
         this.masterTileRepository = masterTileRepository;
+        this.midataGroupRepository = midataGroupRepository;
     }
 
     @Transactional(readOnly = true)
@@ -94,7 +96,14 @@ public class TileService {
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).toList();
 
-        List<UserTile> newTiles = user.getPrimaryMidataGroup().getDefaultTiles().stream()
+        Collection<GroupDefaultTile> groupDefaultTiles;
+        if (user.getPrimaryMidataGroup() != null) {
+            groupDefaultTiles = user.getPrimaryMidataGroup().getDefaultTiles();
+        } else {
+            groupDefaultTiles = midataGroupRepository.findByMidataId(1).getDefaultTiles();
+        }
+
+        List<UserTile> newTiles = groupDefaultTiles.stream()
                 .filter(gdt ->
                         gdt.getMasterTile().isEnabled() &&
                                 !existingMasterTileIds.contains(gdt.getMasterTile().getId()))
