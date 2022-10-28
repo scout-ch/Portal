@@ -30,7 +30,7 @@
                         <a th:href="@{/}" th:text="#{general.menu.portal}">Portal</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
-                        <a th:href="@{/}" th:text="#{general.menu.catalog}">Katalog</a>
+                        <a th:href="@{/catalog}" th:text="#{general.menu.catalog}">Katalog</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
                         <a th:href="@{/message}">
@@ -69,7 +69,7 @@
                             <input hidden type="submit" value="Sign Out"/>
                         </form>
                     </th:block>
-                    <a class="btn-icon" sec:authorize="hasAnyRole('ADMIN')"
+                    <a class="btn-icon" sec:authorize="isAuthenticated()"
                        th:href="@{/admin/midataGroup}" th:title="#{general.menu.admin}"
                        th:attr="aria-label=#{general.menu.admin}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.31 23.943">
