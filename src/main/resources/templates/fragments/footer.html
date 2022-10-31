@@ -6,7 +6,8 @@
         <div class="container">
             <div class="col-block col-2">
                 <div class="col">
-                    <strong th:text="#{general.footer.copyright}"></strong>
+                    <strong th:text="#{general.footer.copyright(${#numbers.formatInteger(#dates.year(#dates.createNow()),4,'NONE')}
+)}"></strong>
                     <th:block th:replace="fragments/version"/>
                     <br/>
                     <small>
