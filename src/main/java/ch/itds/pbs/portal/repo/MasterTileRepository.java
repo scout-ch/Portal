@@ -30,9 +30,9 @@ public interface MasterTileRepository extends BaseEntityRepository<MasterTile> {
 
     List<MasterTile> findAllByMidataGroupOnly(MidataGroup midataGroup);
 
-    @Query("SELECT DISTINCT mt FROM MidataPermission p LEFT JOIN p.role r LEFT JOIN r.group g LEFT JOIN g.tiles mt LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE p.user.id = :userId AND mt.enabled = TRUE ORDER BY mt.position")
-    Stream<MasterTile> findAllEnabledWithFetchForUserByGroups(Long userId);
+    @Query("SELECT DISTINCT mt FROM MidataPermission p LEFT JOIN p.role r LEFT JOIN r.group g LEFT JOIN g.tiles mt LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE ( p.user.id = :userId OR mt.restricted IS FALSE ) AND mt.enabled = TRUE ORDER BY mt.position")
+    Stream<MasterTile> findAllEnabledWithFetchForUserByGroupsOrNotRestricted(Long userId);
 
-    @Query("SELECT DISTINCT mt FROM MidataPermission p LEFT JOIN p.role r LEFT JOIN r.group g LEFT JOIN g.tiles mt LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE p.user.id = :userId AND mt.enabled = TRUE AND mt.id = :masterTileId")
-    Optional<MasterTile> findEnabledWithFetchForUserByIdAndGroups(Long masterTileId, Long userId);
+    @Query("SELECT DISTINCT mt FROM MidataPermission p LEFT JOIN p.role r LEFT JOIN r.group g LEFT JOIN g.tiles mt LEFT JOIN FETCH mt.category c LEFT JOIN FETCH mt.image WHERE (p.user.id = :userId OR mt.restricted IS FALSE) AND mt.enabled = TRUE AND mt.id = :masterTileId")
+    Optional<MasterTile> findEnabledWithFetchForUserByIdAndGroupsOrNotRestricted(Long masterTileId, Long userId);
 }

@@ -40,7 +40,7 @@ public class CatalogController {
 
         Language language = languageService.convertToLanguage(locale);
 
-        List<LocalizedTile> tiles = tileService.listTilesByGroups(userPrincipal, language);
+        List<LocalizedTile> tiles = tileService.listTilesByGroupsOrNotRestricted(userPrincipal, language);
 
         if (selectForMidataGroupId.isPresent()) {
             MidataGroup selectForMidataGroup = midataGroupService.findByIdAndEnsureAdmin(selectForMidataGroupId.get(), userPrincipal.getId());

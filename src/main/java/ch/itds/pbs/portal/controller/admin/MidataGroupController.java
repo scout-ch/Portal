@@ -81,7 +81,7 @@ public class MidataGroupController {
         MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
         String redirectToGroupUrl = "redirect:/admin/midataGroup/" + midataGroup.getId() + "/defaultTile";
 
-        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroups(masterTileId, userPrincipal.getId()).orElse(null);
+        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroupsOrNotRestricted(masterTileId, userPrincipal.getId()).orElse(null);
 
         if (masterTile == null) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("midataGroup.defaultTile.create.error.notFound", null, locale));

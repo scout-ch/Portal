@@ -118,8 +118,8 @@ public class TileService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocalizedTile> listTilesByGroups(UserPrincipal userPrincipal, Language language) {
-        return masterTileRepository.findAllEnabledWithFetchForUserByGroups(userPrincipal.getId())
+    public List<LocalizedTile> listTilesByGroupsOrNotRestricted(UserPrincipal userPrincipal, Language language) {
+        return masterTileRepository.findAllEnabledWithFetchForUserByGroupsOrNotRestricted(userPrincipal.getId())
                 .map(mt -> convertToLocalized(mt, language))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

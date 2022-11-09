@@ -75,7 +75,7 @@ public class UserTileController {
 
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
         Language language = languageService.convertToLanguage(locale);
-        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroups(masterTileId, userPrincipal.getId()).orElse(null);
+        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroupsOrNotRestricted(masterTileId, userPrincipal.getId()).orElse(null);
 
         if (masterTile == null) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("userTile.create.error.notFound", null, locale));
@@ -101,7 +101,7 @@ public class UserTileController {
 
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(EntityNotFoundException::new);
 
-        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroups(masterTileId, userPrincipal.getId()).orElse(null);
+        MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroupsOrNotRestricted(masterTileId, userPrincipal.getId()).orElse(null);
 
         if (masterTile == null) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("userTile.create.error.notFound", null, locale));

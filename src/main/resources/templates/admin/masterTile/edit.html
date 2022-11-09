@@ -165,6 +165,14 @@
                     </div>
 
                     <div class="form-wrap">
+                        <input th:field="*{restricted}"
+                               id="restricted-input"
+                               type="checkbox"
+                        >
+                        <label th:for="restricted-input" th:text="#{masterTile.restricted.label}"></label>
+                    </div>
+
+                    <div class="form-wrap">
                         <input th:field="*{enabled}"
                                id="enabled-input"
                                type="checkbox"

@@ -333,4 +333,15 @@
         </sql>
         <addNotNullConstraint tableName="master_tile" columnName="midata_group_only_id"/>
     </changeSet>
+    <changeSet id="20221108-01" author="mkobel">
+        <addColumn tableName="master_tile">
+            <column name="restricted" type="boolean"/>
+        </addColumn>
+        <sql splitStatements="false">
+            UPDATE master_tile
+            SET restricted = false
+            WHERE restricted IS NULL;
+        </sql>
+        <addNotNullConstraint tableName="master_tile" columnName="restricted"/>
+    </changeSet>
 </databaseChangeLog>
