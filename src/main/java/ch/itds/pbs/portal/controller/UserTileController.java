@@ -90,7 +90,7 @@ public class UserTileController {
         model.addAttribute("masterTile", masterTile);
         model.addAttribute("localizedTile", tileService.convertToLocalized(masterTile, language));
 
-        return "/userTile/create";
+        return "userTile/create";
     }
 
     @PostMapping("/create/{masterTileId:\\d+}")
