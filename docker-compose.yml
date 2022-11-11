@@ -17,11 +17,12 @@ services:
       - POSTGRES_USER=pbsportal-test
       - POSTGRES_PASSWORD=pbsportal-test
   selenium-firefox:
-    image: docker-registry.itds.ch/selenium/standalone-firefox:4.5.0
+    image: docker-registry.itds.ch/selenium/standalone-firefox:4.6.0
     ports:
       - 4444
     environment:
       SCREEN_WIDTH: 2970
       SCREEN_HEIGHT: 1160
+      SE_VNC_NO_PASSWORD: 1
     volumes:
       - "/dev/shm:/dev/shm"

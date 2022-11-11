@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -96,25 +97,41 @@ public class TileService {
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).toList();
 
-        Collection<GroupDefaultTile> groupDefaultTiles;
+        Collection<GroupDefaultTile> groupDefaultTiles = new ArrayList<>();
         if (user.getPrimaryMidataGroup() != null) {
             groupDefaultTiles = user.getPrimaryMidataGroup().getDefaultTiles();
-        } else {
+        }
+
+        if (groupDefaultTiles != null && groupDefaultTiles.isEmpty() && user.getMidataGroupHierarchy() != null && user.getMidataGroupHierarchy().length > 0) {
+            for (int groupId : user.getMidataGroupHierarchy()) {
+                MidataGroup group = midataGroupRepository.findByMidataId(groupId);
+                if (group != null) {
+                    groupDefaultTiles = group.getDefaultTiles();
+                    if (groupDefaultTiles != null && !groupDefaultTiles.isEmpty()) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (groupDefaultTiles != null && groupDefaultTiles.isEmpty()) {
             groupDefaultTiles = midataGroupRepository.findByMidataId(1).getDefaultTiles();
         }
 
-        List<UserTile> newTiles = groupDefaultTiles.stream()
-                .filter(gdt ->
-                        gdt.getMasterTile().isEnabled() &&
-                                !existingMasterTileIds.contains(gdt.getMasterTile().getId()))
-                .map(gdt -> {
-                    UserTile ut = new UserTile();
-                    ut.setUser(user);
-                    ut.setMasterTile(gdt.getMasterTile());
-                    ut.setPosition(gdt.getPosition());
-                    return ut;
-                }).toList();
-        userTileRepository.saveAll(newTiles);
+        if (groupDefaultTiles != null && !groupDefaultTiles.isEmpty()) {
+            List<UserTile> newTiles = groupDefaultTiles.stream()
+                    .filter(gdt ->
+                            gdt.getMasterTile().isEnabled() &&
+                                    !existingMasterTileIds.contains(gdt.getMasterTile().getId()))
+                    .map(gdt -> {
+                        UserTile ut = new UserTile();
+                        ut.setUser(user);
+                        ut.setMasterTile(gdt.getMasterTile());
+                        ut.setPosition(gdt.getPosition());
+                        return ut;
+                    }).toList();
+            userTileRepository.saveAll(newTiles);
+        }
     }
 
     @Transactional(readOnly = true)

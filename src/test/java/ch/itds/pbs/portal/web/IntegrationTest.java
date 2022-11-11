@@ -123,6 +123,13 @@ abstract class IntegrationTest {
             pbsItSupportAdmin = midataPermissionRepository.save(pbsItSupportAdmin);
         }
 
+        MidataGroup pkbGroup = ensurePkbGroup();
+        MidataGroup bezOeGroup = ensureBezOeGroup();
+
+        testUser.setPrimaryMidataGroup(bezOeGroup);
+        testUser.setMidataGroupHierarchy(new Integer[]{pkbGroup.getMidataId(), pbsGroup.getMidataId()});
+        userRepository.save(testUser);
+
         mockUserFilter.authenticateNextRequestAs("3113");
 
         seleniumHelper = new SeleniumHelper(port);
@@ -179,14 +186,36 @@ abstract class IntegrationTest {
     }
 
     protected MidataGroup ensurePbsGroup() {
-        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
-        if (pbsGroup == null) {
-            pbsGroup = new MidataGroup();
-            pbsGroup.setName("Pfadibewegung Schweiz");
-            pbsGroup.setMidataId(1);
-            pbsGroup = midataGroupRepository.save(pbsGroup);
+        MidataGroup midataGroup = midataGroupRepository.findByMidataId(1);
+        if (midataGroup == null) {
+            midataGroup = new MidataGroup();
+            midataGroup.setName("Pfadibewegung Schweiz");
+            midataGroup.setMidataId(1);
+            midataGroup = midataGroupRepository.save(midataGroup);
         }
-        return pbsGroup;
+        return midataGroup;
+    }
+
+    protected MidataGroup ensurePkbGroup() {
+        MidataGroup midataGroup = midataGroupRepository.findByMidataId(2);
+        if (midataGroup == null) {
+            midataGroup = new MidataGroup();
+            midataGroup.setName("Pfadi Kanton Bern");
+            midataGroup.setMidataId(2);
+            midataGroup = midataGroupRepository.save(midataGroup);
+        }
+        return midataGroup;
+    }
+
+    protected MidataGroup ensureBezOeGroup() {
+        MidataGroup midataGroup = midataGroupRepository.findByMidataId(3);
+        if (midataGroup == null) {
+            midataGroup = new MidataGroup();
+            midataGroup.setName("Bezirk Obere Emme");
+            midataGroup.setMidataId(3);
+            midataGroup = midataGroupRepository.save(midataGroup);
+        }
+        return midataGroup;
     }
 
     protected GroupDefaultTile ensurePbsGroupDefaultTile() {

@@ -37,9 +37,7 @@ public class MidataOAuth2UserRequestEntityConverter extends OAuth2UserRequestEnt
                 .build()
                 .toUri();
 
-        for (String scope : userRequest.getClientRegistration().getScopes()) {
-            headers.add("X-Scope", scope);
-        }
+        headers.add("X-Scope", "with_roles");
 
         RequestEntity<?> request;
         if (HttpMethod.POST.equals(httpMethod)) {

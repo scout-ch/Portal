@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -70,6 +71,8 @@ class MidataOAuth2UserServiceTest {
 
         wireMockServer.stubFor(get(urlPathEqualTo("/oauth2/user"))
                 .willReturn(okJson("{\"id\":3110,\"email\":\"oauth@example.com\",\"nickname\":\"oAuth\",\"first_name\":\"oAuthilius\",\"last_name\":\"Testfamily\",\"correspondence_language\":\"fr\"}")));
+        wireMockServer.stubFor(get(urlPathEqualTo("/fr/groups/42.json"))
+                .willReturn(okJson("{\"groups\": [{\"links\": {\"hierarchies\": [\"1\",\"2\",\"3\"]}}]}")));
 
         ClientRegistration reg = ClientRegistration.withRegistrationId("wm-reg")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -100,7 +103,8 @@ class MidataOAuth2UserServiceTest {
                 .willReturn(okJson("{\"id\":3110,\"email\":\"oauth-married@example.com\",\"nickname\":\"oAuth\",\"first_name\":\"oAuthilius\",\"last_name\":\"Testfamily - Married\",\"correspondence_language\":\"de\",\"primary_group_id\": 42,\"roles\": [{\"group_id\": 84, \"group_name\": \"Testgruppe\", \"role_name\": \"IT Support\", \"role_class\": \"Group::Bund::ItSupport\",\n" +
                         "  \"permissions\": [\"layer_and_below_full\",\"admin\"]\n" +
                         "}]}")));
-
+        wireMockServer.stubFor(get(urlPathEqualTo("/de/groups/42.json"))
+                .willReturn(okJson("{\"groups\": [{\"links\": {\"hierarchies\": [\"1\",\"2\",\"3\"]}}]}")));
 
         oAuth2User = (UserPrincipal) midataOAuth2UserService.loadUser(req);
 
@@ -112,6 +116,7 @@ class MidataOAuth2UserServiceTest {
         assertEquals(Language.FR, user.getLanguage()); // language should not be updated!
         assertEquals(42, user.getPrimaryMidataGroup().getMidataId());
         assertEquals(2, user.getMidataPermissions().size());
+        assertArrayEquals(new Integer[]{3, 2, 1}, user.getMidataGroupHierarchy()); // ensure reverse order
 
         userRepository.findByUsername("3110").ifPresent((u) -> userRepository.delete(u));
     }

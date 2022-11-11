@@ -1,8 +1,12 @@
 package ch.itds.pbs.portal.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -14,6 +18,12 @@ import java.util.Set;
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
+@TypeDefs({
+        @TypeDef(
+                name = "int-array",
+                typeClass = IntArrayType.class
+        )
+})
 public class User extends BaseEntity {
 
     @Email
@@ -57,5 +67,8 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<MidataPermission> midataPermissions;
+
+    @Type(type = "int-array")
+    private Integer[] midataGroupHierarchy = {};
 
 }

@@ -4,20 +4,23 @@ package ch.itds.pbs.portal.security.oauth;
 import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.dto.midata.MidataRawPermission;
 import ch.itds.pbs.portal.exception.OAuth2AuthenticationProcessingException;
-import ch.itds.pbs.portal.repo.MidataGroupRepository;
-import ch.itds.pbs.portal.repo.MidataPermissionRepository;
-import ch.itds.pbs.portal.repo.MidataRoleRepository;
-import ch.itds.pbs.portal.repo.UserRepository;
+import ch.itds.pbs.portal.repo.*;
 import ch.itds.pbs.portal.security.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.*;
 
 @Slf4j
@@ -25,13 +28,16 @@ import java.util.*;
 public class MidataOAuth2UserService extends DefaultOAuth2UserService {
 
     private final transient UserRepository userRepository;
+
+    private final transient RoleRepository roleRepository;
     private final transient MidataGroupRepository midataGroupRepository;
     private final transient MidataPermissionRepository midataPermissionRepository;
     private final transient MidataRoleRepository midataRoleRepository;
 
-    public MidataOAuth2UserService(UserRepository userRepository, MidataGroupRepository midataGroupRepository, MidataPermissionRepository midataPermissionRepository, MidataRoleRepository midataRoleRepository) {
+    public MidataOAuth2UserService(UserRepository userRepository, RoleRepository roleRepository, MidataGroupRepository midataGroupRepository, MidataPermissionRepository midataPermissionRepository, MidataRoleRepository midataRoleRepository) {
         super();
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.midataGroupRepository = midataGroupRepository;
         this.midataPermissionRepository = midataPermissionRepository;
         this.midataRoleRepository = midataRoleRepository;
@@ -46,7 +52,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
         try {
-            return processOAuth2User(oAuth2User);
+            return processOAuth2User(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -55,7 +61,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(OAuth2User oAuth2User) {
+    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         MidataOAuth2UserInfo oAuth2UserInfo = new MidataOAuth2UserInfo(oAuth2User.getAttributes());
         if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
@@ -64,9 +70,9 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByMidataUserId(oAuth2UserInfo.getId()).orElse(null);
 
         if (user == null) {
-            user = registerNewUser(oAuth2UserInfo);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         } else {
-            user = updateExistingUser(user, oAuth2UserInfo);
+            user = updateExistingUser(user, oAuth2UserRequest, oAuth2UserInfo);
         }
 
         List<MidataPermission> existingPermissions = midataPermissionRepository.findByUser(user);
@@ -118,7 +124,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
     }
 
 
-    private User registerNewUser(MidataOAuth2UserInfo oAuth2UserInfo) {
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, MidataOAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
         user.setMidataUserId(oAuth2UserInfo.getId());
         user.setUsername(Long.toString(oAuth2UserInfo.getId()));
@@ -132,19 +138,27 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
         user.setAccountLocked(false);
         user.setPasswordExpired(false);
         user.setRoles(new HashSet<>());
+        ensureUserRole(user);
         ensurePrimaryGroup(user, oAuth2UserInfo);
+        ensureGroupHierarchy(user, oAuth2UserRequest);
         return userRepository.save(user);
     }
 
-    private User updateExistingUser(User existingUser, MidataOAuth2UserInfo oAuth2UserInfo) {
+    private User updateExistingUser(User existingUser, OAuth2UserRequest oAuth2UserRequest, MidataOAuth2UserInfo oAuth2UserInfo) {
         existingUser.setUsername(Long.toString(oAuth2UserInfo.getId()));
         existingUser.setMidataUserId(oAuth2UserInfo.getId());
         existingUser.setMail(oAuth2UserInfo.getEmail());
         existingUser.setFirstName(oAuth2UserInfo.getFirstName());
         existingUser.setLastName(oAuth2UserInfo.getLastName());
         existingUser.setNickName(oAuth2UserInfo.getName());
+        ensureUserRole(existingUser);
         ensurePrimaryGroup(existingUser, oAuth2UserInfo);
+        ensureGroupHierarchy(existingUser, oAuth2UserRequest);
         return userRepository.save(existingUser);
+    }
+
+    private void ensureUserRole(User user) {
+        roleRepository.findByName("USER").ifPresent(userRole -> user.getRoles().add(userRole));
     }
 
     private void ensurePrimaryGroup(User user, MidataOAuth2UserInfo oAuth2UserInfo) {
@@ -158,5 +172,56 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
             }
             user.setPrimaryMidataGroup(primaryGroup);
         }
+    }
+
+    private void ensureGroupHierarchy(User user, OAuth2UserRequest oAuth2UserRequest) {
+        if (user.getPrimaryMidataGroup() != null) {
+            Integer[] hierarchy = getGroupHierarchy(oAuth2UserRequest, user.getLanguage().name().toLowerCase(Locale.ROOT), user.getPrimaryMidataGroup().getMidataId());
+            user.setMidataGroupHierarchy(hierarchy);
+        }
+    }
+
+    private Integer[] getGroupHierarchy(OAuth2UserRequest userRequest, String lang, long primaryGroupId) {
+
+        ClientRegistration clientRegistration = userRequest.getClientRegistration();
+
+        HttpMethod httpMethod = HttpMethod.GET;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        URI uri = UriComponentsBuilder.fromUriString(clientRegistration.getProviderDetails().getUserInfoEndpoint().getUri())
+                .replacePath("/" + lang + "/groups/" + primaryGroupId + ".json")
+                .build()
+                .toUri();
+
+        for (String scope : userRequest.getClientRegistration().getScopes()) {
+            headers.add("X-Scope", scope);
+        }
+
+        RequestEntity<?> request;
+        headers.setBearerAuth(userRequest.getAccessToken().getTokenValue());
+        request = new RequestEntity<>(headers, httpMethod, uri);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {
+        });
+
+        TreeSet<Integer> hierarchy = new TreeSet<>();
+        Map<String, Object> responseBody = response.getBody();
+        if (responseBody.get("groups") instanceof List groups) {
+            if (groups.size() == 1) {
+                if (groups.get(0) instanceof Map groupDetails) {
+                    if (groupDetails.get("links") instanceof Map links) {
+                        if (links.get("hierarchies") instanceof List groupIdList) {
+                            for (Object groupId : groupIdList) {
+                                if (groupId instanceof String groupIdStr) {
+                                    hierarchy.add(Integer.parseInt(groupIdStr));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return hierarchy.descendingSet().toArray(hierarchy.toArray(new Integer[0]));
     }
 }

@@ -17,10 +17,9 @@ buildscript {
 	dependencies {
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
 		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
-		classpath 'org.openjdk.nashorn:nashorn-core:15.4'
-		classpath 'com.github.ben-manes:gradle-versions-plugin:0.42.0'
+		classpath 'com.github.ben-manes:gradle-versions-plugin:0.43.0'
 		classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
-		classpath 'com.avast.gradle:gradle-docker-compose-plugin:0.16.9'
+		classpath 'com.avast.gradle:gradle-docker-compose-plugin:0.16.10'
 		classpath 'com.browserstack:browserstack-local-java:1.0.6'
 	}
 }
@@ -82,7 +81,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 
 
-	implementation 'com.vladmihalcea:hibernate-types-52:2.19.2'
+	implementation 'com.vladmihalcea:hibernate-types-52:2.20.0'
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.liquibase:liquibase-core'
 
@@ -100,9 +99,6 @@ dependencies {
 	runtimeOnly "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
 	assets "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
 	implementation "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
-	//does not work for tests otherwise
-	assets 'org.openjdk.nashorn:nashorn-core:15.4'
-	implementation 'org.openjdk.nashorn:nashorn-core:15.4'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -112,18 +108,17 @@ dependencies {
 	testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
 
 	testImplementation 'org.assertj:assertj-core'
-	testImplementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.5.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.5.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-api:4.5.0'
-	testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.6.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.6.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-api:4.6.0'
+	testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.2'
 
-	implementation 'log4j:log4j:1.2.17'
-	implementation 'org.slf4j:log4j-over-slf4j:1.7.36' // required for asset pipeline
+	implementation 'org.slf4j:log4j-over-slf4j:2.0.3' // required for asset pipeline
 
 	// Logging to Logstash
 	implementation "net.logstash.logback:logstash-logback-encoder:7.2"
-	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
 	// required for logback (does not start otherwise)
 
 	// web frontend libraries
@@ -131,8 +126,8 @@ dependencies {
 	implementation 'org.webjars.npm:tablesort:5.2.0'
 
 	// rest api doc
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-	implementation 'org.springdoc:springdoc-openapi-security:1.6.11'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+	implementation 'org.springdoc:springdoc-openapi-security:1.6.12'
 
 }
 
@@ -184,6 +179,9 @@ assets {
 	//if you want to customize the jar task this task runs on you can specify a jarTaskName
 	jarTaskName = "bootJar"
 }
+
+System.setProperty("polyglot.engine.WarnInterpreterOnly", "false")
+System.setProperty("polyglot.log.file", "${buildDir}/polyglot.log")
 
 task generateItdsFooter {
 	doLast {

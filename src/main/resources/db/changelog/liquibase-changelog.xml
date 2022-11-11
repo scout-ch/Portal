@@ -344,4 +344,15 @@
         </sql>
         <addNotNullConstraint tableName="master_tile" columnName="restricted"/>
     </changeSet>
+    <changeSet id="20221111-01" author="mkobel">
+        <addColumn tableName="user">
+            <column name="midata_group_hierarchy" type="int4[]"/>
+        </addColumn>
+        <sql splitStatements="false">
+            UPDATE "user"
+            SET midata_group_hierarchy = array[]::int4[]
+            WHERE midata_group_hierarchy IS NULL;
+        </sql>
+        <addNotNullConstraint tableName="user" columnName="midata_group_hierarchy"/>
+    </changeSet>
 </databaseChangeLog>
