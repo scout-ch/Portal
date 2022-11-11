@@ -11,7 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 public class MasterTileIndexPage extends PortalPage {
 
     @FindBy(css = "a[href$='/masterTile/create']")
-    protected WebElement createLink;
+    public WebElement createLink;
 
     public MasterTileIndexPage(SeleniumHelper helper) {
         super(helper);
@@ -34,12 +34,13 @@ public class MasterTileIndexPage extends PortalPage {
         return page;
     }
 
-    public void clickOnDelete(Long id) {
+    public void clickOnDelete(Long id) throws InterruptedException {
 
         WebElement form = helper.getDriver().findElement(By.cssSelector("form[action$='/masterTile/delete/" + id + "']"));
         WebElement btn = form.findElement(By.cssSelector("button"));
         btn.click();
         helper.getDriver().switchTo().alert().accept();
 
+        Thread.sleep(300);
     }
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -39,14 +40,15 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper, ensurePbsGroup().getId());
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.elementToBeClickable(indexPage.createLink));
 
 
         System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());
 
         MasterTileCreatePage createPage = indexPage.clickOnCreate();
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlContains("/masterTile/create"));
+
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile/create");
@@ -58,17 +60,16 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         MasterTileCreatePage createPage = MasterTileCreatePage.open(seleniumHelper, ensurePbsGroup().getId());
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlContains("/masterTile/create"));
 
         createPage.acceptPrivacyNotice();
         createPage.requestApiKey();
-        createPage.fillForm("Titel1", "Content1", null, null, null, null);
+        createPage.fillForm("TitelN", "ContentN", null, null, null, null);
 
-        Thread.sleep(1500);
 
         createPage.submit();
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
@@ -77,22 +78,20 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testEdit() throws InterruptedException {
 
-        MasterTile masterTile = ensureMasterTile();
+        MasterTile masterTile = ensurePbsNonRestrictedMasterTile();
 
 
         MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId(), ensurePbsGroup().getId());
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlContains("/masterTile/edit/"));
 
         editPage.acceptPrivacyNotice();
         editPage.requestApiKey();
-        editPage.fillForm("Titel1", "Content1", null, null, null, "/etc/hosts");
-
-        Thread.sleep(1500);
+        editPage.fillForm("TitelE1", "ContentE1", null, null, null, "/etc/hosts");
 
         editPage.submit();
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
@@ -104,22 +103,20 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testEditAnotherFile() throws InterruptedException {
 
-        MasterTile masterTile = ensureMasterTile();
+        MasterTile masterTile = ensurePbsNonRestrictedMasterTile();
 
 
         MasterTileEditPage editPage = MasterTileEditPage.open(seleniumHelper, masterTile.getId(), ensurePbsGroup().getId());
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlContains("/masterTile/edit/"));
 
         editPage.acceptPrivacyNotice();
         editPage.requestApiKey();
-        editPage.fillForm("Titel1", "Content1", null, null, null, "/etc/hostname");
-
-        Thread.sleep(1500);
+        editPage.fillForm("TitelE2", "ContentE2", null, null, null, "/etc/hostname");
 
         editPage.submit();
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
@@ -131,18 +128,26 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testDelete() throws InterruptedException {
 
-        MasterTile masterTile = ensureMasterTile();
+        MasterTile masterTile = ensurePbsNonRestrictedMasterTile();
+        List<MasterTile> pbsTiles = masterTileRepository.findAllByMidataGroupOnly(ensurePbsGroup());
+        for (MasterTile mt : pbsTiles) {
+            if ("Titel1".equals(mt.getTitle().getDe())) {
+                masterTile = mt;
+                break;
+            }
+        }
 
         MasterTileIndexPage indexPage = MasterTileIndexPage.open(seleniumHelper, ensurePbsGroup().getId());
 
-        Thread.sleep(1500);
-
+        wait2s.until(ExpectedConditions.urlContains("/masterTile"));
 
         System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());
 
         indexPage.clickOnDelete(masterTile.getId());
 
-        Thread.sleep(1500);
+        wait2s.until(seleniumHelper.waitForPageLoad());
+
+        wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");

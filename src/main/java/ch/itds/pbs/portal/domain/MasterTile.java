@@ -69,6 +69,9 @@ public class MasterTile extends BaseEntity {
     @OneToMany(mappedBy = "masterTile", cascade = CascadeType.REMOVE)
     Set<UserTile> userTiles;
 
+    @OneToMany(mappedBy = "masterTile", cascade = CascadeType.REMOVE)
+    Set<GroupDefaultTile> groupDefaultTiles;
+
     private int position = -1;
 
     private String apiKey;

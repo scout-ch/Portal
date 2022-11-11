@@ -30,6 +30,7 @@ bootstrap:
             de: Hauptkategorie
         position: 1
         enabled: true
+        restricted: false
         titleColor: DEFAULT
         apiKey: DEMO-KEY
         midata-group-only:
@@ -54,6 +55,7 @@ bootstrap:
             de: Lager & Kurse
         position: 2
         enabled: true
+        restricted: false
         titleColor: DEFAULT
         midata-group-only:
           midata-id: 1
@@ -66,6 +68,7 @@ bootstrap:
             de: Hauptkategorie
         position: 3
         enabled: true
+        restricted: false
         titleColor: DEFAULT
         apiKey: DEMO-KEY-EN-ONLY
         midata-group-only:

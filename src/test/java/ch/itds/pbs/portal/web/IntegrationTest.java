@@ -14,11 +14,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 
@@ -58,6 +60,8 @@ abstract class IntegrationTest {
     @LocalServerPort
     private int port;
 
+    WebDriverWait wait2s;
+
     @BeforeAll
     public void start() {
 
@@ -95,15 +99,11 @@ abstract class IntegrationTest {
             testUser = userRepository.save(testUser);
         }
 
-        MidataGroup pbsGroup = midataGroupRepository.findByMidataId(1);
-        if (pbsGroup == null) {
-            pbsGroup = new MidataGroup();
-            pbsGroup.setName("Pfadibewegung Schweiz");
-            pbsGroup.setMidataId(1);
-            pbsGroup = midataGroupRepository.save(pbsGroup);
-        }
+        MidataGroup pbsGroup = ensurePbsGroup();
+        MidataGroup pkbGroup = ensurePkbGroup();
+
         if (testUser.getPrimaryMidataGroup() == null) {
-            testUser.setPrimaryMidataGroup(pbsGroup);
+            testUser.setPrimaryMidataGroup(pkbGroup);
             testUser = userRepository.save(testUser);
         }
         MidataRole pbsItSupport = midataRoleRepository.findByGroupAndName(pbsGroup, "IT Support");
@@ -114,19 +114,22 @@ abstract class IntegrationTest {
             pbsItSupport.setGroup(pbsGroup);
             pbsItSupport = midataRoleRepository.save(pbsItSupport);
         }
-        MidataPermission pbsItSupportAdmin = midataPermissionRepository.findByUserAndRoleAndPermission(testUser, pbsItSupport, "admin");
+        MidataPermission pbsItSupportAdmin = midataPermissionRepository.findByUserAndRoleAndPermission(testUser, pbsItSupport, "group_and_below_full");
         if (pbsItSupportAdmin == null) {
             pbsItSupportAdmin = new MidataPermission();
             pbsItSupportAdmin.setUser(testUser);
             pbsItSupportAdmin.setRole(pbsItSupport);
-            pbsItSupportAdmin.setPermission("admin");
+            pbsItSupportAdmin.setPermission("group_and_below_full");
             pbsItSupportAdmin = midataPermissionRepository.save(pbsItSupportAdmin);
         }
 
-        MidataGroup pkbGroup = ensurePkbGroup();
+
         MidataGroup bezOeGroup = ensureBezOeGroup();
 
-        testUser.setPrimaryMidataGroup(bezOeGroup);
+        ensurePbsNonRestrictedMasterTile();
+        ensurePkbNonRestrictedMasterTile();
+        ensureBezOeGroupDefaultTile();
+
         testUser.setMidataGroupHierarchy(new Integer[]{pkbGroup.getMidataId(), pbsGroup.getMidataId()});
         userRepository.save(testUser);
 
@@ -135,6 +138,8 @@ abstract class IntegrationTest {
         seleniumHelper = new SeleniumHelper(port);
 
         seleniumHelper.getDriver().get(seleniumHelper.getBaseUrl() + "/favicon.ico"); // to enable session creation with auth
+
+        wait2s = new WebDriverWait(seleniumHelper.getDriver(), Duration.ofSeconds(2));
     }
 
 
@@ -145,22 +150,73 @@ abstract class IntegrationTest {
         }
     }
 
-    protected MasterTile ensureMasterTile() {
-        List<MasterTile> masterTiles = masterTileRepository.findAll();
+    protected MasterTile ensurePbsNonRestrictedMasterTile() {
+        List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensurePbsGroup());
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
             Category category = ensureACategory();
 
             LocalizedString title = new LocalizedString();
-            title.setDe("Titel");
+            title.setDe("PBS Titel");
             LocalizedString content = new LocalizedString();
-            content.setDe("Content...");
+            content.setDe("PBS Content...");
 
             masterTile = new MasterTile();
             masterTile.setCategory(category);
             masterTile.setMidataGroupOnly(ensurePbsGroup());
             masterTile.setTitle(title);
             masterTile.setContent(content);
+            masterTile.setRestricted(false);
+            masterTile.setBackgroundColor(Color.DEFAULT);
+            masterTile = masterTileRepository.saveAndFlush(masterTile);
+        } else {
+            masterTile = masterTiles.get(0);
+        }
+        return masterTile;
+    }
+
+    protected MasterTile ensurePkbNonRestrictedMasterTile() {
+        List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensurePkbGroup());
+        MasterTile masterTile;
+        if (masterTiles.isEmpty()) {
+            Category category = ensureACategory();
+
+            LocalizedString title = new LocalizedString();
+            title.setDe("PKB Titel");
+            LocalizedString content = new LocalizedString();
+            content.setDe("PKB Content...");
+
+            masterTile = new MasterTile();
+            masterTile.setCategory(category);
+            masterTile.setMidataGroupOnly(ensurePkbGroup());
+            masterTile.setTitle(title);
+            masterTile.setContent(content);
+            masterTile.setRestricted(false);
+            masterTile.setBackgroundColor(Color.DEFAULT);
+            masterTile = masterTileRepository.saveAndFlush(masterTile);
+        } else {
+            masterTile = masterTiles.get(0);
+        }
+        return masterTile;
+    }
+
+    protected MasterTile ensureBezOeRestrictedMasterTile() {
+        List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensureBezOeGroup());
+        MasterTile masterTile;
+        if (masterTiles.isEmpty()) {
+            Category category = ensureACategory();
+
+            LocalizedString title = new LocalizedString();
+            title.setDe("Bez OE Titel");
+            LocalizedString content = new LocalizedString();
+            content.setDe("Bez OE Content...");
+
+            masterTile = new MasterTile();
+            masterTile.setCategory(category);
+            masterTile.setMidataGroupOnly(ensureBezOeGroup());
+            masterTile.setTitle(title);
+            masterTile.setContent(content);
+            masterTile.setRestricted(true);
             masterTile.setBackgroundColor(Color.DEFAULT);
             masterTile = masterTileRepository.saveAndFlush(masterTile);
         } else {
@@ -220,7 +276,22 @@ abstract class IntegrationTest {
 
     protected GroupDefaultTile ensurePbsGroupDefaultTile() {
         MidataGroup group = ensurePbsGroup();
-        MasterTile tile = ensureMasterTile();
+        MasterTile tile = ensurePbsNonRestrictedMasterTile();
+        List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
+        if (groupDefaultTiles.isEmpty()) {
+            GroupDefaultTile groupDefaultTile = new GroupDefaultTile();
+            groupDefaultTile.setGroup(group);
+            groupDefaultTile.setMasterTile(tile);
+            groupDefaultTile.setPosition(1);
+            return groupDefaultTileRepository.save(groupDefaultTile);
+        } else {
+            return groupDefaultTiles.get(0);
+        }
+    }
+
+    protected GroupDefaultTile ensureBezOeGroupDefaultTile() {
+        MidataGroup group = ensureBezOeGroup();
+        MasterTile tile = ensureBezOeRestrictedMasterTile();
         List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
         if (groupDefaultTiles.isEmpty()) {
             GroupDefaultTile groupDefaultTile = new GroupDefaultTile();

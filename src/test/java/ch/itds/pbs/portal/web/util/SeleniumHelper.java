@@ -1,11 +1,9 @@
 package ch.itds.pbs.portal.web.util;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -25,15 +23,15 @@ public class SeleniumHelper {
 
     public SeleniumHelper(int port) {
         try {
-            String envFfHost = System.getenv("SELENIUM-FIREFOX_HOST");
-            String envFfPort = System.getenv("SELENIUM-FIREFOX_TCP_4444");
+            String envHost = System.getenv("SELENIUM_HOST");
+            String envPort = System.getenv("SELENIUM_TCP_4444");
             FirefoxOptions browserCapabilities = new FirefoxOptions();
             browserCapabilities.setHeadless(true);
             browserCapabilities.setAcceptInsecureCerts(true);
             browserCapabilities.addArguments("use-fake-device-for-media-stream");
             browserCapabilities.addArguments("use-fake-ui-for-media-stream");
 
-            String seleniumHub = "http://" + (envFfHost != null ? envFfHost : "selenium") + ':' + (envFfPort != null ? envFfPort : 4444) + "/wd/hub";
+            String seleniumHub = "http://" + (envHost != null ? envHost : "selenium") + ':' + (envPort != null ? envPort : 4444) + "/wd/hub";
 
             String baseUrlProtocol = "http";
 
@@ -102,6 +100,10 @@ public class SeleniumHelper {
             e.printStackTrace();
         }
 
+    }
+
+    public ExpectedCondition<Boolean> waitForPageLoad() {
+        return input -> ((JavascriptExecutor) input).executeScript("return document.readyState").equals("complete");
     }
 
 }

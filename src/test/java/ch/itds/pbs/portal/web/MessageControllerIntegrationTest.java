@@ -14,6 +14,7 @@ import ch.itds.pbs.portal.service.MessageService;
 import ch.itds.pbs.portal.service.TileService;
 import ch.itds.pbs.portal.web.page.MessagePage;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -63,11 +64,9 @@ public class MessageControllerIntegrationTest extends IntegrationTest {
         messageService.createMessages(tile.getId(), messageCreateRequest);
         messageService.createMessages(tile.getId(), messageCreateRequest);
 
-        Thread.sleep(500);
-
         MessagePage page = MessagePage.open(seleniumHelper);
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlMatches("\\/message"));
 
 
         System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());

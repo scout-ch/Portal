@@ -6,6 +6,7 @@ import ch.itds.pbs.portal.web.page.IndexPage;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +18,7 @@ public class IndexIntegrationTest extends IntegrationTest {
 
         IndexPage dashboardPage = IndexPage.open(seleniumHelper);
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("Nachrichten")));
 
 
         System.out.println("current url: " + seleniumHelper.getDriver().getCurrentUrl());
@@ -25,7 +26,7 @@ public class IndexIntegrationTest extends IntegrationTest {
         final WebElement customerNav = seleniumHelper.getDriver().findElement(By.partialLinkText("Nachrichten"));
         customerNav.click();
 
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.urlMatches("/message"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
         assertThat(currentUrl).endsWith("/message");
@@ -38,12 +39,12 @@ public class IndexIntegrationTest extends IntegrationTest {
     public void testLocaleSave() throws InterruptedException {
 
         seleniumHelper.navigateTo("/?lang=en");
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("Messages")));
         User user = userRepository.findByUsernameWithRoles("3113").get();
         assertEquals(Language.EN, user.getLanguage());
 
         seleniumHelper.navigateTo("/?lang=de");
-        Thread.sleep(1500);
+        wait2s.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("Nachrichten")));
         user = userRepository.findByUsernameWithRoles("3113").get();
         assertEquals(Language.DE, user.getLanguage());
 

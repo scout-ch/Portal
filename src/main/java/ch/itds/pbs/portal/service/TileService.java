@@ -94,6 +94,7 @@ public class TileService {
     }
 
     private void provisioning(User user) {
+
         List<UserTile> existingTiles = userTileRepository.findAllByUser(user);
         List<Long> existingMasterTileIds = existingTiles.stream().map(ut -> ut.getMasterTile().getId()).toList();
 
@@ -102,7 +103,7 @@ public class TileService {
             groupDefaultTiles = user.getPrimaryMidataGroup().getDefaultTiles();
         }
 
-        if (groupDefaultTiles != null && groupDefaultTiles.isEmpty() && user.getMidataGroupHierarchy() != null && user.getMidataGroupHierarchy().length > 0) {
+        if ((groupDefaultTiles == null || groupDefaultTiles.isEmpty()) && user.getMidataGroupHierarchy() != null && user.getMidataGroupHierarchy().length > 0) {
             for (int groupId : user.getMidataGroupHierarchy()) {
                 MidataGroup group = midataGroupRepository.findByMidataId(groupId);
                 if (group != null) {
@@ -114,7 +115,7 @@ public class TileService {
             }
         }
 
-        if (groupDefaultTiles != null && groupDefaultTiles.isEmpty()) {
+        if (groupDefaultTiles == null || groupDefaultTiles.isEmpty()) {
             groupDefaultTiles = midataGroupRepository.findByMidataId(1).getDefaultTiles();
         }
 
