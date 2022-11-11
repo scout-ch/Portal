@@ -10,10 +10,10 @@ public interface MidataGroupRepository extends BaseEntityRepository<MidataGroup>
 
     MidataGroup findByMidataId(Integer groupId);
 
-    @Query("SELECT DISTINCT mg FROM MidataPermission mp LEFT JOIN mp.role mr LEFT JOIN mr.group mg WHERE mp.user.id = :userId AND ( mp.permission = 'admin' OR mp.permission = 'group_and_below_full' ) ORDER BY mg.name")
+    @Query("SELECT DISTINCT mg FROM MidataPermission mp LEFT JOIN mp.role mr LEFT JOIN mr.group mg WHERE mp.user.id = :userId AND ( mp.permission = 'layer_and_below_full' OR mp.permission = 'group_and_below_full' ) ORDER BY mg.name")
     List<MidataGroup> findAllWithAdminPermission(long userId);
 
-    @Query("SELECT DISTINCT mg FROM MidataPermission mp LEFT JOIN mp.role mr LEFT JOIN mr.group mg WHERE mg.id = :groupId AND mp.user.id = :userId AND ( mp.permission = 'admin' OR mp.permission = 'group_and_below_full' ) ORDER BY mg.name")
+    @Query("SELECT DISTINCT mg FROM MidataPermission mp LEFT JOIN mp.role mr LEFT JOIN mr.group mg WHERE mg.id = :groupId AND mp.user.id = :userId AND ( mp.permission = 'layer_and_below_full' OR mp.permission = 'group_and_below_full' ) ORDER BY mg.name")
     Optional<MidataGroup> findWithAdminPermission(long groupId, long userId);
 
 }
