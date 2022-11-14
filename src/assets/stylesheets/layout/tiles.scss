@@ -88,21 +88,37 @@
     &.theme-GREEN {
       background-color: $color-theme-forest;
       border-color: $color-theme-forest;
+
+      .btn-icon {
+        color: $color-bright;
+      }
     }
 
     &.theme-BLUE {
       background-color: $color-theme-ocean;
       border-color: $color-theme-ocean;
+
+      .btn-icon {
+        color: $color-bright;
+      }
     }
 
     &.theme-INVERTED_DEFAULT {
       background-color: $color-primary;
       border-color: $color-primary;
+
+      .btn-icon {
+        color: $color-bright;
+      }
     }
 
     &.theme-OCHER {
       background-color: $color-theme-earth;
       border-color: $color-theme-earth;
+
+      .btn-icon {
+        color: $color-bright;
+      }
     }
   }
 
