@@ -296,10 +296,10 @@ test {
 
 	// via https://groups.google.com/g/geb-user/c/ps9rErAmX9k/m/tekG5l1jCwAJ
 	// disabled due to load issues: slower in GitLab-CI than with 1 fork
-	//maxParallelForks = Runtime.runtime.availableProcessors() - 2
-	maxParallelForks = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
+	maxParallelForks = Runtime.runtime.availableProcessors() - 2
+	//maxParallelForks = 1 // to avoid hanging test;  https://discuss.gradle.org/t/gradle-test-hangs-forever/9251/8
 	forkEvery = 50
-	systemProperty 'runner.parallel.enabled', 'false'
+	systemProperty 'runner.parallel.enabled', 'true'
 
 	testLogging {
 		exceptionFormat = 'full'
