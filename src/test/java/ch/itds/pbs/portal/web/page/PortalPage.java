@@ -31,6 +31,7 @@ public class PortalPage {
 
     public PortalPage(SeleniumHelper helper) {
         this.helper = helper;
+        this.driver = helper.getDriver();
         PageFactory.initElements(helper.getDriver(), PortalPage.class);
     }
 

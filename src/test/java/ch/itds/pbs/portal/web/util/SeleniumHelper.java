@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class SeleniumHelper {
 
@@ -103,7 +104,19 @@ public class SeleniumHelper {
     }
 
     public ExpectedCondition<Boolean> waitForPageLoad() {
-        return input -> ((JavascriptExecutor) input).executeScript("return document.readyState").equals("complete");
+        return waitForReadyState("complete");
+    }
+
+    public ExpectedCondition<Boolean> waitForReadyState(String state) {
+        return webDriver -> Objects.equals(getReadyState(webDriver), state);
+    }
+
+    public String getReadyState() {
+        return getReadyState(driver);
+    }
+
+    public String getReadyState(WebDriver driver) {
+        return (String) ((JavascriptExecutor) driver).executeScript("return document.readyState");
     }
 
 }

@@ -53,7 +53,7 @@ public class MessageControllerIntegrationTest extends IntegrationTest {
 
         MasterTile tile = ensurePbsGroupDefaultTile().getMasterTile();
         messageRepository.deleteAll();
-        userRepository.findAll().forEach(u -> tileService.provisioning(UserPrincipal.create(u)));
+        userRepository.findAll().forEach(u -> ensureUserTile(u, tile));
 
         LocalizedString deLanguage = new LocalizedString();
         deLanguage.setDe("Text DE");

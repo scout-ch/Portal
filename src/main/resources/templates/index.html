@@ -97,7 +97,7 @@
                     </div>
                     <form th:action="@{/userTile/delete/{id}(id=${tile.userTileId})}" method="post"
                           onsubmit="return confirm('Wirklich löschen?');">
-                        <button class="btn-icon editable-only" type="submit" th:title="#{general.delete}"
+                        <button class="btn-icon btn-delete editable-only" th:title="#{general.delete}" type="submit"
                                 th:attr="aria-label=#{general.delete}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18.669" height="20.366"
                                  viewBox="0 0 18.669 20.366">

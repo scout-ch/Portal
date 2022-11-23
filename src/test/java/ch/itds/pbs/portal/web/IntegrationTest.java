@@ -12,6 +12,7 @@ import ch.qos.logback.classic.Logger;
 import io.github.bonigarcia.seljup.SeleniumJupiter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -57,16 +58,17 @@ abstract class IntegrationTest {
     @Autowired
     GroupDefaultTileRepository groupDefaultTileRepository;
 
+    @Autowired
+    UserTileRepository userTileRepository;
+
     @LocalServerPort
     private int port;
 
     WebDriverWait wait2s;
 
     @BeforeAll
-    public void start() {
-
+    public void init() {
         log.setLevel(Level.INFO);
-
         User testUser = userRepository.findByUsernameWithRoles("3113").orElseGet(() -> {
             User u = new User();
             u.setRoles(new HashSet<>());
@@ -123,14 +125,10 @@ abstract class IntegrationTest {
             pbsItSupportAdmin = midataPermissionRepository.save(pbsItSupportAdmin);
         }
 
-
         MidataGroup bezOeGroup = ensureBezOeGroup();
 
-        ensurePbsNonRestrictedMasterTile();
-        ensurePkbNonRestrictedMasterTile();
-        ensureBezOeGroupDefaultTile();
-
         testUser.setMidataGroupHierarchy(new Integer[]{pkbGroup.getMidataId(), pbsGroup.getMidataId()});
+        testUser.setPrimaryMidataGroup(bezOeGroup);
         userRepository.save(testUser);
 
         mockUserFilter.authenticateNextRequestAs("3113");
@@ -140,6 +138,17 @@ abstract class IntegrationTest {
         seleniumHelper.getDriver().get(seleniumHelper.getBaseUrl() + "/favicon.ico"); // to enable session creation with auth
 
         wait2s = new WebDriverWait(seleniumHelper.getDriver(), Duration.ofSeconds(2));
+    }
+
+    @BeforeEach
+    public void start() {
+
+        groupDefaultTileRepository.deleteAll();
+        userTileRepository.deleteAll();
+
+        ensurePbsNonRestrictedMasterTile();
+        ensurePkbNonRestrictedMasterTile();
+        ensureBezOeGroupDefaultTile();
     }
 
 
@@ -154,24 +163,26 @@ abstract class IntegrationTest {
         List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensurePbsGroup());
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
-            Category category = ensureACategory();
-
-            LocalizedString title = new LocalizedString();
-            title.setDe("PBS Titel");
-            LocalizedString content = new LocalizedString();
-            content.setDe("PBS Content...");
-
             masterTile = new MasterTile();
-            masterTile.setCategory(category);
-            masterTile.setMidataGroupOnly(ensurePbsGroup());
-            masterTile.setTitle(title);
-            masterTile.setContent(content);
-            masterTile.setRestricted(false);
-            masterTile.setBackgroundColor(Color.DEFAULT);
-            masterTile = masterTileRepository.saveAndFlush(masterTile);
         } else {
             masterTile = masterTiles.get(0);
         }
+        Category category = ensureACategory();
+
+        LocalizedString title = new LocalizedString();
+        title.setDe("PBS Titel");
+        LocalizedString content = new LocalizedString();
+        content.setDe("PBS Content...");
+
+        masterTile.setCategory(category);
+        masterTile.setMidataGroupOnly(ensurePbsGroup());
+        masterTile.setTitle(title);
+        masterTile.setContent(content);
+        masterTile.setRestricted(false);
+        masterTile.setBackgroundColor(Color.DEFAULT);
+        masterTile.setPosition(1);
+        masterTile = masterTileRepository.saveAndFlush(masterTile);
+
         return masterTile;
     }
 
@@ -179,24 +190,27 @@ abstract class IntegrationTest {
         List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensurePkbGroup());
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
-            Category category = ensureACategory();
-
-            LocalizedString title = new LocalizedString();
-            title.setDe("PKB Titel");
-            LocalizedString content = new LocalizedString();
-            content.setDe("PKB Content...");
-
             masterTile = new MasterTile();
-            masterTile.setCategory(category);
-            masterTile.setMidataGroupOnly(ensurePkbGroup());
-            masterTile.setTitle(title);
-            masterTile.setContent(content);
-            masterTile.setRestricted(false);
-            masterTile.setBackgroundColor(Color.DEFAULT);
-            masterTile = masterTileRepository.saveAndFlush(masterTile);
         } else {
             masterTile = masterTiles.get(0);
         }
+
+        Category category = ensureACategory();
+
+        LocalizedString title = new LocalizedString();
+        title.setDe("PKB Titel");
+        LocalizedString content = new LocalizedString();
+        content.setDe("PKB Content...");
+
+        masterTile.setCategory(category);
+        masterTile.setMidataGroupOnly(ensurePkbGroup());
+        masterTile.setTitle(title);
+        masterTile.setContent(content);
+        masterTile.setRestricted(false);
+        masterTile.setBackgroundColor(Color.DEFAULT);
+        masterTile.setPosition(2);
+        masterTile = masterTileRepository.saveAndFlush(masterTile);
+
         return masterTile;
     }
 
@@ -204,24 +218,27 @@ abstract class IntegrationTest {
         List<MasterTile> masterTiles = masterTileRepository.findAllByMidataGroupOnly(ensureBezOeGroup());
         MasterTile masterTile;
         if (masterTiles.isEmpty()) {
-            Category category = ensureACategory();
-
-            LocalizedString title = new LocalizedString();
-            title.setDe("Bez OE Titel");
-            LocalizedString content = new LocalizedString();
-            content.setDe("Bez OE Content...");
-
             masterTile = new MasterTile();
-            masterTile.setCategory(category);
-            masterTile.setMidataGroupOnly(ensureBezOeGroup());
-            masterTile.setTitle(title);
-            masterTile.setContent(content);
-            masterTile.setRestricted(true);
-            masterTile.setBackgroundColor(Color.DEFAULT);
-            masterTile = masterTileRepository.saveAndFlush(masterTile);
         } else {
             masterTile = masterTiles.get(0);
         }
+
+        Category category = ensureACategory();
+
+        LocalizedString title = new LocalizedString();
+        title.setDe("Bez OE Titel");
+        LocalizedString content = new LocalizedString();
+        content.setDe("Bez OE Content...");
+
+        masterTile.setCategory(category);
+        masterTile.setMidataGroupOnly(ensureBezOeGroup());
+        masterTile.setTitle(title);
+        masterTile.setContent(content);
+        masterTile.setRestricted(true);
+        masterTile.setBackgroundColor(Color.DEFAULT);
+        masterTile.setPosition(3);
+        masterTile = masterTileRepository.saveAndFlush(masterTile);
+
         return masterTile;
     }
 
@@ -301,6 +318,19 @@ abstract class IntegrationTest {
             return groupDefaultTileRepository.save(groupDefaultTile);
         } else {
             return groupDefaultTiles.get(0);
+        }
+    }
+
+    protected UserTile ensureUserTile(User user, MasterTile masterTile) {
+        List<UserTile> matchingUserTiles = userTileRepository.findAllByUserAndMasterTile(user, masterTile);
+        if (matchingUserTiles.isEmpty()) {
+            UserTile userTile = new UserTile();
+            userTile.setMasterTile(masterTile);
+            userTile.setUser(user);
+            userTile.setPosition(masterTile.getPosition());
+            return userTileRepository.save(userTile);
+        } else {
+            return matchingUserTiles.get(0);
         }
     }
 
