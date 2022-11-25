@@ -30,7 +30,7 @@ public class TileEndpoint {
         this.tileService = tileService;
     }
 
-    @Operation(description = "Send a message to the tile users")
+    @Operation(description = "Override a tile for some time")
     @PutMapping("/tile/override")
     @Transactional
     public ResponseEntity<TileOverrideCreateResponse> override(@RequestBody TileOverrideCreateRequest tileOverrideCreateRequest, @CurrentUser TileAuthentication authentication) {

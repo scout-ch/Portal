@@ -23,7 +23,7 @@ public class TileOverrideCreateRequest {
     private LocalizedString content = new LocalizedString();
     @Schema(description = "Optional URL related to the override tile")
     private LocalizedString url = new LocalizedString();
-    @Schema(description = "The message can be limited to specified users. The ID is the one provided by MiData", required = true)
+    @Schema(description = "The override can be limited to specified users. The ID is the one provided by MiData")
     private List<Long> limitToUserIds = new ArrayList<>();
     @Schema(description = "Optional theme related to the override tile")
     private Color backgroundColor = Color.DEFAULT;
