@@ -10,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.net.InetSocketAddress;
 
 @Slf4j
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = {"ch.itds.pbs.portal", "asset.pipeline.springboot"})
 public class PortalApplication {
 
@@ -44,8 +46,7 @@ public class PortalApplication {
 		ajpConnector.setAllowTrace(false);
 		ajpConnector.setScheme("http");
 		ProtocolHandler protocolHandler = ajpConnector.getProtocolHandler();
-		if (protocolHandler instanceof AbstractAjpProtocol<?>) {
-			AbstractAjpProtocol<?> ajpProtocolHandler = (AbstractAjpProtocol<?>) protocolHandler;
+		if (protocolHandler instanceof AbstractAjpProtocol<?> ajpProtocolHandler) {
 			ajpProtocolHandler.setSecretRequired(false);
 			ajpProtocolHandler.setAddress(new InetSocketAddress(0).getAddress());
 		} else {

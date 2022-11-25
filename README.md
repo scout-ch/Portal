@@ -38,3 +38,9 @@
 ```
 curl -i -X PUT -H 'Content-Type: application/json' -d '{"title":{"de":"Hallo"},"content":{"de":"Inhalt..."},"limitToUserIds":[2]}' -H 'X-Tile-Authorization: DEMO-KEY' http://localhost:8080/api/v1/message
 ```
+
+### Create a tile override in development environment (local)
+
+```
+curl -i -X PUT -H 'Content-Type: application/json' -d '{"title":{"de":"Hallo"},"content":{"de":"Inhalt..."},"limitToUserIds":[2],"validUntil":"2030-12-12T12:00:00.000Z"}' -H 'X-Tile-Authorization: DEMO-KEY' http://localhost:8080/api/v1/tile/override
+```

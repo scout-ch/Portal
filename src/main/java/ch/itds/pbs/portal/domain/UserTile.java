@@ -19,6 +19,10 @@ public class UserTile extends BaseEntity {
     @NotNull
     private MasterTile masterTile;
 
+    @ManyToOne
+    @JoinColumn
+    private TileOverride override;
+
     @ManyToOne(optional = false)
     @JoinColumn
     @NotNull

@@ -355,4 +355,48 @@
         </sql>
         <addNotNullConstraint tableName="user" columnName="midata_group_hierarchy"/>
     </changeSet>
+    <changeSet id="20221125-01" author="mkobel">
+        <createTable tableName="tile_override">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="version" type="int"/>
+            <column name="date_created" type="timestamp"/>
+            <column name="last_updated" type="timestamp"/>
+            <column name="title_de" type="text"/>
+            <column name="title_fr" type="text"/>
+            <column name="title_it" type="text"/>
+            <column name="title_en" type="text"/>
+            <column name="title_color" type="text"/>
+            <column name="content_de" type="text"/>
+            <column name="content_fr" type="text"/>
+            <column name="content_it" type="text"/>
+            <column name="content_en" type="text"/>
+            <column name="content_color" type="text"/>
+            <column name="background_color" type="text"/>
+            <column name="url_de" type="text"/>
+            <column name="url_fr" type="text"/>
+            <column name="url_it" type="text"/>
+            <column name="url_en" type="text"/>
+            <column name="image_id" type="bigint">
+                <constraints foreignKeyName="fk_image" references="file_meta(id)"/>
+            </column>
+            <column name="valid_until" type="timestamp"/>
+        </createTable>
+        <addColumn tableName="master_tile">
+            <column name="override_id" type="bigint">
+                <constraints foreignKeyName="fk_override_id" references="tile_override(id)"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="user_tile">
+            <column name="override_id" type="bigint">
+                <constraints foreignKeyName="fk_override_id" references="tile_override(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20221125-02" author="mkobel">
+        <addNotNullConstraint tableName="tile_override" columnName="valid_until"/>
+        <sqlFile path="include/20221125-02-tile-override-triggers.sql" splitStatements="false"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>
