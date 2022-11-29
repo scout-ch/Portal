@@ -4,6 +4,8 @@ package ch.itds.pbs.portal.web.page.admin;
 import ch.itds.pbs.portal.web.page.PortalPage;
 import ch.itds.pbs.portal.web.util.SeleniumHelper;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
@@ -84,6 +86,9 @@ public class MasterTileEditPage extends PortalPage {
         }
 
         if (fileName != null) {
+            if (driver instanceof RemoteWebDriver remoteWebDriver) {
+                remoteWebDriver.setFileDetector(new LocalFileDetector());
+            }
             imageUpload.clear();
             imageUpload.sendKeys(fileName);
         }

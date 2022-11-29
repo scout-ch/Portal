@@ -87,7 +87,8 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         editPage.acceptPrivacyNotice();
         editPage.requestApiKey();
-        editPage.fillForm("TitelE1", "ContentE1", null, null, null, "/etc/hosts");
+        String filename = System.getProperty("user.dir") + "/src/main/resources/static/favicon/android-icon-36x36.png";
+        editPage.fillForm("TitelE1", "ContentE1", null, null, null, filename);
 
         editPage.submit();
 
@@ -97,7 +98,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
-        assertEquals("hosts", updatedMasterTile.getImage().getName());
+        assertEquals("android-icon-36x36.png", updatedMasterTile.getImage().getName());
     }
 
     @Test
@@ -112,7 +113,9 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
         editPage.acceptPrivacyNotice();
         editPage.requestApiKey();
-        editPage.fillForm("TitelE2", "ContentE2", null, null, null, "/etc/hostname");
+
+        String filename = System.getProperty("user.dir") + "/src/main/resources/static/favicon/apple-icon-180x180.png";
+        editPage.fillForm("TitelE2", "ContentE2", null, null, null, filename);
 
         editPage.submit();
 
@@ -122,7 +125,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
-        assertEquals("hostname", updatedMasterTile.getImage().getName());
+        assertEquals("apple-icon-180x180.png", updatedMasterTile.getImage().getName());
     }
 
     @Test
