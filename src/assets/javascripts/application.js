@@ -15,7 +15,6 @@
 //= require inc/char-count.js
 //= require inc/api-reload.js
 
-//= require vendor/isotope.min.js
 //= require inc/tiles.js
 
 //= require vendor/Sortable.min.js
