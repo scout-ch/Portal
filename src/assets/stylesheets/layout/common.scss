@@ -169,6 +169,11 @@
     }
   }
 
+  a {
+    justify-content: end;
+    width: 100%;
+  }
+
   button {
     color: $color-primary;
     padding: 0;
@@ -305,6 +310,10 @@
 
   .top-buttons {
     text-align: left;
+
+    a {
+        justify-content: start;
+    }
   }
 }
 
