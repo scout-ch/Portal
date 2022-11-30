@@ -1,5 +1,6 @@
 package ch.itds.pbs.portal.domain;
 
+import ch.itds.pbs.portal.util.validation.GroupAndCategoryMatchRequired;
 import ch.itds.pbs.portal.util.validation.OneLocalizationRequired;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.Set;
 @EntityListeners({AuditingEntityListener.class})
 @Getter
 @Setter
+@GroupAndCategoryMatchRequired
 @OneLocalizationRequired(fields = {"title", "content"})
 public class MasterTile extends BaseEntity {
 

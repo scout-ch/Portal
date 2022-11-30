@@ -34,13 +34,16 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
     private final transient MidataPermissionRepository midataPermissionRepository;
     private final transient MidataRoleRepository midataRoleRepository;
 
-    public MidataOAuth2UserService(UserRepository userRepository, RoleRepository roleRepository, MidataGroupRepository midataGroupRepository, MidataPermissionRepository midataPermissionRepository, MidataRoleRepository midataRoleRepository) {
+    private final transient CategoryRepository categoryRepository;
+
+    public MidataOAuth2UserService(UserRepository userRepository, RoleRepository roleRepository, MidataGroupRepository midataGroupRepository, MidataPermissionRepository midataPermissionRepository, MidataRoleRepository midataRoleRepository, CategoryRepository categoryRepository) {
         super();
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.midataGroupRepository = midataGroupRepository;
         this.midataPermissionRepository = midataPermissionRepository;
         this.midataRoleRepository = midataRoleRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -89,10 +92,49 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
                 group.setName(permission.getGroupName());
                 group = midataGroupRepository.save(group);
             }
-            if (Objects.equals(group.getName(), permission.getGroupName())) {
+            if (!Objects.equals(group.getName(), permission.getGroupName())) {
                 group.setName(permission.getGroupName());
                 group = midataGroupRepository.save(group);
             }
+            List<Category> groupCategories = categoryRepository.findAllByMidataGroupOnly(group);
+            if (groupCategories.isEmpty()) {
+                Category category = new Category();
+                LocalizedString name = new LocalizedString();
+                name.setDe(group.getName());
+                name.setFr(group.getName());
+                name.setIt(group.getName());
+                name.setEn(group.getName());
+                category.setName(name);
+                category.setMidataGroupOnly(group);
+                categoryRepository.save(category);
+            } else if (groupCategories.size() == 1) {
+                Category category = groupCategories.get(0);
+                boolean hasChanges = false;
+                if (category.getName() == null) {
+                    category.setName(new LocalizedString());
+                    hasChanges = true;
+                }
+                if (Objects.equals(category.getName().getDe(), group.getName())) {
+                    category.getName().setDe(group.getName());
+                    hasChanges = true;
+                }
+                if (Objects.equals(category.getName().getFr(), group.getName())) {
+                    category.getName().setFr(group.getName());
+                    hasChanges = true;
+                }
+                if (Objects.equals(category.getName().getIt(), group.getName())) {
+                    category.getName().setIt(group.getName());
+                    hasChanges = true;
+                }
+                if (Objects.equals(category.getName().getEn(), group.getName())) {
+                    category.getName().setEn(group.getName());
+                    hasChanges = true;
+                }
+                if (hasChanges) {
+                    categoryRepository.save(category);
+                }
+            }
+
             MidataRole role = midataRoleRepository.findByGroupAndName(group, permission.getRoleName());
             if (role == null) {
                 role = new MidataRole();
@@ -100,7 +142,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
                 role.setName(permission.getRoleName());
                 role.setClazz(permission.getRoleClass());
             }
-            if (Objects.equals(role.getName(), permission.getRoleName())) {
+            if (!Objects.equals(role.getClazz(), permission.getRoleClass())) {
                 role.setClazz(permission.getRoleClass());
                 role = midataRoleRepository.save(role);
             }

@@ -75,12 +75,25 @@ public class MasterTileControllerTest extends BaseControllerTest {
         pbsGroup.setName("Pfadibewegung Schweiz");
         pbsGroup.setMidataId(1);
 
+        MidataGroup otherGroup = new MidataGroup();
+        otherGroup.setId(21L);
+        otherGroup.setName("Pfadi Kanton Bern");
+        otherGroup.setMidataId(2);
+
         LocalizedString categoryName = new LocalizedString();
         categoryName.setDe("Kategorie");
 
         Category category = new Category();
         category.setId(5L);
         category.setName(categoryName);
+
+        LocalizedString categoryOtherName = new LocalizedString();
+        categoryOtherName.setDe(otherGroup.getName());
+
+        Category categoryOtherGroup = new Category();
+        categoryOtherGroup.setId(7L);
+        categoryOtherGroup.setName(categoryOtherName);
+        categoryOtherGroup.setMidataGroupOnly(otherGroup);
 
         LocalizedString title = new LocalizedString();
         title.setDe("Titel");
@@ -104,9 +117,11 @@ public class MasterTileControllerTest extends BaseControllerTest {
 
         Mockito.when(midataGroupService.findByIdAndEnsureAdmin(eq(42L), anyLong())).thenReturn(pbsGroup);
 
-        Mockito.when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
+        Mockito.when(categoryRepository.findById(eq(category.getId()))).thenReturn(Optional.of(category));
+        Mockito.when(categoryRepository.findById(eq(categoryOtherGroup.getId()))).thenReturn(Optional.of(categoryOtherGroup));
 
         mockedWebConversion.register(category);
+        mockedWebConversion.register(categoryOtherGroup);
         mockedWebConversion.register(pbsGroup);
     }
 
@@ -175,6 +190,24 @@ public class MasterTileControllerTest extends BaseControllerTest {
         //params.set("title.de", "Titel");
         params.set("content.de", "Inhalt");
         params.set("category", "5");
+        params.set("backgroundColor", "DEFAULT");
+        params.set("midataGroupOnly", "42");
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
+                "text/plain", "".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+                        .file(mockMultipartFile).params(params).with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createSaveWithInvalidCategory() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.set("title.de", "Titel");
+        params.set("content.de", "Inhalt");
+        params.set("category", "7");
         params.set("backgroundColor", "DEFAULT");
         params.set("midataGroupOnly", "42");
 

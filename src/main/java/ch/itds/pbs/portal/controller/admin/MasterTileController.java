@@ -1,9 +1,6 @@
 package ch.itds.pbs.portal.controller.admin;
 
-import ch.itds.pbs.portal.domain.Color;
-import ch.itds.pbs.portal.domain.FileMeta;
-import ch.itds.pbs.portal.domain.MasterTile;
-import ch.itds.pbs.portal.domain.MidataGroup;
+import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.dto.ActionMessage;
 import ch.itds.pbs.portal.dto.ApiKey;
 import ch.itds.pbs.portal.repo.CategoryRepository;
@@ -74,10 +71,14 @@ public class MasterTileController {
         MasterTile entity = new MasterTile();
         entity.setMidataGroupOnly(midataGroup);
         entity.setApiKey(UUID.randomUUID().toString());
+        Category primaryGroupCategory = midataGroupService.getCategory(midataGroup);
+        if (primaryGroupCategory != null) {
+            entity.setCategory(primaryGroupCategory);
+        }
 
         model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("entity", entity);
-        model.addAttribute("categoryList", categoryRepository.findAll());
+        model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
         model.addAttribute("colorList", Color.values());
 
         return "admin/masterTile/edit";
@@ -93,7 +94,7 @@ public class MasterTileController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("midataGroup", midataGroup);
-            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
         }
@@ -111,7 +112,7 @@ public class MasterTileController {
             log.error("unable to save entity {}: {}", entity.getClass().getSimpleName(), e.getMessage(), e);
             model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.create.error", new String[]{e.getMessage()}, locale));
             model.addAttribute("midataGroup", midataGroup);
-            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
         }
@@ -130,7 +131,7 @@ public class MasterTileController {
 
         model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("entity", entity);
-        model.addAttribute("categoryList", categoryRepository.findAll());
+        model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
         model.addAttribute("colorList", Color.values());
 
         return "admin/masterTile/edit";
@@ -149,7 +150,7 @@ public class MasterTileController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("midataGroup", midataGroup);
-            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
         }
@@ -180,7 +181,7 @@ public class MasterTileController {
             log.error("unable to save entity {}: {}", savedEntity.getClass().getSimpleName(), e.getMessage(), e);
             model.addAttribute(Flash.ERROR, messageSource.getMessage("masterTile.edit.error", new String[]{e.getMessage()}, locale));
             model.addAttribute("midataGroup", midataGroup);
-            model.addAttribute("categoryList", categoryRepository.findAll());
+            model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
             return "admin/masterTile/edit";
         }
