@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="group : ${groups}">
+        <tr th:each="group : ${groups}" th:id="|group${group.id}|">
             <td th:text="${group.name}">
             </td>
             <td>
