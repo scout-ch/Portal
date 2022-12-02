@@ -90,7 +90,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
                 group = new MidataGroup();
                 group.setMidataId(permission.getGroupId());
                 group.setName(permission.getGroupName());
-                group = midataGroupRepository.save(group);
+                group = midataGroupRepository.saveAndFlush(group);
             }
             if (!Objects.equals(group.getName(), permission.getGroupName())) {
                 group.setName(permission.getGroupName());
@@ -141,6 +141,7 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
                 role.setGroup(group);
                 role.setName(permission.getRoleName());
                 role.setClazz(permission.getRoleClass());
+                role = midataRoleRepository.saveAndFlush(role);
             }
             if (!Objects.equals(role.getClazz(), permission.getRoleClass())) {
                 role.setClazz(permission.getRoleClass());
