@@ -1,4 +1,4 @@
-package ch.itds.pbs.portal.controller.admin;
+package ch.itds.pbs.portal.controller;
 
 import ch.itds.pbs.portal.domain.GroupDefaultTile;
 import ch.itds.pbs.portal.domain.MasterTile;
@@ -31,8 +31,8 @@ import java.util.Locale;
 import java.util.Map;
 
 @Slf4j
-@Controller("midataGroupAdminController")
-@RequestMapping("/admin/midataGroup")
+@Controller
+@RequestMapping("/midataGroup")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class MidataGroupController {
 
@@ -60,7 +60,7 @@ public class MidataGroupController {
         List<MidataGroup> groups = midataGroupRepository.findAllWithAdminPermission(userPrincipal.getId());
         model.addAttribute("groups", groups);
 
-        return "admin/midataGroup/index";
+        return "midataGroup/index";
     }
 
     @RequestMapping("/{midataGroupId:\\d+}/defaultTile")
@@ -70,7 +70,7 @@ public class MidataGroupController {
         model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("groupDefaultTiles", groupDefaultTileRepository.findAllEnabledWithFetchForUserId(midataGroup.getId()));
 
-        return "admin/midataGroup/defaultTile";
+        return "midataGroup/defaultTile";
     }
 
     @PostMapping("/{midataGroupId:\\d+}/defaultTile/create/{masterTileId:\\d+}")
@@ -79,7 +79,7 @@ public class MidataGroupController {
                                  RedirectAttributes redirectAttributes, Locale locale) {
 
         MidataGroup midataGroup = midataGroupService.findByIdAndEnsureAdmin(midataGroupId, userPrincipal.getId());
-        String redirectToGroupUrl = "redirect:/admin/midataGroup/" + midataGroup.getId() + "/defaultTile";
+        String redirectToGroupUrl = "redirect:/midataGroup/" + midataGroup.getId() + "/defaultTile";
 
         MasterTile masterTile = masterTileRepository.findEnabledWithFetchForUserByIdAndGroupsOrNotRestricted(masterTileId, userPrincipal.getId()).orElse(null);
 
@@ -124,7 +124,7 @@ public class MidataGroupController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("midataGroup.defaultTile.delete.error", new String[]{e.getMessage()}, locale));
         }
-        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/defaultTile";
+        return "redirect:/midataGroup/" + midataGroup.getId() + "/defaultTile";
     }
 
     @PostMapping(path = "/{midataGroupId:\\d+}/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)

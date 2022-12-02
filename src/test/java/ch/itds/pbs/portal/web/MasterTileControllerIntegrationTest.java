@@ -51,7 +51,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
 
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile/create");
+        assertThat(currentUrl).endsWith("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile/create");
     }
 
     @Test
@@ -72,7 +72,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
+        assertThat(currentUrl).endsWith("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
+        assertThat(currentUrl).endsWith("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
         assertEquals("android-icon-36x36.png", updatedMasterTile.getImage().getName());
@@ -122,7 +122,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
+        assertThat(currentUrl).endsWith("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         MasterTile updatedMasterTile = masterTileRepository.findById(masterTile.getId()).get();
         assertEquals("apple-icon-180x180.png", updatedMasterTile.getImage().getName());
@@ -153,7 +153,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
         wait2s.until(ExpectedConditions.urlMatches("\\/masterTile$"));
 
         final String currentUrl = seleniumHelper.getDriver().getCurrentUrl();
-        assertThat(currentUrl).endsWith("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
+        assertThat(currentUrl).endsWith("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         assertThat(masterTileRepository.findById(masterTile.getId())).isEqualTo(Optional.empty());
 
@@ -187,7 +187,7 @@ public class MasterTileControllerIntegrationTest extends IntegrationTest {
             log.info("Tile {} @ {}: {}", p.getId(), p.getPosition(), p.getTitle().getDe());
         }
 
-        seleniumHelper.navigateTo("/admin/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
+        seleniumHelper.navigateTo("/midataGroup/" + ensurePbsGroup().getId() + "/masterTile");
 
         seleniumHelper.screenshot("start");
 

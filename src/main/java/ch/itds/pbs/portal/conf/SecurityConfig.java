@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .disable()
                 .authorizeRequests()
-                .mvcMatchers("/admin", "/admin/**").hasAnyRole("ADMIN")
+                .mvcMatchers("/midataGroup", "/midataGroup/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/error",
                         "/assets/**"
                 ).permitAll()

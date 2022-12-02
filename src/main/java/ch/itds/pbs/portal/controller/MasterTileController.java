@@ -1,4 +1,4 @@
-package ch.itds.pbs.portal.controller.admin;
+package ch.itds.pbs.portal.controller;
 
 import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.dto.ActionMessage;
@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
-@Controller("masterTileAdminController")
-@RequestMapping("/admin/midataGroup/{midataGroupId:\\d+}/masterTile")
+@Controller
+@RequestMapping("/midataGroup/{midataGroupId:\\d+}/masterTile")
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class MasterTileController {
 
@@ -60,7 +60,7 @@ public class MasterTileController {
         model.addAttribute("midataGroup", midataGroup);
         model.addAttribute("entityList", masterTileRepository.findAllByGroupWithCategory(midataGroup));
 
-        return "admin/masterTile/index";
+        return "masterTile/index";
     }
 
     @GetMapping("/create")
@@ -81,7 +81,7 @@ public class MasterTileController {
         model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
         model.addAttribute("colorList", Color.values());
 
-        return "admin/masterTile/edit";
+        return "masterTile/edit";
     }
 
     @PostMapping("/create")
@@ -96,7 +96,7 @@ public class MasterTileController {
             model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
-            return "admin/masterTile/edit";
+            return "masterTile/edit";
         }
 
         if (imageUpload != null && !imageUpload.isEmpty()) {
@@ -114,12 +114,12 @@ public class MasterTileController {
             model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
-            return "admin/masterTile/edit";
+            return "masterTile/edit";
         }
 
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.create.success", null, locale));
 
-        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
+        return "redirect:/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @GetMapping("/edit/{id}")
@@ -134,7 +134,7 @@ public class MasterTileController {
         model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
         model.addAttribute("colorList", Color.values());
 
-        return "admin/masterTile/edit";
+        return "masterTile/edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -152,7 +152,7 @@ public class MasterTileController {
             model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
-            return "admin/masterTile/edit";
+            return "masterTile/edit";
         }
 
         BeanUtils.copyProperties(entity, savedEntity, "id", "version", "dateCreated", "lastUpdated", "image", "midataGroupOnly");
@@ -183,12 +183,12 @@ public class MasterTileController {
             model.addAttribute("midataGroup", midataGroup);
             model.addAttribute("categoryList", categoryRepository.findAllForGroup(midataGroup));
             model.addAttribute("colorList", Color.values());
-            return "admin/masterTile/edit";
+            return "masterTile/edit";
         }
 
         redirectAttributes.addFlashAttribute(Flash.SUCCESS, messageSource.getMessage("masterTile.edit.success", null, locale));
 
-        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
+        return "redirect:/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @PostMapping("/delete/{id}")
@@ -206,7 +206,7 @@ public class MasterTileController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute(Flash.ERROR, messageSource.getMessage("masterTile.delete.error", new String[]{e.getMessage()}, locale));
         }
-        return "redirect:/admin/midataGroup/" + midataGroup.getId() + "/masterTile";
+        return "redirect:/midataGroup/" + midataGroup.getId() + "/masterTile";
     }
 
     @PostMapping(path = "/updateSort", produces = MediaType.APPLICATION_JSON_VALUE)

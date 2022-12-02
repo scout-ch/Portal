@@ -3,6 +3,7 @@ package ch.itds.pbs.portal.controller.admin;
 import ch.itds.pbs.portal.MockedWebConversion;
 import ch.itds.pbs.portal.WithMockedWebConversion;
 import ch.itds.pbs.portal.controller.BaseControllerTest;
+import ch.itds.pbs.portal.controller.MasterTileController;
 import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;
@@ -128,20 +129,20 @@ public class MasterTileControllerTest extends BaseControllerTest {
     @Test
     public void regularIndex() throws Exception {
 
-        mockMvc.perform(get("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"))
+        mockMvc.perform(get("/midataGroup/" + pbsGroup.getId() + "/masterTile"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithAnonymousUser
     public void indexAsAnonymous() throws Exception {
-        mockMvc.perform(get("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"))
+        mockMvc.perform(get("/midataGroup/" + pbsGroup.getId() + "/masterTile"))
                 .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void create() throws Exception {
-        mockMvc.perform(get("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create"))
+        mockMvc.perform(get("/midataGroup/" + pbsGroup.getId() + "/masterTile/create"))
                 .andExpect(status().isOk());
     }
 
@@ -158,10 +159,10 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "content...".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"));
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"));
     }
 
     @Test
@@ -177,10 +178,10 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"));
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"));
     }
 
     @Test
@@ -196,7 +197,7 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().isOk());
     }
@@ -214,7 +215,7 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().isOk());
     }
@@ -236,7 +237,7 @@ public class MasterTileControllerTest extends BaseControllerTest {
             throw new Exception("expected exception");
         }).when(masterTileRepository).save(any());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/create")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(Flash.ERROR));
@@ -244,13 +245,13 @@ public class MasterTileControllerTest extends BaseControllerTest {
 
     @Test
     public void edit() throws Exception {
-        mockMvc.perform(get("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1"))
+        mockMvc.perform(get("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void editNotFound() throws Exception {
-        mockMvc.perform(get("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/2"))
+        mockMvc.perform(get("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/2"))
                 .andExpect(status().isNotFound());
     }
 
@@ -268,10 +269,10 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "test data".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"));
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"));
     }
 
     @Test
@@ -288,10 +289,10 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"));
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"));
     }
 
     @Test
@@ -308,7 +309,7 @@ public class MasterTileControllerTest extends BaseControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("imageUpload", "file.txt",
                 "text/plain", "test data".getBytes());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().isOk());
     }
@@ -330,7 +331,7 @@ public class MasterTileControllerTest extends BaseControllerTest {
             throw new Exception("expected exception");
         }).when(masterTileRepository).save(any());
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/midataGroup/" + pbsGroup.getId() + "/masterTile/edit/1")
                         .file(mockMultipartFile).params(params).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(Flash.ERROR));
@@ -338,9 +339,9 @@ public class MasterTileControllerTest extends BaseControllerTest {
 
     @Test
     public void delete() throws Exception {
-        mockMvc.perform(post("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/delete/1").with(csrf()))
+        mockMvc.perform(post("/midataGroup/" + pbsGroup.getId() + "/masterTile/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"));
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"));
     }
 
     @Test
@@ -350,9 +351,9 @@ public class MasterTileControllerTest extends BaseControllerTest {
             throw new Exception("expected exception");
         }).when(masterTileRepository).delete(any());
 
-        mockMvc.perform(post("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile/delete/1").with(csrf()))
+        mockMvc.perform(post("/midataGroup/" + pbsGroup.getId() + "/masterTile/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/midataGroup/" + pbsGroup.getId() + "/masterTile"))
+                .andExpect(redirectedUrl("/midataGroup/" + pbsGroup.getId() + "/masterTile"))
                 .andExpect(flash().attributeExists(Flash.ERROR));
     }
 

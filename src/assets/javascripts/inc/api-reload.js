@@ -8,7 +8,7 @@
       reloadButton.addEventListener('click', function onReloadApiClicked() {
         var midataGroupId = reloadButton.dataset.midataGroupId;
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/admin/midataGroup/' + midataGroupId + '/masterTile/generateApiKey', true);
+        xhr.open('POST', '/midataGroup/' + midataGroupId + '/masterTile/generateApiKey', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         portal.addCsrfHeader(xhr);
         xhr.onreadystatechange = function () {

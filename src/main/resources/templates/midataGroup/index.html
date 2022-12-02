@@ -28,7 +28,7 @@
             <td th:text="${group.name}">
             </td>
             <td>
-                <a th:href="@{/admin/midataGroup/{id}/defaultTile(id=${group.id})}"
+                <a th:href="@{/midataGroup/{id}/defaultTile(id=${group.id})}"
                    th:title="#{midataGroup.defaultTile.titel(${group.name})}"
                    class="btn-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -38,7 +38,7 @@
                 </a>
             </td>
             <td>
-                <a th:href="@{/admin/midataGroup/{id}/masterTile(id=${group.id})}"
+                <a th:href="@{/midataGroup/{id}/masterTile(id=${group.id})}"
                    th:title="#{masterTile.indexOfGroup.titel(${group.name})}"
                    class="btn-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

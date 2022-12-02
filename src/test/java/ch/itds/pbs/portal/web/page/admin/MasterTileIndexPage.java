@@ -18,7 +18,7 @@ public class MasterTileIndexPage extends PortalPage {
     }
 
     public static MasterTileIndexPage open(SeleniumHelper helper, long midataGroupId) {
-        helper.navigateTo("/admin/midataGroup/" + midataGroupId + "/masterTile");
+        helper.navigateTo("/midataGroup/" + midataGroupId + "/masterTile");
         MasterTileIndexPage indexPage = new MasterTileIndexPage(helper);
         PageFactory.initElements(helper.getDriver(), indexPage);
 

@@ -95,7 +95,7 @@
                         </button>
                     </form>
                     <form th:if="${selectForMidataGroup!=null}"
-                          th:action="@{/admin/midataGroup/{midataGroupId}/defaultTile/create/{masterTileId}(midataGroupId=${selectForMidataGroup.id},masterTileId=${tile.masterTileId})}"
+                          th:action="@{/midataGroup/{midataGroupId}/defaultTile/create/{masterTileId}(midataGroupId=${selectForMidataGroup.id},masterTileId=${tile.masterTileId})}"
                           method="post">
                         <button class="btn-text btn-icon" type="submit"
                                 th:title="#{midataGroup.defaultTile.verboseCreate(${selectForMidataGroup.name})}">
