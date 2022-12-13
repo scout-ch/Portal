@@ -14,6 +14,7 @@
 //= require inc/file-input.js
 //= require inc/char-count.js
 //= require inc/api-reload.js
+//= require inc/tom-select.js
 
 //= require inc/tiles.js
 

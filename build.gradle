@@ -124,6 +124,7 @@ dependencies {
 	// web frontend libraries
 	implementation 'org.webjars:font-awesome:5.15.2'
 	implementation 'org.webjars.npm:tablesort:5.2.0'
+	implementation 'org.webjars.npm:tom-select:2.2.2'
 
 	// rest api doc
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'

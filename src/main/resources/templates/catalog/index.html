@@ -26,7 +26,7 @@
                    th:placeholder="#{userTile.catalog.filter.title.placeholder}">
         </div>
 
-        <select class="filter" aria-label="select" name="category">
+        <select class="filter tom-select-autoinit" aria-label="select" name="category">
             <option value="" th:text="#{userTile.catalog.filter.category.all}"></option>
             <option th:each="category : ${categories}"
                     th:value="${category.key}"
