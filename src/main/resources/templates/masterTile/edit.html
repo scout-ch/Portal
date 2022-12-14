@@ -186,9 +186,10 @@
 
 
         <div class="controls">
-            <button type="submit" class="btn">Speichern</button>
+            <button type="submit" class="btn" th:text="#{general.save}">Speichern</button>
             <a type="button" class="btn"
-               th:href="@{/midataGroup/{midataGroupId}/masterTile(midataGroupId=${midataGroup.id})}">Abbrechen</a>
+               th:href="@{/midataGroup/{midataGroupId}/masterTile(midataGroupId=${midataGroup.id})}"
+               th:text="#{general.cancel}">Abbrechen</a>
         </div>
     </form>
 
