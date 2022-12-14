@@ -1,9 +1,7 @@
-package ch.itds.pbs.portal.controller.admin;
+package ch.itds.pbs.portal.controller;
 
 import ch.itds.pbs.portal.MockedWebConversion;
 import ch.itds.pbs.portal.WithMockedWebConversion;
-import ch.itds.pbs.portal.controller.BaseControllerTest;
-import ch.itds.pbs.portal.controller.MasterTileController;
 import ch.itds.pbs.portal.domain.*;
 import ch.itds.pbs.portal.repo.CategoryRepository;
 import ch.itds.pbs.portal.repo.MasterTileRepository;

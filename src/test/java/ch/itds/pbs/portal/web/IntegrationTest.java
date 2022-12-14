@@ -294,31 +294,13 @@ abstract class IntegrationTest {
     protected GroupDefaultTile ensurePbsGroupDefaultTile() {
         MidataGroup group = ensurePbsGroup();
         MasterTile tile = ensurePbsNonRestrictedMasterTile();
-        List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
-        if (groupDefaultTiles.isEmpty()) {
-            GroupDefaultTile groupDefaultTile = new GroupDefaultTile();
-            groupDefaultTile.setGroup(group);
-            groupDefaultTile.setMasterTile(tile);
-            groupDefaultTile.setPosition(1);
-            return groupDefaultTileRepository.save(groupDefaultTile);
-        } else {
-            return groupDefaultTiles.get(0);
-        }
+        return ensureGroupTile(group, tile);
     }
 
     protected GroupDefaultTile ensureBezOeGroupDefaultTile() {
         MidataGroup group = ensureBezOeGroup();
         MasterTile tile = ensureBezOeRestrictedMasterTile();
-        List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
-        if (groupDefaultTiles.isEmpty()) {
-            GroupDefaultTile groupDefaultTile = new GroupDefaultTile();
-            groupDefaultTile.setGroup(group);
-            groupDefaultTile.setMasterTile(tile);
-            groupDefaultTile.setPosition(1);
-            return groupDefaultTileRepository.save(groupDefaultTile);
-        } else {
-            return groupDefaultTiles.get(0);
-        }
+        return ensureGroupTile(group, tile);
     }
 
     protected UserTile ensureUserTile(User user, MasterTile masterTile) {
@@ -331,6 +313,19 @@ abstract class IntegrationTest {
             return userTileRepository.save(userTile);
         } else {
             return matchingUserTiles.get(0);
+        }
+    }
+
+    protected GroupDefaultTile ensureGroupTile(MidataGroup group, MasterTile tile) {
+        List<GroupDefaultTile> groupDefaultTiles = groupDefaultTileRepository.findAllByGroupAndMasterTile(group, tile);
+        if (groupDefaultTiles.isEmpty()) {
+            GroupDefaultTile groupDefaultTile = new GroupDefaultTile();
+            groupDefaultTile.setGroup(group);
+            groupDefaultTile.setMasterTile(tile);
+            groupDefaultTile.setPosition(tile.getPosition());
+            return groupDefaultTileRepository.save(groupDefaultTile);
+        } else {
+            return groupDefaultTiles.get(0);
         }
     }
 
