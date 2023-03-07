@@ -2,6 +2,7 @@ package ch.itds.pbs.portal.security.tile;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @Getter
 @Setter
 public class TileAuthentication implements Authentication {
@@ -53,6 +55,10 @@ public class TileAuthentication implements Authentication {
 
     @Override
     public String getName() {
+        if (tileId == null) {
+            log.warn("name access without given tileId for apiKey {}", apiKey);
+            return "incomplete-tile-authentication";
+        }
         return tileId.toString();
     }
 
