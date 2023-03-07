@@ -219,8 +219,12 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
 
     private void ensureGroupHierarchy(User user, OAuth2UserRequest oAuth2UserRequest) {
         if (user.getPrimaryMidataGroup() != null) {
-            Integer[] hierarchy = getGroupHierarchy(oAuth2UserRequest, user.getLanguage().name().toLowerCase(Locale.ROOT), user.getPrimaryMidataGroup().getMidataId());
-            user.setMidataGroupHierarchy(hierarchy);
+            try {
+                Integer[] hierarchy = getGroupHierarchy(oAuth2UserRequest, user.getLanguage().name().toLowerCase(Locale.ROOT), user.getPrimaryMidataGroup().getMidataId());
+                user.setMidataGroupHierarchy(hierarchy);
+            } catch (Exception e) {
+                log.warn("unable to sync group hierarchy for {} with lang={} and primaryGroupId={}: {}", user.getUsername(), user.getLanguage().name().toLowerCase(Locale.ROOT), user.getPrimaryMidataGroup().getMidataId(), e.getMessage());
+            }
         }
     }
 
