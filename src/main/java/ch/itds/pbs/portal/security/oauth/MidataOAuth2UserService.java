@@ -230,6 +230,12 @@ public class MidataOAuth2UserService extends DefaultOAuth2UserService {
 
     private Integer[] getGroupHierarchy(OAuth2UserRequest userRequest, String lang, long primaryGroupId) {
 
+        List<String> midataLanguages = List.of("de", "fr", "it");
+
+        if (!midataLanguages.contains(lang)) {
+            lang = midataLanguages.get(0);
+        }
+
         ClientRegistration clientRegistration = userRequest.getClientRegistration();
 
         HttpMethod httpMethod = HttpMethod.GET;
