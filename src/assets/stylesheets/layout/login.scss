@@ -1,6 +1,5 @@
 .login-wrapper {
   display: flex;
-  justify-content: center;
 
   .login-box {
     @include tile;
@@ -10,17 +9,17 @@
 
 .btn-midata-login {
   color: #fff;
-  background-color: #99bf62;
-  border-color: #99bf62;
-  background-image: url('/assets/midata.svg');
-  background-position: 6px 0;
-  background-size: contain;
+  background-color: #521d3a;
+  border: 1px solid #521d3a;
+  background-image: url('/assets/midata.png');
+  background-position: 10px 2px;
   background-repeat: no-repeat;
+  background-size: 33px;
   padding-left: 59px;
 
   &:hover {
-    background-color: #87b249;
-    border-color: #80a945;
+    background-color: #632949;
+    border-color: #632949;
   }
 }
 
