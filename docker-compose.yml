@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: postgres:13
+    image: postgres:13-bullseye
     ports:
       - 5432
     environment:
@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=pbsportal
       - POSTGRES_PASSWORD=pbsportal
   postgres-test:
-    image: postgres:13
+    image: postgres:13-bullseye
     ports:
       - 5432
     environment:
