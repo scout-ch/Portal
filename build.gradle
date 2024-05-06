@@ -81,7 +81,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 
 
-	implementation 'com.vladmihalcea:hibernate-types-52:2.20.0'
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.4'
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.liquibase:liquibase-core'
 
@@ -91,9 +91,11 @@ dependencies {
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+	implementation 'org.apache.groovy:groovy:4.0.20' // required for thymeleaf-layout-dialect
+	implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'){
+		exclude group: 'org.apache.groovy', module: 'groovy'
+	}
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.1.1'
 
 	runtimeOnly "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
@@ -117,7 +119,7 @@ dependencies {
 	implementation 'org.slf4j:log4j-over-slf4j:2.0.3' // required for asset pipeline
 
 	// Logging to Logstash
-	implementation "net.logstash.logback:logstash-logback-encoder:7.2"
+	implementation "net.logstash.logback:logstash-logback-encoder:7.4"
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
 	// required for logback (does not start otherwise)
 

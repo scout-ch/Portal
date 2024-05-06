@@ -5,8 +5,8 @@ import ch.itds.pbs.portal.domain.LocalizedString;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

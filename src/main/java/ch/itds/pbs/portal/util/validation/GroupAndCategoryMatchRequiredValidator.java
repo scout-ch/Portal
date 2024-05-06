@@ -3,8 +3,8 @@ package ch.itds.pbs.portal.util.validation;
 import ch.itds.pbs.portal.domain.Category;
 import ch.itds.pbs.portal.domain.MasterTile;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class GroupAndCategoryMatchRequiredValidator implements
         ConstraintValidator<GroupAndCategoryMatchRequired, Object> {
