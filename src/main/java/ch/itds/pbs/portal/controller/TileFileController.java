@@ -2,7 +2,6 @@ package ch.itds.pbs.portal.controller;
 
 import ch.itds.pbs.portal.domain.FileMeta;
 import ch.itds.pbs.portal.service.FileService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/tile")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class TileFileController {
 
     private final transient FileService fileService;

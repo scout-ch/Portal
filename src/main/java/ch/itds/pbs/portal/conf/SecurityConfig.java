@@ -2,26 +2,24 @@ package ch.itds.pbs.portal.conf;
 
 
 import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
-import ch.itds.pbs.portal.service.UserService;
+import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
+import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -31,23 +29,23 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
+    private final transient MidataOAuth2UserService midataOAuth2UserService;
+    private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
     private final transient Environment environment;
-    private final transient UserService userService;
+
     @Value("${spring.websecurity.debug:false}")
     boolean webSecurityDebug;
 
-    public SecurityConfig(Environment environment, UserService userService) {
+    public SecurityConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler) {
         super();
 
         this.environment = environment;
-        this.userService = userService;
+        this.midataOAuth2UserService = midataOAuth2UserService;
+        this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -82,11 +80,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(EndpointRequest.toAnyEndpoint())
                         .access((new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")))
+                        .requestMatchers("/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/share/tile/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/catalog").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/message", "/message/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/userTile/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/tile/masterFile/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/midataGroup", "/midataGroup/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/error",
-                                "/assets/**"
+                                "/assets/**",
+                                "/static/**"
                         ).permitAll()
-                        .requestMatchers("/auth/**", "/oauth2/**", "/logoutMidata/**").permitAll()
+                        .requestMatchers("/login/**", "/auth/**", "/oauth2/**", "/logout").permitAll()
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/swagger-config", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/**").hasRole("TILE")
                 )
@@ -96,10 +101,13 @@ public class SecurityConfig {
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer
                                 .loginPage("/auth/login")
-                                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userAuthoritiesMapper(userAuthoritiesMapper()))
+                                .redirectionEndpoint(config -> config.baseUri("/oauth2/callback/*"))
+                                .authorizationEndpoint(config -> config.baseUri("/oauth2/authorize"))
+                                .successHandler(localeSettingAuthenticationSuccessHandler)
+                                .userInfoEndpoint(config -> config.userService(midataOAuth2UserService))
                 )
                 .logout(logoutConfigurer ->
-                        logoutConfigurer.logoutUrl("/logoutMidata/**")
+                        logoutConfigurer.logoutUrl("/logout")
                                 .logoutSuccessHandler(logoutSuccessHandler)
                 );
 
@@ -109,31 +117,6 @@ public class SecurityConfig {
 
         return http.build();
 
-    }
-
-    private GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return (authorities) -> {
-
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
-
-            authorities.forEach(authority -> {
-
-                if (authority instanceof OidcUserAuthority oidcUserAuthority) {
-
-                    OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
-
-                    List<String> roleNames = userService.extractRoleNames(userInfo);
-                    List<SimpleGrantedAuthority> groupAuthorities = new ArrayList<>(roleNames.size());
-                    for (String name : roleNames) {
-                        groupAuthorities.add(new SimpleGrantedAuthority("ROLE_" + name));
-                    }
-                    mappedAuthorities.addAll(groupAuthorities);
-                    userService.updateRoles(userInfo.getPreferredUsername(), roleNames);
-                }
-            });
-
-            return mappedAuthorities;
-        };
     }
 
     @Bean

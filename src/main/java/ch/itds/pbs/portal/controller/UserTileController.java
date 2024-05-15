@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -32,7 +31,6 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("/userTile")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class UserTileController {
 
     private final transient TileService tileService;

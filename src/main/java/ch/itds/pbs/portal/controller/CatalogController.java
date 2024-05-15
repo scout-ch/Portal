@@ -8,7 +8,6 @@ import ch.itds.pbs.portal.security.UserPrincipal;
 import ch.itds.pbs.portal.service.LanguageService;
 import ch.itds.pbs.portal.service.MidataGroupService;
 import ch.itds.pbs.portal.service.TileService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/catalog")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class CatalogController {
 
     private final LanguageService languageService;

@@ -9,7 +9,6 @@ import ch.itds.pbs.portal.service.TileService;
 import ch.itds.pbs.portal.util.Flash;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,6 @@ import java.util.Locale;
 @Slf4j
 @Controller
 @RequestMapping("/")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class IndexController {
 
     private final transient TileService tileService;
