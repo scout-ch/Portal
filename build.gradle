@@ -107,14 +107,15 @@ dependencies {
 	}
 
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+	testImplementation 'com.github.tomakehurst:wiremock:3.0.1'
 
 	testImplementation 'org.assertj:assertj-core'
-	testImplementation 'org.seleniumhq.selenium:selenium-java:4.6.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.6.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.6.0'
-	testImplementation 'org.seleniumhq.selenium:selenium-api:4.6.0'
-	testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.2'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.19.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.19.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.19.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-api:4.19.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-http:4.19.1' // required because transitive dep has not been resolved in this version
+	testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.0'
 
 	implementation 'org.slf4j:log4j-over-slf4j:2.0.3' // required for asset pipeline
 

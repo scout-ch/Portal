@@ -4,6 +4,7 @@ package ch.itds.pbs.portal.conf;
 import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -35,17 +36,19 @@ public class SecurityConfig {
 
     private final transient MidataOAuth2UserService midataOAuth2UserService;
     private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
+    private final transient TileAuthenticationProvider tileAuthenticationProvider;
     private final transient Environment environment;
 
     @Value("${spring.websecurity.debug:false}")
     boolean webSecurityDebug;
 
-    public SecurityConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler) {
+    public SecurityConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
         super();
 
         this.environment = environment;
         this.midataOAuth2UserService = midataOAuth2UserService;
         this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
+        this.tileAuthenticationProvider = tileAuthenticationProvider;
     }
 
     @Bean
@@ -96,7 +99,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/**").hasRole("TILE")
                 )
                 .authenticationProvider(new PreAuthenticatedAuthenticationProvider())
-                .addFilterBefore(new TileTokenAuthenticationFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new TileTokenAuthenticationFilter(tileAuthenticationProvider), BasicAuthenticationFilter.class)
                 .oauth2Client(Customizer.withDefaults())
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer
