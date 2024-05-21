@@ -80,6 +80,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, LogoutSuccessHandler logoutSuccessHandler) throws Exception {
         http
+                .csrf((csrf) -> csrf.ignoringRequestMatchers("/api/v1/**"))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(EndpointRequest.toAnyEndpoint())
                         .access((new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")))
