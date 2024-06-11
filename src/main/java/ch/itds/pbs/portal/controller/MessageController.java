@@ -10,7 +10,6 @@ import ch.itds.pbs.portal.util.Flash;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/message")
-@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class MessageController {
 
     private final transient MessageService messageService;

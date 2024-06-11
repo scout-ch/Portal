@@ -27,7 +27,6 @@ public class SeleniumHelper {
             String envHost = System.getenv("SELENIUM_HOST");
             String envPort = System.getenv("SELENIUM_TCP_4444");
             FirefoxOptions browserCapabilities = new FirefoxOptions();
-            browserCapabilities.setHeadless(true);
             browserCapabilities.setAcceptInsecureCerts(true);
             browserCapabilities.addArguments("use-fake-device-for-media-stream");
             browserCapabilities.addArguments("use-fake-ui-for-media-stream");

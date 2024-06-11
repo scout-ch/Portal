@@ -1,5 +1,7 @@
 # PBS Portal
 
+Further information about the integration environment, test logins etc. can be found at https://pfadi.swiss/de/apps/pbs-portal/.
+
 ## Development setup
 
 * Requires Java 17 and Docker

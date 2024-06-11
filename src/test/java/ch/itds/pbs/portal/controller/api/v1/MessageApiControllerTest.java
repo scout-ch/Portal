@@ -1,5 +1,6 @@
 package ch.itds.pbs.portal.controller.api.v1;
 
+import ch.itds.pbs.portal.conf.SecurityConfig;
 import ch.itds.pbs.portal.controller.BaseControllerTest;
 import ch.itds.pbs.portal.util.WithMockTileAuthorization;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = MessageEndpoint.class)
 @WithMockTileAuthorization(apiKey = "TILE-KEY-01", tileId = 3L)
+@Import({SecurityConfig.class})
 public class MessageApiControllerTest extends BaseControllerTest {
 
     @Autowired

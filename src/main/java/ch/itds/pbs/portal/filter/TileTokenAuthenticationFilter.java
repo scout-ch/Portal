@@ -1,17 +1,24 @@
 package ch.itds.pbs.portal.filter;
 
 import ch.itds.pbs.portal.security.tile.TileAuthentication;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class TileTokenAuthenticationFilter extends OncePerRequestFilter {
+
+    private final TileAuthenticationProvider tileAuthenticationProvider;
+
+    public TileTokenAuthenticationFilter(TileAuthenticationProvider tileAuthenticationProvider) {
+        this.tileAuthenticationProvider = tileAuthenticationProvider;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -23,7 +30,7 @@ public class TileTokenAuthenticationFilter extends OncePerRequestFilter {
         if (apiKey != null) {
 
             Authentication auth = new TileAuthentication(apiKey);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            SecurityContextHolder.getContext().setAuthentication(tileAuthenticationProvider.authenticate(auth));
         }
 
         filterChain.doFilter(request, response);

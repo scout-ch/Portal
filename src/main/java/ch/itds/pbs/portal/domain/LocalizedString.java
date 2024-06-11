@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import java.util.Locale;
 
 @Getter

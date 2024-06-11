@@ -6,8 +6,8 @@ import org.springframework.context.i18n.LocaleContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Locale;
 
