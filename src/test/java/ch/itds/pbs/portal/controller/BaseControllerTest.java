@@ -4,7 +4,7 @@ import ch.itds.pbs.portal.TestAnnotationHolder;
 import ch.itds.pbs.portal.security.CustomUserDetailsService;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
-import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationManager;
 import ch.itds.pbs.portal.service.MessageService;
 import ch.itds.pbs.portal.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +43,7 @@ public abstract class BaseControllerTest {
     @MockBean
     LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
     @MockBean
-    TileAuthenticationProvider tileAuthenticationProvider;
+    TileAuthenticationManager tileAuthenticationManager;
 
     @BeforeAll
     public void initBaseMocks() {

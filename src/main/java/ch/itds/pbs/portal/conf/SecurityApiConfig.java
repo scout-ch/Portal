@@ -2,7 +2,7 @@ package ch.itds.pbs.portal.conf;
 
 
 import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
-import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -17,14 +17,14 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 public class SecurityApiConfig {
 
-    private final transient TileAuthenticationProvider tileAuthenticationProvider;
+    private final transient TileAuthenticationManager tileAuthenticationManager;
     private final transient Environment environment;
 
-    public SecurityApiConfig(Environment environment, TileAuthenticationProvider tileAuthenticationProvider) {
+    public SecurityApiConfig(Environment environment, TileAuthenticationManager tileAuthenticationManager) {
         super();
 
         this.environment = environment;
-        this.tileAuthenticationProvider = tileAuthenticationProvider;
+        this.tileAuthenticationManager = tileAuthenticationManager;
     }
 
     @Bean
@@ -37,7 +37,8 @@ public class SecurityApiConfig {
                         .requestMatchers("/api/v1/**").hasRole("TILE")
                 )
                 .authenticationProvider(new PreAuthenticatedAuthenticationProvider())
-                .addFilterBefore(new TileTokenAuthenticationFilter(tileAuthenticationProvider), BasicAuthenticationFilter.class);
+                .addFilterBefore(new TileTokenAuthenticationFilter(tileAuthenticationManager), BasicAuthenticationFilter.class);
+
 
         if (environment.acceptsProfiles(Profiles.of("development"))) {
             http.headers(headersConfigurer -> headersConfigurer.httpStrictTransportSecurity(HeadersConfigurer.HstsConfig::disable));

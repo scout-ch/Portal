@@ -1,38 +1,30 @@
 package ch.itds.pbs.portal.filter;
 
-import ch.itds.pbs.portal.security.tile.TileAuthentication;
-import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
+import ch.itds.pbs.portal.exception.InvalidTileApiKeyException;
+import ch.itds.pbs.portal.security.tile.TileAuthenticationManager;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.util.StringUtils;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-public class TileTokenAuthenticationFilter extends OncePerRequestFilter {
+public class TileTokenAuthenticationFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-    private final TileAuthenticationProvider tileAuthenticationProvider;
-
-    public TileTokenAuthenticationFilter(TileAuthenticationProvider tileAuthenticationProvider) {
-        this.tileAuthenticationProvider = tileAuthenticationProvider;
+    public TileTokenAuthenticationFilter(TileAuthenticationManager tileAuthenticationManager) {
+        this.setAuthenticationManager(tileAuthenticationManager);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
-        String apiKey = request.getHeader("X-Tile-Authorization");
-
-        if (apiKey != null) {
-
-            Authentication auth = new TileAuthentication(apiKey);
-            SecurityContextHolder.getContext().setAuthentication(tileAuthenticationProvider.authenticate(auth));
+    protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
+        String apiKey = (String) getPreAuthenticatedCredentials(request);
+        if (StringUtils.hasText(apiKey)) {
+            return apiKey;
+        } else {
+            throw new InvalidTileApiKeyException("missing api key");
         }
+    }
 
-        filterChain.doFilter(request, response);
+    @Override
+    protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
+        return request.getHeader("X-Tile-Authorization");
     }
 }

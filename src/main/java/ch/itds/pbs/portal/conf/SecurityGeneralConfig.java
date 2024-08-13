@@ -1,10 +1,8 @@
 package ch.itds.pbs.portal.conf;
 
 
-import ch.itds.pbs.portal.filter.TileTokenAuthenticationFilter;
 import ch.itds.pbs.portal.security.LocaleSettingAuthenticationSuccessHandler;
 import ch.itds.pbs.portal.security.oauth.MidataOAuth2UserService;
-import ch.itds.pbs.portal.security.tile.TileAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -25,10 +23,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
@@ -37,19 +33,17 @@ public class SecurityGeneralConfig {
 
     private final transient MidataOAuth2UserService midataOAuth2UserService;
     private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
-    private final transient TileAuthenticationProvider tileAuthenticationProvider;
     private final transient Environment environment;
 
     @Value("${spring.websecurity.debug:false}")
     boolean webSecurityDebug;
 
-    public SecurityGeneralConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
+    public SecurityGeneralConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler) {
         super();
 
         this.environment = environment;
         this.midataOAuth2UserService = midataOAuth2UserService;
         this.localeSettingAuthenticationSuccessHandler = localeSettingAuthenticationSuccessHandler;
-        this.tileAuthenticationProvider = tileAuthenticationProvider;
     }
 
     @Bean
@@ -100,8 +94,6 @@ public class SecurityGeneralConfig {
                         .requestMatchers("/login/**", "/auth/**", "/oauth2/**", "/logout").permitAll()
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/swagger-config", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 )
-                .authenticationProvider(new PreAuthenticatedAuthenticationProvider())
-                .addFilterBefore(new TileTokenAuthenticationFilter(tileAuthenticationProvider), BasicAuthenticationFilter.class)
                 .oauth2Client(Customizer.withDefaults())
                 .oauth2Login(oAuth2LoginConfigurer ->
                         oAuth2LoginConfigurer

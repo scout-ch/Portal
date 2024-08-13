@@ -9,17 +9,19 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 
 @SpringBootTest
-class TileAuthenticationProviderTest {
+class TileAuthenticationManagerTest {
 
     @Autowired
-    TileAuthenticationProvider tileAuthenticationProvider;
+    TileAuthenticationManager tileAuthenticationManager;
 
     @MockBean
     MasterTileRepository masterTileRepository;
@@ -35,8 +37,8 @@ class TileAuthenticationProviderTest {
 
     @Test
     void authenticate() {
-        TileAuthentication authentication = new TileAuthentication("valid-key");
-        Authentication result = tileAuthenticationProvider.authenticate(authentication);
+        PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken("valid-key", "valid-key");
+        Authentication result = tileAuthenticationManager.authenticate(token);
         assertTrue(result.isAuthenticated());
         assertEquals(TileAuthentication.class, result.getClass());
         assertEquals(TileAuthentication.class, result.getPrincipal().getClass());
@@ -44,15 +46,33 @@ class TileAuthenticationProviderTest {
     }
 
     @Test
-    void authenticationFailure() {
-        TileAuthentication authentication = new TileAuthentication("invalid-key");
+    void authenticationFailureNoKey() {
         assertThrows(InvalidTileApiKeyException.class, () -> {
-            tileAuthenticationProvider.authenticate(authentication);
+            tileAuthenticationManager.authenticate(null);
         });
     }
 
     @Test
-    void supports() {
-        assertTrue(tileAuthenticationProvider.supports(TileAuthentication.class));
+    void authenticationFailureInvalidKeyClass() {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("valid-key", "valid-key");
+        assertThrows(InvalidTileApiKeyException.class, () -> {
+            tileAuthenticationManager.authenticate(token);
+        });
+    }
+
+    @Test
+    void authenticationFailureInvalidKeyValue() {
+        PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken("invalid-key", "invalid-key");
+        assertThrows(InvalidTileApiKeyException.class, () -> {
+            tileAuthenticationManager.authenticate(token);
+        });
+    }
+
+    @Test
+    void authenticationFailureEmptyKeyValue() {
+        PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(null, null);
+        assertThrows(InvalidTileApiKeyException.class, () -> {
+            tileAuthenticationManager.authenticate(token);
+        });
     }
 }
