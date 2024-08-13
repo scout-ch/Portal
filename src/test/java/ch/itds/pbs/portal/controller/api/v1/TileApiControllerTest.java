@@ -1,6 +1,7 @@
 package ch.itds.pbs.portal.controller.api.v1;
 
-import ch.itds.pbs.portal.conf.SecurityConfig;
+import ch.itds.pbs.portal.conf.SecurityApiConfig;
+import ch.itds.pbs.portal.conf.SecurityGeneralConfig;
 import ch.itds.pbs.portal.controller.BaseControllerTest;
 import ch.itds.pbs.portal.domain.TileOverride;
 import ch.itds.pbs.portal.service.TileService;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = TileEndpoint.class)
 @WithMockTileAuthorization(apiKey = "TILE-KEY-01", tileId = 3L)
-@Import({SecurityConfig.class})
+@Import({SecurityGeneralConfig.class, SecurityApiConfig.class})
 public class TileApiControllerTest extends BaseControllerTest {
 
     @Autowired
@@ -49,6 +51,18 @@ public class TileApiControllerTest extends BaseControllerTest {
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(42L));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void overrideUnauthorized() throws Exception {
+
+        String rcontent = "{\"title\": {\"de\": \"Title\"},\"content\": {\"de\": \"Content...\"}, \"limitToUserIds\": [1,2,3], \"validUntil\": \"2040-01-01T12:00:00.000Z\"}";
+
+        mockMvc.perform(put("/api/v1/tile/override")
+                        .content(rcontent)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.security.config.Customizer;
@@ -32,7 +33,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityGeneralConfig {
 
     private final transient MidataOAuth2UserService midataOAuth2UserService;
     private final transient LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler;
@@ -42,7 +43,7 @@ public class SecurityConfig {
     @Value("${spring.websecurity.debug:false}")
     boolean webSecurityDebug;
 
-    public SecurityConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
+    public SecurityGeneralConfig(Environment environment, MidataOAuth2UserService midataOAuth2UserService, LocaleSettingAuthenticationSuccessHandler localeSettingAuthenticationSuccessHandler, TileAuthenticationProvider tileAuthenticationProvider) {
         super();
 
         this.environment = environment;
@@ -78,9 +79,10 @@ public class SecurityConfig {
 
 
     @Bean
+    @Order(1)
     public SecurityFilterChain filterChain(HttpSecurity http, LogoutSuccessHandler logoutSuccessHandler) throws Exception {
         http
-                .csrf((csrf) -> csrf.ignoringRequestMatchers("/api/v1/**"))
+                .securityMatcher("/**")
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(EndpointRequest.toAnyEndpoint())
                         .access((new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasRole('ADMIN')")))
@@ -97,7 +99,6 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/login/**", "/auth/**", "/oauth2/**", "/logout").permitAll()
                         .requestMatchers("/v3/api-docs", "/v3/api-docs/swagger-config", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/api/v1/**").hasRole("TILE")
                 )
                 .authenticationProvider(new PreAuthenticatedAuthenticationProvider())
                 .addFilterBefore(new TileTokenAuthenticationFilter(tileAuthenticationProvider), BasicAuthenticationFilter.class)
