@@ -98,9 +98,15 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'ch.itds.taglib:asset-pipeline-thymeleaf-taglib:1.1.1'
 
-	runtimeOnly "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
-	assets "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
-	implementation "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
+	runtimeOnly("com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}") {
+		exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+	}
+	assets("com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}") {
+		exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+	}
+	implementation("com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}") {
+		exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+	}
 	developmentOnly "org.graalvm.sdk:graal-sdk:22.0.0.2"
 	testRuntimeOnly "org.graalvm.sdk:graal-sdk:22.0.0.2"
 	developmentOnly "org.graalvm.js:js:22.0.0.2"
