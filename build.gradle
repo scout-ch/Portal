@@ -81,7 +81,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 
 
-	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.4'
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.2'
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.liquibase:liquibase-core'
 
@@ -91,7 +91,7 @@ dependencies {
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-	implementation 'org.apache.groovy:groovy:4.0.20' // required for thymeleaf-layout-dialect
+	implementation 'org.apache.groovy:groovy:4.0.22' // required for thymeleaf-layout-dialect
 	implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'){
 		exclude group: 'org.apache.groovy', module: 'groovy'
 	}
@@ -101,6 +101,10 @@ dependencies {
 	runtimeOnly "com.bertramlabs.plugins:asset-pipeline-spring-boot:${assetPipelineVersion}"
 	assets "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
 	implementation "com.bertramlabs.plugins:sass-dart-asset-pipeline:${assetPipelineVersion}"
+	developmentOnly "org.graalvm.sdk:graal-sdk:22.0.0.2"
+	testRuntimeOnly "org.graalvm.sdk:graal-sdk:22.0.0.2"
+	developmentOnly "org.graalvm.js:js:22.0.0.2"
+	testRuntimeOnly "org.graalvm.js:js:22.0.0.2"
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -110,27 +114,25 @@ dependencies {
 	testImplementation 'org.wiremock:wiremock-jetty12:3.5.4'
 
 	testImplementation 'org.assertj:assertj-core'
-	testImplementation 'org.seleniumhq.selenium:selenium-java:4.19.1'
-	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.19.1'
-	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.19.1'
-	testImplementation 'org.seleniumhq.selenium:selenium-api:4.19.1'
-	testImplementation 'org.seleniumhq.selenium:selenium-http:4.19.1' // required because transitive dep has not been resolved in this version
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.23.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.23.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-remote-driver:4.23.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-api:4.23.1'
+	testImplementation 'org.seleniumhq.selenium:selenium-http:4.23.1' // required because transitive dep has not been resolved in this version
 	testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.0'
 
-	implementation 'org.slf4j:log4j-over-slf4j:2.0.3' // required for asset pipeline
-
 	// Logging to Logstash
-	implementation "net.logstash.logback:logstash-logback-encoder:7.4"
-	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
+	implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 	// required for logback (does not start otherwise)
 
 	// web frontend libraries
 	implementation 'org.webjars:font-awesome:5.15.2'
 	implementation 'org.webjars.npm:tablesort:5.2.0'
-	implementation 'org.webjars.npm:tom-select:2.2.2'
+	implementation 'org.webjars.npm:tom-select:2.3.1'
 
 	// rest api doc
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
 }
 

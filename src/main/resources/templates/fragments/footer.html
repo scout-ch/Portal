@@ -8,7 +8,7 @@
                 <div class="col">
                     <strong th:text="#{general.footer.copyright(${#numbers.formatInteger(#dates.year(#dates.createNow()),4,'NONE')}
 )}"></strong>
-                    <th:block th:replace="fragments/version"/>
+                    <th:block th:replace="~{fragments/version}"/>
                     <br/>
                     <small>
                         <th:block th:text="#{general.footer.developed-by}"></th:block>

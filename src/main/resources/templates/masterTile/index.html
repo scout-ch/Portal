@@ -110,7 +110,7 @@
         </tbody>
     </table>
 
-    <th:block th:if="${entityList.isEmpty()}" th:include="fragments/no-tiles :: no-tiles"/>
+    <th:block th:if="${entityList.isEmpty()}" th:include="~{fragments/no-tiles :: no-tiles}"/>
 </div>
 
 <th:block layout:fragment="scripts">
