@@ -7,6 +7,7 @@
             var body = tables[i].querySelector('tbody');
             new Sortable(body, {
                 draggable: 'tr',
+                filter: ['.add'], // adding a new tile is not part of the drag and drop functionality
                 handle: '.grip-handle',
                 forceFallback: true, // required for automated testing
                 onUpdate: (function (tableBody) {
