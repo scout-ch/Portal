@@ -258,6 +258,8 @@
 .text-right { text-align: right; }
 .flex-justify-end { justify-content: flex-end; }
 .flex-align-start { align-items: flex-start; }
+.flex { display: flex; }
+.gap { gap: 1rem; }
 
 // ===== MEDIA QUERIES =====
 @media (max-width: $break-lg) {
