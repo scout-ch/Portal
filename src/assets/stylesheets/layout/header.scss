@@ -109,11 +109,9 @@
 @media (max-width: $break-md) {
   .page-header {
     height: $header-height-small;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
 
-    .logo {
-      height: 7rem;
-    }
+    .logo { height: $header-height-small - (0.6rem * 2); }
 
     .navigation {
       background-color: $color-primary;
