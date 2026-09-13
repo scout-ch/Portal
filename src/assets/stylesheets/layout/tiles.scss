@@ -130,6 +130,17 @@
   display: none;
 }
 
+// when the user is in edit mode, the tiles get a dashed border to indicate that they can be moved around
+// except for the add tile, which is not part of the drag and drop functionality
+.tiles:not(.tiles-not-editable) {
+  .tile:not(.add) {
+    &.theme-OCHER, &.theme-BLUE, &.theme-GREEN, &.theme-INVERTED_DEFAULT {
+      border: 0.3rem dashed white;
+    }
+    border: 0.3rem dashed $color-primary;
+  }
+}
+
 
 // ===== MEDIA QUERIES =====
 @media (max-width: $break-md) {

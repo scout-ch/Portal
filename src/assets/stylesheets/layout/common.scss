@@ -16,9 +16,9 @@
   background-color: transparent;
 
   svg {
-    height: 1.5rem;
+    height: 2rem;
     vertical-align: middle;
-    width: 1.5rem;
+    width: 2rem;
   }
 
   &:hover {
@@ -157,6 +157,9 @@
 .top-buttons {
   text-align: right;
   margin-bottom: 3rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
 
   a,
   button {
@@ -167,11 +170,6 @@
     svg {
       margin-right: 1rem;
     }
-  }
-
-  a {
-    justify-content: end;
-    width: 100%;
   }
 
   button {
